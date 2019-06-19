@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Notifications;
-
 
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
@@ -44,7 +51,8 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView() {
+    public function getEmailView()
+    {
         return ['text' => 'fof-follow-tags::emails.newDiscussion'];
     }
 
@@ -54,7 +62,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     public function getEmailSubject()
     {
         return app('translator')->trans('fof-follow-tags.email.newDiscussionInTag', [
-            'title' => $this->discussion->title
+            'title' => $this->discussion->title,
         ]);
     }
 

@@ -14,9 +14,9 @@ namespace FoF\FollowTags;
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
-use Flarum\Post\Event as Post;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend;
+use Flarum\Post\Event as Post;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
 use Illuminate\Contracts\View\Factory;
@@ -26,7 +26,7 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/resources/less/forum.less'),
-    new Extend\Locales(__DIR__ . '/resources/locale'),
+    new Extend\Locales(__DIR__.'/resources/locale'),
 
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
@@ -49,5 +49,5 @@ return [
         $events->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class);
 
         $views->addNamespace('fof-follow-tags', __DIR__.'/resources/views');
-    })
+    }),
 ];

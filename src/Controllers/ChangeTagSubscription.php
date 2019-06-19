@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Controllers;
-
 
 use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Tags\Api\Serializer\TagSerializer;
@@ -34,7 +41,7 @@ class ChangeTagSubscription extends AbstractShowController
         $tag = Tag::whereVisibleTo($actor)->findOrFail($id);
         $state = $tag->stateFor($actor);
 
-        if (! in_array($subscription, ['follow', 'lurk', 'ignore'])) {
+        if (!in_array($subscription, ['follow', 'lurk', 'ignore'])) {
             $subscription = null;
         }
 

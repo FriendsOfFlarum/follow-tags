@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Listeners;
-
 
 use Flarum\Discussion\Event\Started;
 use Flarum\Notification\NotificationSyncer;
@@ -31,13 +38,15 @@ class SendNotificationWhenDiscussionIsStarted
         $discussion = $event->discussion;
 
         /**
-         * @type $tags Collection
-         * @type $tagIds Collection
+         * @var Collection
+         * @var $tagIds    Collection
          */
         $tags = $discussion->tags;
         $tagIds = $tags->map->id;
 
-        if ($tags->isEmpty()) return;
+        if ($tags->isEmpty()) {
+            return;
+        }
 
         $notify = User::where('users.id', '!=', $discussion->user_id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')

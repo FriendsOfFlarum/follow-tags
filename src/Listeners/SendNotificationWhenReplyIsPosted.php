@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Listeners;
-
 
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Event\Posted;
@@ -31,13 +38,15 @@ class SendNotificationWhenReplyIsPosted
         $discussion = $post->discussion;
 
         /**
-         * @type $tags Collection
-         * @type $tagIds Collection
+         * @var Collection
+         * @var $tagIds    Collection
          */
         $tags = $discussion->tags;
         $tagIds = $tags->map->id;
 
-        if ($tags->isEmpty()) return;
+        if ($tags->isEmpty()) {
+            return;
+        }
 
         $notify = $discussion->readers()
             ->where('users.id', '!=', $post->user_id)

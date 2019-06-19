@@ -1,14 +1,20 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Notifications;
-
 
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
-use Flarum\Tags\Tag;
 
 class NewPostBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -63,7 +69,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     public function getEmailSubject()
     {
         return app('translator')->trans('fof-follow-tags.email.newPostInTag', [
-            'title' => $this->post->discussion->title
+            'title' => $this->post->discussion->title,
         ]);
     }
 
@@ -74,6 +80,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     {
         return 'newPostInTag';
     }
+
     /**
      * {@inheritdoc}
      */
