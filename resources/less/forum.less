@@ -1,0 +1,48 @@
+.IndexPage-nav .item-subscription .Dropdown {
+  width: 100%;
+
+  .SubscriptionMenu-button {
+    width: 80%;
+  }
+
+  .SubscriptionMenu-button--lurk {
+    color: #de8e00;
+    background: #fff2ae;
+  }
+}
+
+.SubscriptionMenu-button--follow {
+  .Button--color(#de8e00, #fff2ae);
+}
+
+.SubscriptionMenu .Dropdown-menu {
+  min-width: 260px;
+}
+
+.SubscriptionMenuItem-label {
+  padding-left: 25px;
+  display: block;
+  white-space: normal;
+
+  & strong {
+    display: block;
+  }
+}
+
+.SubscriptionMenuItem-description {
+  display: block;
+  color: @muted-color;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+@media @phone {
+  .IndexPage-nav .item-subscription .Dropdown {
+    width: auto;
+    right: 40px;
+
+    > .Button--icon .icon:before {
+      content: '';
+    }
+  }
+}
