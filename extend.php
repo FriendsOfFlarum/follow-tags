@@ -45,7 +45,7 @@ return [
         $events->listen([Discussion\Hidden::class, Discussion\Deleted::class], Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class);
         $events->listen(Discussion\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class);
 
-        $events->listen([Post\Hidden::class, Post\Deleted::class], Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class);
+        $events->listen([Post\Hidden::class, Post\Deleted::class], Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class);
         $events->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class);
 
         $views->addNamespace('fof-follow-tags', __DIR__.'/resources/views');
