@@ -26,6 +26,9 @@ composer update fof/follow-tags
 
 ### Links
 
+[<img src="https://opencollective.com/fof/donate/button@2x.png?color=blue" height="25" />](https://opencollective.com/fof/donate)
+[<img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="25" />](https://patreon.com/datitisev)
+
 - [Packagist](https://packagist.org/packages/fof/follow-tags)
 - [GitHub](https://github.com/packages/FriendsOfFlarum/follow-tags)
 
