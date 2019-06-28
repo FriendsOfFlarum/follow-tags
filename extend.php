@@ -16,6 +16,7 @@ use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend;
+use Flarum\Notification\Event as Notification;
 use Flarum\Post\Event as Post;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
@@ -47,6 +48,10 @@ return [
 
         $events->listen([Post\Hidden::class, Post\Deleted::class], Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class);
         $events->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class);
+
+        $events->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class);
+
+        $events->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class);
 
         $views->addNamespace('fof-follow-tags', __DIR__.'/resources/views');
     }),

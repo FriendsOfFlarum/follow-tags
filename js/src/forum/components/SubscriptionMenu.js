@@ -35,6 +35,12 @@ export default class SubscriptionMenu extends Dropdown {
                 label: app.translator.trans('fof-follow-tags.forum.sub_controls.ignoring_button'),
                 description: app.translator.trans('fof-follow-tags.forum.sub_controls.ignoring_text'),
             },
+            {
+                subscription: 'hide',
+                icon: icons.hide,
+                label: app.translator.trans('fof-follow-tags.forum.sub_controls.hiding_button'),
+                description: app.translator.trans('fof-follow-tags.forum.sub_controls.hiding_text'),
+            },
         ];
     }
 
@@ -46,26 +52,15 @@ export default class SubscriptionMenu extends Dropdown {
         let buttonIcon = icons[subscription] || 'far fa-star';
         const buttonClass = 'SubscriptionMenu-button--' + subscription;
 
-        switch (subscription) {
-            case 'follow':
-                buttonLabel = app.translator.trans('fof-follow-tags.forum.sub_controls.following_button');
-                break;
+        if (['follow', 'lurk', 'ignore', 'hide'].includes(subscription)) {
+            const word = ['ignore', 'hide'].includes(subscription) ? subscription.slice(0, subscription.length - 1) : subscription;
 
-            case 'lurk':
-                buttonLabel = app.translator.trans('fof-follow-tags.forum.sub_controls.lurking_button');
-                break;
-
-            case 'ignore':
-                buttonLabel = app.translator.trans('fof-follow-tags.forum.sub_controls.ignoring_button');
-                break;
-
-            default:
-            // no default
+            buttonLabel = app.translator.trans(`fof-follow-tags.forum.sub_controls.${word}ing_button`);
         }
 
         const preferences = app.session.user.preferences();
-        const notifyEmail = preferences['notify_newPost_email'];
-        const notifyAlert = preferences['notify_newPost_alert'];
+        const notifyEmail = preferences['notify_newPostInTag_email'];
+        const notifyAlert = preferences['notify_newPostInTag_alert'];
 
         const title = extractText(
             app.translator.trans(
@@ -77,7 +72,7 @@ export default class SubscriptionMenu extends Dropdown {
             className: 'Button SubscriptionMenu-button ' + buttonClass,
             icon: buttonIcon,
             children: buttonLabel,
-            onclick: this.saveSubscription.bind(this, tag, ['follow', 'lurk', 'ignore'].indexOf(subscription) !== -1 ? false : 'follow'),
+            onclick: this.saveSubscription.bind(this, tag, ['follow', 'lurk', 'ignore', 'hide'].includes(subscription) ? false : 'follow'),
             title: title,
             loading: this.loading(),
         };
@@ -93,6 +88,7 @@ export default class SubscriptionMenu extends Dropdown {
             };
         } else {
             buttonProps.config = element => $(element).tooltip('destroy');
+            delete buttonProps.title;
         }
 
         return (
@@ -107,6 +103,7 @@ export default class SubscriptionMenu extends Dropdown {
                     {this.options.map(props => {
                         props.onclick = this.saveSubscription.bind(this, tag, props.subscription);
                         props.active = subscription === props.subscription;
+                        props.disabled = props.subscription === 'hide' && tag.isHidden();
 
                         return <li>{SubscriptionMenuItem.component(props)}</li>;
                     })}

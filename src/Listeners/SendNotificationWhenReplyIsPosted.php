@@ -56,7 +56,7 @@ class SendNotificationWhenReplyIsPosted
             ->where('discussion_user.last_read_post_number', $discussion->last_post_number)
             ->get()
             ->reject(function ($user) use ($tags) {
-                return $tags->map->state->map->subscription->contains('ignore')
+                return $tags->map->state->filter()->map->subscription->contains('ignore')
                     || $tags->whereIn('id', Tag::getIdsWhereCannot($user, 'viewDiscussions'))->isNotEmpty();
             });
 

@@ -14,12 +14,15 @@ fof-follow-tags:
       follow_button: => fof-follow-tags.ref.follow
       following_button: => fof-follow-tags.ref.following
       following_text: Be notified of all new discussions.
+      hiding_button: => fof-follow-tags.ref.hiding
+      hiding_text: Hide discussions from All Discussions page.
       ignoring_button: => fof-follow-tags.ref.ignoring
       ignoring_text: Never be notified.
       lurking_button: => fof-follow-tags.ref.lurking
       lurking_text: Be notified of all new discussions and replies.
       not_following_button: Not Following
       not_following_text: "Be notified only when @mentioned."
+      notify_alert_tooltip: Get a forum notification when there are new discussions or posts
       notify_email_tooltip: Get an email when there are new discussions or posts
 
     notifications:
@@ -33,5 +36,6 @@ fof-follow-tags:
   ref:
     follow: Follow
     following: Following
-    lurking: Lurking
+    hiding: Hiding
     ignoring: Ignoring
+    lurking: Lurking

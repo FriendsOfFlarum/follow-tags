@@ -41,7 +41,7 @@ class ChangeTagSubscription extends AbstractShowController
         $tag = Tag::whereVisibleTo($actor)->findOrFail($id);
         $state = $tag->stateFor($actor);
 
-        if (!in_array($subscription, ['follow', 'lurk', 'ignore'])) {
+        if (!in_array($subscription, ['follow', 'lurk', 'ignore', 'hide'])) {
             $subscription = null;
         }
 
