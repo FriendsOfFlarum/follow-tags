@@ -23,5 +23,5 @@ return [
         $prefix = $connection->getTablePrefix();
 
         $connection->statement("ALTER TABLE {$prefix}tag_user MODIFY COLUMN subscription ENUM('follow', 'lurk', 'ignore')");
-    }
+    },
 ];
