@@ -44,7 +44,7 @@ class SendNotificationWhenDiscussionIsStarted
         $tags = $discussion->tags;
         $tagIds = $tags->map->id;
 
-        if ($tags->isEmpty()) {
+        if ($tags->isEmpty() || !$event->actor->can('viewPrivate', $discussion)) {
             return;
         }
 
