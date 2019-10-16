@@ -1,5 +1,13 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Listeners;
 
@@ -10,7 +18,8 @@ use Illuminate\Events\Dispatcher;
 
 class QueueNotificationJobs
 {
-    public function subscribe(Dispatcher $events) {
+    public function subscribe(Dispatcher $events)
+    {
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
         $events->listen(Posted::class, [$this, 'whenPostCreated']);
     }
@@ -22,8 +31,11 @@ class QueueNotificationJobs
         );
     }
 
-    public function whenPostCreated(Posted $event) {
-        if (!$event->post->discussion->exists || $event->post->number == 1) return;
+    public function whenPostCreated(Posted $event)
+    {
+        if (!$event->post->discussion->exists || $event->post->number == 1) {
+            return;
+        }
 
         app('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->discussion->last_post_number)

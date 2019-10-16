@@ -1,8 +1,15 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2019 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
 
 namespace FoF\FollowTags\Jobs;
-
 
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
@@ -28,7 +35,8 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
         $this->discussion = $discussion;
     }
 
-    public function handle(NotificationSyncer $notifications) {
+    public function handle(NotificationSyncer $notifications)
+    {
         /**
          * @var Collection
          * @var $tagIds    Collection
