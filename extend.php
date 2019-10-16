@@ -40,8 +40,7 @@ return [
             $event->add(NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
 
-        $events->listen(Post\Posted::class, Listeners\SendNotificationWhenReplyIsPosted::class);
-        $events->listen(Discussion\Started::class, Listeners\SendNotificationWhenDiscussionIsStarted::class);
+        $events->subscribe(Listeners\QueueNotificationJobs::class);
 
         $events->listen([Discussion\Hidden::class, Discussion\Deleted::class], Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class);
         $events->listen(Discussion\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class);
