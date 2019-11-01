@@ -13,7 +13,6 @@ namespace FoF\FollowTags\Jobs;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
-use Flarum\Tags\Tag;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
 use Illuminate\Bus\Queueable;
@@ -54,8 +53,8 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
             ->whereIn('tag_user.subscription', ['follow', 'lurk'])
             ->get()
             ->reject(function ($user) use ($tags) {
-                return $tags->map->state->filter()->map->subscription->contains('ignore')
-                    || $tags->whereIn('id', Tag::getIdsWhereCannot($user, 'viewDiscussions'))->isNotEmpty();
+                return $tags->map->stateFor($user)->map->subscription->contains('ignore')
+                        || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id);
             });
 
         $notifications->sync(
