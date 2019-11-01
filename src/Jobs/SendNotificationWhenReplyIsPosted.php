@@ -11,7 +11,6 @@
 
 namespace FoF\FollowTags\Jobs;
 
-use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Post;
 use Flarum\User\User;
