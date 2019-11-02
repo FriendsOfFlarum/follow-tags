@@ -7,4 +7,4 @@ To view the new discussion, check out the following link:
 
 ---
 
-{!! $blueprint->discussion->firstPost->content !!}
+{!! $blueprint->post->content !!}

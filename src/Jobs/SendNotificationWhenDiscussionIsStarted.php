@@ -36,14 +36,16 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
+
         /**
          * @var Collection
          * @var $tagIds    Collection
          */
         $tags = $this->discussion->tags;
         $tagIds = $tags->map->id;
+        $firstPost = $this->discussion->firstPost ?? $this->discussion->posts()->orderBy('number')->first();
 
-        if ($tags->isEmpty()) {
+        if ($tags->isEmpty() || !$firstPost) {
             return;
         }
 
@@ -52,13 +54,14 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->whereIn('tag_user.subscription', ['follow', 'lurk'])
             ->get()
-            ->reject(function ($user) use ($tags) {
+            ->reject(function ($user) use ($firstPost, $tags) {
                 return $tags->map->stateFor($user)->map->subscription->contains('ignore')
-                        || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id);
+                        || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
+                        || !$firstPost->isVisibleTo($user);
             });
 
         $notifications->sync(
-            new NewDiscussionBlueprint($this->discussion),
+            new NewDiscussionBlueprint($this->discussion, $firstPost),
             $notify->all()
         );
     }

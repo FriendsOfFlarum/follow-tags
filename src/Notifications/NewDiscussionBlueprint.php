@@ -14,14 +14,24 @@ namespace FoF\FollowTags\Notifications;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
+use Flarum\Post\Post;
 
 class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
 {
+    /**
+     * @var Discussion
+     */
     public $discussion;
 
-    public function __construct(Discussion $discussion)
+    /**
+     * @var Post
+     */
+    public $post;
+
+    public function __construct(Discussion $discussion, Post $post = null)
     {
         $this->discussion = $discussion;
+        $this->post = $post;
     }
 
     /**
