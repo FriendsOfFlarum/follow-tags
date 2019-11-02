@@ -1,10 +1,8 @@
 import Notification from 'flarum/components/Notification';
 
-import icons from '../icons';
-
 export default class NewDiscussionNotification extends Notification {
     icon() {
-        return icons.follow;
+        return 'fas fa-user-tag';
     }
 
     href() {
