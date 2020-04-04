@@ -22,7 +22,8 @@ use Illuminate\Support\Collection;
 
 class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * @var Discussion
