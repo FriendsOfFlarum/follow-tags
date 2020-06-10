@@ -14,6 +14,7 @@ namespace FoF\FollowTags\Listeners;
 use Flarum\Approval\Event\PostWasApproved;
 use Flarum\Discussion\Event\Started;
 use Flarum\Post\Event\Posted;
+use Flarum\Tags\Event\DiscussionWasTagged;
 use FoF\FollowTags\Jobs;
 use Illuminate\Events\Dispatcher;
 
@@ -24,6 +25,7 @@ class QueueNotificationJobs
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
         $events->listen(Posted::class, [$this, 'whenPostCreated']);
         $events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
+        $events->listen(DiscussionWasTagged::class, [$this, 'whenDiscussionTagChanged']);
     }
 
     public function whenDiscussionStarted(Started $event)
@@ -54,6 +56,13 @@ class QueueNotificationJobs
             $event->post->number == 1
                 ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
                 : new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
+        );
+    }
+
+    public function whenDiscussionTagChanged(DiscussionWasTagged $event)
+    {
+        app('flarum.queue.connection')->push(
+            new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $event->discussion)
         );
     }
 }
