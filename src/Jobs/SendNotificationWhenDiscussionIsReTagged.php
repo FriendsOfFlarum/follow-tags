@@ -26,7 +26,6 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
     use SerializesModels;
 
     /**
-     *
      * @var User
      */
     protected $actor;
