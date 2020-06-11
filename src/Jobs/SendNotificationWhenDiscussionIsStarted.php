@@ -37,7 +37,10 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
-
+        if (!$this->discussion->exists()) {
+            return;
+        }
+        
         /**
          * @var Collection
          * @var $tagIds    Collection
