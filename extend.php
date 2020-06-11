@@ -19,6 +19,7 @@ use Flarum\Extend;
 use Flarum\Notification\Event as Notification;
 use Flarum\Post\Event as Post;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
+use FoF\FollowTags\Notifications\NewDiscussionTagBlueprint;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Events\Dispatcher;
@@ -32,12 +33,13 @@ return [
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
-    new Extend\Compat(function (Dispatcher $events, Factory $views) {
+    (function (Dispatcher $events, Factory $views) {
         $events->listen(Serializing::class, Listeners\AddTagSubscriptionAttribute::class);
 
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
             $event->add(NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
+            $event->add(NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
         });
 
         $events->subscribe(Listeners\QueueNotificationJobs::class);

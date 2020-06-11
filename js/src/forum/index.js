@@ -4,6 +4,7 @@ import NotificationGrid from 'flarum/components/NotificationGrid';
 import addSubscriptionControls from './addSubscriptionControls';
 import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
+import NewDiscussionTagNotification from './components/NewDiscussionTagNotification';
 
 app.initializers.add(
     'fof/follow-tags',
@@ -17,6 +18,7 @@ app.initializers.add(
 
         app.notificationComponents.newPostInTag = NewPostNotification;
         app.notificationComponents.newDiscussionInTag = NewDiscussionNotification;
+        app.notificationComponents.newDiscussionTag = NewDiscussionTagNotification;
 
         extend(NotificationGrid.prototype, 'notificationTypes', function(items) {
             items.add('newDiscussionInTag', {
@@ -29,6 +31,12 @@ app.initializers.add(
                 name: 'newPostInTag',
                 icon: 'fas fa-user-tag',
                 label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_post_label'),
+            });
+
+            items.add('newDiscussionTag', {
+                name: 'newDiscussionTag',
+                icon: 'fas fa-user-tag',
+                label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_discussion_tag_label'),
             });
         });
     },
