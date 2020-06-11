@@ -46,7 +46,7 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
         if (!$this->discussion->exists()) {
             return;
         }
-        
+
         /**
          * @var Collection
          * @var $tagIds    Collection
