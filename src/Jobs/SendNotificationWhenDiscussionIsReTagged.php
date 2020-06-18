@@ -56,7 +56,7 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
             return;
         }
 
-        $notify = User::where('users.id', '!=', $this->discussion->user_id)
+        $notify = User::where('users.id', '!=', $this->actor->id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->whereIn('tag_user.subscription', ['follow', 'lurk'])
