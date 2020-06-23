@@ -33,7 +33,7 @@ class HideDiscussionsInIgnoredTags
                     ->whereIn('tag_id', function ($query) use ($db, $user) {
                         $query
                             ->select($db->raw(1))
-                            ->from((new TagState)->getTable())
+                            ->from((new TagState())->getTable())
                             ->where('user_id', $user->id)
                             ->where('subscription', 'hide');
                     })
