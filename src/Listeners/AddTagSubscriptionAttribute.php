@@ -12,7 +12,6 @@
 namespace FoF\FollowTags\Listeners;
 
 use Flarum\Api\Event\Serializing;
-use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 
 class AddTagSubscriptionAttribute
@@ -21,11 +20,6 @@ class AddTagSubscriptionAttribute
     {
         if ($event->isSerializer(TagSerializer::class)) {
             $event->attributes['subscription'] = $event->model->state['subscription'];
-//            $event->attributes['subscription'] = $state->subscription;
-        }
-
-        if ($event->isSerializer(DiscussionSerializer::class)) {
-//            throw new \Error(json_encode($event->model->tags->map->state->map->subscription));
         }
     }
 }
