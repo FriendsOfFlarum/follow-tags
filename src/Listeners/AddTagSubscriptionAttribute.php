@@ -19,9 +19,9 @@ class AddTagSubscriptionAttribute
 {
     public function handle(Serializing $event)
     {
-        if ($event->isSerializer(TagSerializer::class)
-            && ($state = $event->model->stateFor($event->actor))) {
-            $event->attributes['subscription'] = $state->subscription;
+        if ($event->isSerializer(TagSerializer::class)) {
+            $event->attributes['subscription'] = $event->model->state['subscription'];
+//            $event->attributes['subscription'] = $state->subscription;
         }
 
         if ($event->isSerializer(DiscussionSerializer::class)) {
