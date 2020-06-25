@@ -2,19 +2,27 @@ import { extend } from 'flarum/extend';
 import NotificationGrid from 'flarum/components/NotificationGrid';
 
 import addSubscriptionControls from './addSubscriptionControls';
+import addFollowedTagsDiscussions from './addFollowedTagsDiscussions';
+
 import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
 import NewDiscussionTagNotification from './components/NewDiscussionTagNotification';
+import addDiscussionBadge from './addDiscussionBadge';
 
 app.initializers.add(
     'fof/follow-tags',
     () => {
         if (!app.initializers.has('flarum-tags')) {
-            console.error('!! flarum/tags is not enabled');
+            console.error('[fof/follow-tags] flarum/tags is not enabled');
             return;
         }
 
         addSubscriptionControls();
+
+        if (app.initializers.has('subscriptions')) {
+            addDiscussionBadge();
+            addFollowedTagsDiscussions();
+        }
 
         app.notificationComponents.newPostInTag = NewPostNotification;
         app.notificationComponents.newDiscussionInTag = NewDiscussionNotification;

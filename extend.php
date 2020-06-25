@@ -14,6 +14,7 @@ namespace FoF\FollowTags;
 use Flarum\Api\Event\Serializing;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
+use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Event\ConfigureNotificationTypes;
 use Flarum\Extend;
 use Flarum\Notification\Event as Notification;
@@ -53,6 +54,10 @@ return [
         $events->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class);
 
         $events->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class);
+
+        $events->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
+            $event->gambits->add(Gambit\FollowTagsGambit::class);
+        });
 
         $views->addNamespace('fof-follow-tags', __DIR__.'/resources/views');
     }),
