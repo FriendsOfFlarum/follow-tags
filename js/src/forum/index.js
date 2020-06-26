@@ -8,6 +8,7 @@ import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
 import NewDiscussionTagNotification from './components/NewDiscussionTagNotification';
 import addDiscussionBadge from './addDiscussionBadge';
+import addPreferences from './addPreferences';
 
 app.initializers.add(
     'fof/follow-tags',
@@ -22,6 +23,7 @@ app.initializers.add(
         if (app.initializers.has('subscriptions')) {
             addDiscussionBadge();
             addFollowedTagsDiscussions();
+            addPreferences();
         }
 
         app.notificationComponents.newPostInTag = NewPostNotification;
