@@ -30,7 +30,7 @@ app.initializers.add(
         app.notificationComponents.newDiscussionInTag = NewDiscussionNotification;
         app.notificationComponents.newDiscussionTag = NewDiscussionTagNotification;
 
-        extend(NotificationGrid.prototype, 'notificationTypes', function(items) {
+        extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
             items.add('newDiscussionInTag', {
                 name: 'newDiscussionInTag',
                 icon: 'fas fa-user-tag',

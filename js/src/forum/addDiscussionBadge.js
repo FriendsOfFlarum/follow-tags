@@ -5,14 +5,14 @@ import Badge from 'flarum/components/Badge';
 import isFollowingPage from './utils/isFollowingPage';
 
 export default function addSubscriptionBadge() {
-    extend(Discussion.prototype, 'badges', function(badges) {
+    extend(Discussion.prototype, 'badges', function (badges) {
         if (!isFollowingPage()) {
             return;
         }
 
         const subscriptions = this.tags()
-            .map(tag => tag.subscription())
-            .filter(state => ['lurk', 'follow'].includes(state));
+            .map((tag) => tag.subscription())
+            .filter((state) => ['lurk', 'follow'].includes(state));
 
         const type = subscriptions.includes('lurk') ? 'lurking' : 'following';
 

@@ -7,7 +7,7 @@ import Select from 'flarum/components/Select';
 import { getOptions, getDefaultFollowingFiltering } from './utils/getDefaultFollowingFiltering';
 
 export default () => {
-    extend(SettingsPage.prototype, 'settingsItems', function(items) {
+    extend(SettingsPage.prototype, 'settingsItems', function (items) {
         items.add(
             'fof-follow-tags',
             FieldSet.component({
@@ -19,7 +19,7 @@ export default () => {
                         {Select.component({
                             options: getOptions(),
                             value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
-                            onchange: key => this.preferenceSaver('followTagsPageDefault')(key),
+                            onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
                         })}
                     </div>,
                 ],

@@ -11,7 +11,7 @@ import isFollowingPage from './utils/isFollowingPage';
 import { getDefaultFollowingFiltering, getOptions } from './utils/getDefaultFollowingFiltering';
 
 export default () => {
-    extend(DiscussionList.prototype, 'requestParams', function(params) {
+    extend(DiscussionList.prototype, 'requestParams', function (params) {
         if (!isFollowingPage() || !app.session.user) return;
 
         if (!this.followTags) {
@@ -35,7 +35,7 @@ export default () => {
         }
     });
 
-    extend(IndexPage.prototype, 'viewItems', function(items) {
+    extend(IndexPage.prototype, 'viewItems', function (items) {
         if (!isFollowingPage() || !app.session.user) {
             return;
         }
@@ -48,7 +48,7 @@ export default () => {
             Dropdown.component({
                 buttonClassName: 'Button',
                 label: options[selected] || getDefaultFollowingFiltering(),
-                children: Object.keys(options).map(key => {
+                children: Object.keys(options).map((key) => {
                     const active = key === selected;
 
                     return Button.component({

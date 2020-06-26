@@ -78,7 +78,7 @@ export default class SubscriptionMenu extends Dropdown {
         };
 
         if ((notifyEmail || notifyAlert) && subscription === false) {
-            buttonProps.config = element => {
+            buttonProps.config = (element) => {
                 $(element).tooltip({
                     container: '.SubscriptionMenu',
                     placement: 'bottom',
@@ -87,7 +87,7 @@ export default class SubscriptionMenu extends Dropdown {
                 });
             };
         } else {
-            buttonProps.config = element => $(element).tooltip('destroy');
+            buttonProps.config = (element) => $(element).tooltip('destroy');
             delete buttonProps.title;
         }
 
@@ -100,7 +100,7 @@ export default class SubscriptionMenu extends Dropdown {
                 </button>
 
                 <ul className="Dropdown-menu dropdown-menu Dropdown-menu--right">
-                    {this.options.map(props => {
+                    {this.options.map((props) => {
                         props.onclick = this.saveSubscription.bind(this, tag, props.subscription);
                         props.active = subscription === props.subscription;
                         props.disabled = props.subscription === 'hide' && tag.isHidden();
@@ -124,7 +124,7 @@ export default class SubscriptionMenu extends Dropdown {
                 },
             },
         })
-            .then(res => app.store.pushPayload(res))
+            .then((res) => app.store.pushPayload(res))
             .then(() => {
                 this.loading(false);
                 m.lazyRedraw();
