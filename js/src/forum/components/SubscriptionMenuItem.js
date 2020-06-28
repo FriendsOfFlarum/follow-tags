@@ -5,7 +5,7 @@ export default class SubscriptionMenuItem extends Component {
     view() {
         const attrs = {
             onclick: this.props.onclick,
-            disabled: this.props.disabled
+            disabled: this.props.disabled,
         };
 
         return (
