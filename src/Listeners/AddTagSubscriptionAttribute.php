@@ -20,13 +20,11 @@ class AddTagSubscriptionAttribute
     public function handle(Serializing $event)
     {
         if ($event->isSerializer(TagSerializer::class)) {
-            if (isset($event->model->state)) {
-                $state = $event->model->state;
-            } else {
-                $state = $event->model->stateFor($event->actor);
+            if (!isset($event->model->state)) {
+                $event->model->state = $event->model->stateFor($event->actor);
             }
 
-            $event->attributes['subscription'] = Arr::get($state ?? [], 'subscription');
+            $event->attributes['subscription'] = Arr::get($event->model->state ?? [], 'subscription');
         }
     }
 }
