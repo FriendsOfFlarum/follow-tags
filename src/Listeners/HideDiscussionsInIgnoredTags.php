@@ -24,13 +24,19 @@ class HideDiscussionsInIgnoredTags
 
         $user = $event->criteria->actor;
 
-        $event->search->getQuery()
-            ->whereNotExists(function ($query) use ($user) {
-                $hide = TagState::where('user_id', $user->id)->where('subscription', 'hide')->pluck('tag_id');
+        $db = $event->search->getQuery()->getConnection();
 
+        $event->search->getQuery()
+            ->whereNotExists(function ($query) use ($db, $user) {
                 return $query->selectRaw('1')
                     ->from('discussion_tag')
-                    ->whereIn('tag_id', $hide)
+                    ->whereIn('tag_id', function ($query) use ($db, $user) {
+                        $query
+                            ->select($db->raw(1))
+                            ->from((new TagState())->getTable())
+                            ->where('user_id', $user->id)
+                            ->where('subscription', 'hide');
+                    })
                     ->whereColumn('discussions.id', 'discussion_id');
             });
     }
