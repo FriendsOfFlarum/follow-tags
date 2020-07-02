@@ -13,7 +13,6 @@ namespace FoF\FollowTags\Listeners;
 
 use Flarum\Api\Event\Serializing;
 use Flarum\Tags\Api\Serializer\TagSerializer;
-use Illuminate\Support\Arr;
 
 class AddTagSubscriptionAttribute
 {
