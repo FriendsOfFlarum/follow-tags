@@ -43,7 +43,7 @@ class FollowTagsGambit extends AbstractRegexGambit
                 ->pluck('tag_id')
                 ->all();
 
-            return $query->selectRaw('1')
+            $query->selectRaw('1')
                 ->from('discussion_tag')
                 ->whereIn('tag_id', $tagIds)
                 ->whereColumn('discussions.id', 'discussion_id');
