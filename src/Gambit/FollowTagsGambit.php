@@ -36,7 +36,7 @@ class FollowTagsGambit extends AbstractRegexGambit
             return $gambit instanceof SubscriptionGambit;
         });
 
-        $search->getQuery()->{$includeFollowing ? 'orWhereExists' : 'whereExists'}(function ($query) use ($actor, $negate) {
+        $search->getQuery()->{$includeFollowing ? 'orWhereExists' : 'whereExists'}(function ($query) use ($actor) {
             $tagIds = TagState::query()
                 ->where('user_id', $actor->id)
                 ->whereIn('subscription', ['lurk', 'follow'])
