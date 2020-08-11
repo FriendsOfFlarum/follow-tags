@@ -3,12 +3,10 @@ import { extend } from 'flarum/extend';
 import DiscussionList from 'flarum/components/DiscussionList';
 import IndexPage from 'flarum/components/IndexPage';
 
-import Button from 'flarum/components/Button';
-import Dropdown from 'flarum/components/Dropdown';
-
 import isFollowingPage from './utils/isFollowingPage';
 
-import { getDefaultFollowingFiltering, getOptions } from './utils/getDefaultFollowingFiltering';
+import { getDefaultFollowingFiltering } from './utils/getDefaultFollowingFiltering';
+import FollowingPageFilterDropdown from './components/FollowingPageFilterDropdown';
 
 export default () => {
     extend(DiscussionList.prototype, 'requestParams', function (params) {
@@ -40,29 +38,6 @@ export default () => {
             return;
         }
 
-        const selected = app.cache.discussionList.followTags;
-        const options = getOptions();
-
-        items.add(
-            'follow-tags',
-            Dropdown.component({
-                buttonClassName: 'Button',
-                label: options[selected] || getDefaultFollowingFiltering(),
-                children: Object.keys(options).map((key) => {
-                    const active = key === selected;
-
-                    return Button.component({
-                        active,
-                        children: options[key],
-                        icon: active ? 'fas fa-check' : true,
-                        onclick: () => {
-                            app.cache.discussionList.followTags = key;
-
-                            app.cache.discussionList.refresh();
-                        },
-                    });
-                }),
-            })
-        );
+        items.add('follow-tags', <FollowingPageFilterDropdown />);
     });
 };
