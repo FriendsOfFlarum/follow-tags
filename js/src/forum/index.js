@@ -10,6 +10,9 @@ import NewDiscussionTagNotification from './components/NewDiscussionTagNotificat
 import addDiscussionBadge from './addDiscussionBadge';
 import addPreferences from './addPreferences';
 
+export * from './components';
+export * from './utils';
+
 app.initializers.add(
     'fof/follow-tags',
     () => {
