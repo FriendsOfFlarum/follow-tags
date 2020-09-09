@@ -1,9 +1,11 @@
+import {options, getOptions, getDefaultFollowingFiltering} from './getDefaultFollowingFiltering';
 import isFollowingPage from './isFollowingPage';
-import { options, getOptions, getDefaultFollowingFiltering } from './getDefaultFollowingFiltering';
+import {utils as commonUtils} from '../../common';
 
-export const forumUtils = {
+export const utils = {
     options,
     getOptions,
     getDefaultFollowingFiltering,
     isFollowingPage,
+    ...commonUtils,
 };
