@@ -15,6 +15,7 @@ use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
 use Flarum\User\AssertPermissionTrait;
+use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -33,8 +34,8 @@ class ChangeTagSubscription extends AbstractShowController
     protected function data(ServerRequestInterface $request, Document $document)
     {
         $actor = $request->getAttribute('actor');
-        $id = array_get($request->getQueryParams(), 'id');
-        $subscription = array_get($request->getParsedBody(), 'data.subscription');
+        $id = Arr::get($request->getQueryParams(), 'id');
+        $subscription = Arr::get($request->getParsedBody(), 'data.subscription');
 
         $this->assertRegistered($actor);
 
