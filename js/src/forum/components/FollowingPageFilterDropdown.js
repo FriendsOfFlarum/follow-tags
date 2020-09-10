@@ -7,27 +7,25 @@ import { getOptions } from '../utils/getDefaultFollowingFiltering';
 
 export default class FollowingPageFilterDropdown extends Component {
     view() {
-        const selected = app.cache.discussionList.followTags;
+        const selected = app.discussions.followTags;
         const options = this.options();
 
         return Dropdown.component({
             buttonClassName: 'Button',
             label: options[selected] || getDefaultFollowingFiltering(),
-            children: Object.keys(options).map((key) => {
-                const active = key === selected;
+        }, Object.keys(options).map((key) => {
+            const active = key === selected;
 
-                return Button.component({
-                    active,
-                    children: options[key],
-                    icon: active ? 'fas fa-check' : true,
-                    onclick: () => {
-                        app.cache.discussionList.followTags = key;
+            return Button.component({
+                active,
+                icon: active ? 'fas fa-check' : true,
+                onclick: () => {
+                    app.discussions.followTags = key;
 
-                        app.cache.discussionList.refresh();
-                    },
-                });
-            }),
-        });
+                    app.discussions.refresh();
+                },
+            }, options[key]);
+        }));
     }
 
     options() {

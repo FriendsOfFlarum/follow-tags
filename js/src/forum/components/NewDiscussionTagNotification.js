@@ -6,7 +6,7 @@ export default class NewDiscussionTagNotification extends Notification {
     }
 
     href() {
-        const notification = this.props.notification;
+        const notification = this.attrs.notification;
         const discussion = notification.subject();
 
         return app.route.discussion(discussion);
@@ -14,8 +14,8 @@ export default class NewDiscussionTagNotification extends Notification {
 
     content() {
         return app.translator.trans('fof-follow-tags.forum.notifications.new_discussion_tag_text', {
-            user: this.props.notification.fromUser(),
-            title: this.props.notification.subject().title(),
+            user: this.attrs.notification.fromUser(),
+            title: this.attrs.notification.subject().title(),
         });
     }
 }

@@ -1,1 +1,1 @@
-export default () => m.route().includes(app.route('index.filter', { filter: 'following' }));
+export default () => m.route.get().includes(app.route('following'));
