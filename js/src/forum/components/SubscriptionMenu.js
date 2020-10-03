@@ -2,6 +2,7 @@ import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import icon from 'flarum/helpers/icon';
 import extractText from 'flarum/utils/extractText';
+import Stream from 'flarum/utils/Stream';
 
 import SubscriptionMenuItem from './SubscriptionMenuItem';
 import icons from '../icons';
@@ -10,7 +11,7 @@ export default class SubscriptionMenu extends Dropdown {
     oninit(vnode) {
         super.oninit(vnode);
 
-        this.loading = m.stream(false);
+        this.loading = Stream(false);
 
         this.options = [
             {
