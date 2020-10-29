@@ -71,7 +71,7 @@ export default class SubscriptionMenu extends Dropdown {
             )
         );
 
-        const buttonattrs = {
+        const buttonAttrs = {
             className: 'Button SubscriptionMenu-button ' + buttonClass,
             icon: buttonIcon,
             onclick: this.saveSubscription.bind(this, tag, ['follow', 'lurk', 'ignore', 'hide'].includes(subscription) ? false : 'follow'),
@@ -80,25 +80,22 @@ export default class SubscriptionMenu extends Dropdown {
         };
 
         if ((notifyEmail || notifyAlert) && subscription === false) {
-            buttonattrs.oncreate = (vnode) => {
+            buttonAttrs.oncreate = (vnode) =>
                 $(vnode.dom).tooltip({
                     container: '.SubscriptionMenu',
                     placement: 'bottom',
                     delay: 250,
                     title,
                 });
-            };
-
         } else {
-            buttonattrs.oncreate = (vnode) => $(vnode.dom).tooltip('destroy');
-            delete buttonattrs.title;
+            delete buttonAttrs.title;
         }
 
-        buttonattrs.onupdate = buttonattrs.oncreate;
+        buttonAttrs.onupdate = buttonAttrs.oncreate;
 
         return (
             <div className="Dropdown ButtonGroup SubscriptionMenu App-primaryControl">
-                {Button.component(buttonattrs, buttonLabel)}
+                {Button.component(buttonAttrs, buttonLabel)}
 
                 <button className={'Dropdown-toggle Button Button--icon ' + buttonClass} data-toggle="dropdown">
                     {icon('fas fa-caret-down', { className: 'Button-icon' })}
