@@ -42,7 +42,7 @@ return [
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
-    (new Extend\View)
+    (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
 
     (new ExtensionSettings())
