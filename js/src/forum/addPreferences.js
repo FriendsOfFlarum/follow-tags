@@ -10,19 +10,22 @@ export default () => {
     extend(SettingsPage.prototype, 'settingsItems', function (items) {
         items.add(
             'fof-follow-tags',
-            FieldSet.component({
-                label: app.translator.trans('fof-follow-tags.forum.user.settings.heading'),
-                className: 'Settings-follow-tags',
-            }, [
-                <div className="Form-group">
-                    <p>{app.translator.trans('fof-follow-tags.forum.user.settings.filter_label')}</p>
-                    {Select.component({
-                        options: getOptions(),
-                        value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
-                        onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
-                    })}
-                </div>,
-            ])
+            FieldSet.component(
+                {
+                    label: app.translator.trans('fof-follow-tags.forum.user.settings.heading'),
+                    className: 'Settings-follow-tags',
+                },
+                [
+                    <div className="Form-group">
+                        <p>{app.translator.trans('fof-follow-tags.forum.user.settings.filter_label')}</p>
+                        {Select.component({
+                            options: getOptions(),
+                            value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
+                            onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
+                        })}
+                    </div>,
+                ]
+            )
         );
     });
 };

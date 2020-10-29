@@ -1,6 +1,6 @@
-import {options, getOptions, getDefaultFollowingFiltering} from './getDefaultFollowingFiltering';
+import { options, getOptions, getDefaultFollowingFiltering } from './getDefaultFollowingFiltering';
 import isFollowingPage from './isFollowingPage';
-import {utils as commonUtils} from '../../common';
+import { utils as commonUtils } from '../../common';
 
 export const utils = {
     options,
