@@ -14,6 +14,6 @@ export default () => {
 
         items.replace('newDiscussion', items.get('newDiscussion'), 10);
 
-        items.add('subscription', SubscriptionMenu.component({ tag, itemClassName: 'App-primaryControl' }), 5);
+        items.add('subscription', SubscriptionMenu.component({ model: tag, itemClassName: 'App-primaryControl' }), 5);
     });
 };

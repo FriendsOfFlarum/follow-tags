@@ -13,17 +13,16 @@ export default () => {
             FieldSet.component({
                 label: app.translator.trans('fof-follow-tags.forum.user.settings.heading'),
                 className: 'Settings-follow-tags',
-                children: [
-                    <div className="Form-group">
-                        <p>{app.translator.trans('fof-follow-tags.forum.user.settings.filter_label')}</p>
-                        {Select.component({
-                            options: getOptions(),
-                            value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
-                            onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
-                        })}
-                    </div>,
-                ],
-            })
+            }, [
+                <div className="Form-group">
+                    <p>{app.translator.trans('fof-follow-tags.forum.user.settings.filter_label')}</p>
+                    {Select.component({
+                        options: getOptions(),
+                        value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
+                        onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
+                    })}
+                </div>,
+            ])
         );
     });
 };

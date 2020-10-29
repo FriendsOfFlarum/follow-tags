@@ -2,13 +2,16 @@ import Dropdown from 'flarum/components/Dropdown';
 import Button from 'flarum/components/Button';
 import icon from 'flarum/helpers/icon';
 import extractText from 'flarum/utils/extractText';
+import Stream from 'flarum/utils/Stream';
 
 import SubscriptionMenuItem from './SubscriptionMenuItem';
 import icons from '../icons';
 
 export default class SubscriptionMenu extends Dropdown {
-    init() {
-        this.loading = m.prop(false);
+    oninit(vnode) {
+        super.oninit(vnode);
+
+        this.loading = Stream(false);
 
         this.options = [
             {
@@ -45,7 +48,7 @@ export default class SubscriptionMenu extends Dropdown {
     }
 
     view() {
-        const tag = this.props.tag;
+        const tag = this.attrs.model;
         const subscription = tag.subscription() || false;
 
         let buttonLabel = app.translator.trans('fof-follow-tags.forum.sub_controls.follow_button');
@@ -68,44 +71,46 @@ export default class SubscriptionMenu extends Dropdown {
             )
         );
 
-        const buttonProps = {
+        const buttonattrs = {
             className: 'Button SubscriptionMenu-button ' + buttonClass,
             icon: buttonIcon,
-            children: buttonLabel,
             onclick: this.saveSubscription.bind(this, tag, ['follow', 'lurk', 'ignore', 'hide'].includes(subscription) ? false : 'follow'),
             title: title,
             loading: this.loading(),
         };
 
         if ((notifyEmail || notifyAlert) && subscription === false) {
-            buttonProps.config = (element) => {
-                $(element).tooltip({
+            buttonattrs.oncreate = (vnode) => {
+                $(vnode.dom).tooltip({
                     container: '.SubscriptionMenu',
                     placement: 'bottom',
                     delay: 250,
                     title,
                 });
             };
+
         } else {
-            buttonProps.config = (element) => $(element).tooltip('destroy');
-            delete buttonProps.title;
+            buttonattrs.oncreate = (vnode) => $(vnode.dom).tooltip('destroy');
+            delete buttonattrs.title;
         }
+
+        buttonattrs.onupdate = buttonattrs.oncreate;
 
         return (
             <div className="Dropdown ButtonGroup SubscriptionMenu App-primaryControl">
-                {Button.component(buttonProps)}
+                {Button.component(buttonattrs, buttonLabel)}
 
                 <button className={'Dropdown-toggle Button Button--icon ' + buttonClass} data-toggle="dropdown">
                     {icon('fas fa-caret-down', { className: 'Button-icon' })}
                 </button>
 
                 <ul className="Dropdown-menu dropdown-menu Dropdown-menu--right">
-                    {this.options.map((props) => {
-                        props.onclick = this.saveSubscription.bind(this, tag, props.subscription);
-                        props.active = subscription === props.subscription;
-                        props.disabled = props.subscription === 'hide' && tag.isHidden();
+                    {this.options.map((attrs) => {
+                        attrs.onclick = this.saveSubscription.bind(this, tag, attrs.subscription);
+                        attrs.active = subscription === attrs.subscription;
+                        attrs.disabled = attrs.subscription === 'hide' && tag.isHidden();
 
-                        return <li>{SubscriptionMenuItem.component(props)}</li>;
+                        return <li>{SubscriptionMenuItem.component(attrs)}</li>;
                     })}
                 </ul>
             </div>
@@ -118,7 +123,7 @@ export default class SubscriptionMenu extends Dropdown {
         app.request({
             url: `${app.forum.attribute('apiUrl')}/tags/${tag.id()}/subscription`,
             method: 'POST',
-            data: {
+            body: {
                 data: {
                     subscription,
                 },
@@ -127,7 +132,7 @@ export default class SubscriptionMenu extends Dropdown {
             .then((res) => app.store.pushPayload(res))
             .then(() => {
                 this.loading(false);
-                m.lazyRedraw();
+                m.redraw();
             });
 
         this.$('.SubscriptionMenu-button').tooltip('hide');

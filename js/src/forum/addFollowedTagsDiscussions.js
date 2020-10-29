@@ -1,7 +1,7 @@
 import { extend } from 'flarum/extend';
 
-import DiscussionList from 'flarum/components/DiscussionList';
 import IndexPage from 'flarum/components/IndexPage';
+import DiscussionListState from 'flarum/states/DiscussionListState';
 
 import isFollowingPage from './utils/isFollowingPage';
 
@@ -9,7 +9,7 @@ import { getDefaultFollowingFiltering } from './utils/getDefaultFollowingFilteri
 import FollowingPageFilterDropdown from './components/FollowingPageFilterDropdown';
 
 export default () => {
-    extend(DiscussionList.prototype, 'requestParams', function (params) {
+    extend(DiscussionListState.prototype, 'requestParams', function (params) {
         if (!isFollowingPage() || !app.session.user) return;
 
         if (!this.followTags) {
@@ -17,10 +17,9 @@ export default () => {
         }
 
         let q = params.filter.q || '';
-        const filter = m.route.param().filter;
         const followTags = this.followTags;
 
-        if (filter === 'following' && ['tags', 'all'].includes(followTags)) {
+        if (app.current.get('routeName') === 'following' && ['tags', 'all'].includes(followTags)) {
             if (followTags === 'tags' || followTags === 'all') {
                 q += ' is:following-tag';
             }

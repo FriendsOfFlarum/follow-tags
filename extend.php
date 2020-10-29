@@ -25,7 +25,6 @@ use FoF\Extend\Extend\ExtensionSettings;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
 use FoF\FollowTags\Notifications\NewDiscussionTagBlueprint;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Events\Dispatcher;
 
 return [
@@ -43,10 +42,13 @@ return [
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
+    (new Extend\View)
+        ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
+
     (new ExtensionSettings())
         ->addKey('fof-follow-tags.following_page_default'),
 
-    new Extend\Compat(function (Dispatcher $events, Factory $views) {
+    new Extend\Compat(function (Dispatcher $events) {
         $events->listen(Serializing::class, Listeners\AddTagSubscriptionAttribute::class);
 
         $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
@@ -70,8 +72,6 @@ return [
         $events->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
             $event->gambits->add(Gambit\FollowTagsGambit::class);
         });
-
-        $views->addNamespace('fof-follow-tags', __DIR__.'/resources/views');
 
         User::addPreference('followTagsPageDefault', null);
     }),
