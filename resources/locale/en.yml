@@ -11,7 +11,6 @@ fof-follow-tags:
 
       following:
         following_none_label: => fof-follow-tags.ref.filtering_options.none
-        following_all_label: => fof-follow-tags.ref.filtering_options.all
         following_tags_label: => fof-follow-tags.ref.filtering_options.tags
 
     badge:
@@ -53,7 +52,6 @@ fof-follow-tags:
 
       following_none_label: => fof-follow-tags.ref.filtering_options.none
       following_tags_label: => fof-follow-tags.ref.filtering_options.tags
-      following_all_label: => fof-follow-tags.ref.filtering_options.all
 
 
   email:
@@ -70,5 +68,4 @@ fof-follow-tags:
 
     filtering_options:
       none: Followed Discussions
-      all: Everything You Follow
       tags: Followed Tags
