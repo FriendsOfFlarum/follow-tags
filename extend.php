@@ -48,31 +48,27 @@ return [
     (new ExtensionSettings())
         ->addKey('fof-follow-tags.following_page_default'),
 
-    new Extend\Compat(function (Dispatcher $events) {
-        $events->listen(Serializing::class, Listeners\AddTagSubscriptionAttribute::class);
-
-        $events->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
+    (new Extend\Event())
+        ->listen(Serializing::class, Listeners\AddTagSubscriptionAttribute::class)
+        ->listen(ConfigureNotificationTypes::class, function (ConfigureNotificationTypes $event) {
             $event->add(NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
             $event->add(NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email']);
-        });
-
-        $events->subscribe(Listeners\QueueNotificationJobs::class);
-
-        $events->listen([Discussion\Hidden::class, Discussion\Deleted::class], Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class);
-        $events->listen(Discussion\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class);
-
-        $events->listen([Post\Hidden::class, Post\Deleted::class], Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class);
-        $events->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class);
-
-        $events->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class);
-
-        $events->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class);
-
-        $events->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
+        })
+        ->listen(Discussion\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
+        ->listen(Discussion\Hidden::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
+        ->listen(Discussion\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class)
+        ->listen(Post\Hidden::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
+        ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
+        ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
+        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
+        ->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class)
+        ->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
             $event->gambits->add(Gambit\FollowTagsGambit::class);
-        });
+        }),
 
+    function (Dispatcher $events) {
+        $events->subscribe(Listeners\QueueNotificationJobs::class);
         User::addPreference('followTagsPageDefault', null);
-    }),
+    },
 ];
