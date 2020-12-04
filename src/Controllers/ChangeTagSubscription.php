@@ -14,15 +14,13 @@ namespace FoF\FollowTags\Controllers;
 use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
-use Flarum\User\AssertPermissionTrait;
+use Flarum\User\User;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
 class ChangeTagSubscription extends AbstractShowController
 {
-    use AssertPermissionTrait;
-
     /**
      * {@inheritdoc}
      */
@@ -33,11 +31,14 @@ class ChangeTagSubscription extends AbstractShowController
      */
     protected function data(ServerRequestInterface $request, Document $document)
     {
+        /**
+         * @var User
+         */
         $actor = $request->getAttribute('actor');
         $id = Arr::get($request->getQueryParams(), 'id');
         $subscription = Arr::get($request->getParsedBody(), 'data.subscription');
 
-        $this->assertRegistered($actor);
+        $actor->assertRegistered();
 
         $tag = Tag::whereVisibleTo($actor)->findOrFail($id);
         $state = $tag->stateFor($actor);
