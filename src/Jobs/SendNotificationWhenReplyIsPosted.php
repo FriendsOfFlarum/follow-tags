@@ -43,6 +43,10 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
+        if (!$this->post->exists()) {
+            return;
+        }
+
         /**
          * @var Collection
          * @var $tagIds    Collection
