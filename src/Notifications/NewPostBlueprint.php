@@ -68,8 +68,8 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
      */
     public function getEmailSubject()
     {
-        return app('translator')->trans('fof-follow-tags.email.newPostInTag', [
-            'title' => $this->post->discussion->title,
+        return app('translator')->trans('fof-follow-tags.email.subject.newPostInTag', [
+            '{title}' => $this->post->discussion->title,
         ]);
     }
 
