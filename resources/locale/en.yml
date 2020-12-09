@@ -55,10 +55,44 @@ fof-follow-tags:
 
 
   email:
-    newDiscussionInTag: "[Tag | New Discussion] title"
-    newPostInTag: "[Tag | New Post] title"
-    newDiscussionTag: "[Tag | Changed Tag] title"
+    subject:
+        newDiscussionInTag: "[Tag | New Discussion] {title}"
+        newPostInTag: "[Tag | New Post] {title}"
+        newDiscussionTag: "[Tag | Changed Tag] {title}"
+    body:
+        newDiscussionInTag: |
+            Hey {recipient_display_name},
 
+            {actor_display_name} started a discussion in a tag you're following: {discussion_title}
+
+            To view the new discussion, check out the following link:
+            {discussion_url}
+
+            ---
+
+            {post_content}
+        newPostInTag: |
+            Hey {recipient_display_name},
+
+            {actor_display_name} posted in a discussion on a tag you're following: {discussion_title}
+
+            To view the new activity, check out the following link:
+            {post_url}
+
+            ---
+
+            {post_content}
+
+            ---
+
+            You won't receive any more notifications about this discussion until you're up to date.
+        newDiscussionTag: |
+            Hey {recipient_display_name},
+
+            {actor_display_name} just changed the tag on a discussion by {author_display_name} to a tag you're following {discussion_title}
+
+            To view the new discussion, check out the following link:
+            {discussion_url}
   ref:
     follow: Follow
     following: Following

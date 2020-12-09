@@ -71,8 +71,8 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
      */
     public function getEmailSubject()
     {
-        return app('translator')->trans('fof-follow-tags.email.newDiscussionInTag', [
-            'title' => $this->discussion->title,
+        return app('translator')->trans('fof-follow-tags.email.subject.newDiscussionInTag', [
+            '{title}' => $this->discussion->title,
         ]);
     }
 
