@@ -19,7 +19,6 @@ use Flarum\Notification\Event as Notification;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use FoF\Extend\Extend\ExtensionSettings;
-use FoF\FollowTags\Notifications;
 use Illuminate\Events\Dispatcher;
 
 return [
@@ -53,7 +52,7 @@ return [
         ->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
             $event->gambits->add(Gambit\FollowTagsGambit::class);
         }),
-    
+
     (new Extend\User())
         ->registerPreference('followTagsPageDefault', null),
 
@@ -63,8 +62,7 @@ return [
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ,
+        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
 
     function (Dispatcher $events) {
         $events->subscribe(Listeners\QueueNotificationJobs::class);
