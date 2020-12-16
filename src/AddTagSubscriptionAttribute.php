@@ -9,19 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\Listeners;
+namespace FoF\FollowTags;
 
-use Flarum\Api\Event\Serializing;
 use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Tags\Tag;
 
 class AddTagSubscriptionAttribute
 {
-    public function handle(Serializing $event)
+    public function __invoke(TagSerializer $serializer, Tag $tag, array $attributes): array
     {
-        if ($event->isSerializer(TagSerializer::class)) {
-            $state = $event->model->stateFor($event->actor);
+        $state = $tag->stateFor($serializer->getActor());
 
-            $event->attributes['subscription'] = $state->subscription;
-        }
+        $attributes['subscription'] = $state->subscription;
+
+        return $attributes;
     }
 }

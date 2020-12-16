@@ -6,10 +6,21 @@
   ],
   "type": "flarum-extension",
   "license": "MIT",
+  "support": {
+    "issues": "https://github.com/FriendsOfFlarum/follow-tags/issues",
+    "source": "https://github.com/FriendsOfFlarum/follow-tags",
+    "forum": "https://discuss.flarum.org/d/20525"
+  },
+  "homepage": "https://friendsofflarum.org",
+  "funding": [
+    {
+      "type": "website",
+      "url": "https://opencollective.com/fof/donate"
+    }
+  ],
   "require": {
-    "flarum/core": ">=0.1.0-beta.14 <0.1.0-beta.15",
-    "flarum/tags": "^0.1.0-beta.14",
-    "fof/components": ">=0.2.0",
+    "flarum/core": "^0.1.0-beta.15",
+    "flarum/tags": "^0.1.0-beta.15",
     "fof/extend": ">=0.3.1"
   },
   "authors": [
@@ -27,6 +38,7 @@
   "extra": {
     "flarum-extension": {
       "title": "FoF Follow Tags",
+      "category": "discussion",
       "icon": {
         "name": "fas fa-user-tag",
         "backgroundColor": "#e74c3c",
@@ -34,7 +46,7 @@
       }
     },
     "flagrow": {
-      "discuss": "https://discuss.flarum.org/d/20525-friendsofflarum-follow-tags"
+      "discuss": "https://discuss.flarum.org/d/20525"
     }
   }
 }

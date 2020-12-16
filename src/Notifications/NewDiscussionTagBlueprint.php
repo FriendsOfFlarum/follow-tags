@@ -16,6 +16,7 @@ use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use Flarum\User\User;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
 {
@@ -76,9 +77,9 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject()
+    public function getEmailSubject(TranslatorInterface $translator)
     {
-        return app('translator')->trans('fof-follow-tags.email.subject.newDiscussionTag', [
+        return $translator->trans('fof-follow-tags.email.subject.newDiscussionTag', [
             '{actor}' => $this->actor,
             '{title}' => $this->discussion->title,
         ]);
