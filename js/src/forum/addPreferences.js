@@ -21,7 +21,11 @@ export default () => {
                         {Select.component({
                             options: getOptions(),
                             value: this.user.preferences().followTagsPageDefault || getDefaultFollowingFiltering(),
-                            onchange: (key) => this.preferenceSaver('followTagsPageDefault')(key),
+                            onchange: (value) => {
+                                this.user.savePreferences({ followTagsPageDefault: value }).then(() => {
+                                    m.redraw();
+                                })
+                            },
                         })}
                     </div>,
                 ]
