@@ -6,7 +6,7 @@ import isFollowingPage from './utils/isFollowingPage';
 
 export default function addSubscriptionBadge() {
     extend(Discussion.prototype, 'badges', function (badges) {
-        if (!isFollowingPage()) {
+        if (!isFollowingPage() || !this.tags()) {
             return;
         }
 
