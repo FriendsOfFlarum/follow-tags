@@ -3,7 +3,7 @@ import Component from 'flarum/Component';
 import Button from 'flarum/components/Button';
 import Dropdown from 'flarum/components/Dropdown';
 
-import { getOptions } from '../utils/getDefaultFollowingFiltering';
+import { getDefaultFollowingFiltering, getOptions } from '../utils/getDefaultFollowingFiltering';
 
 export default class FollowingPageFilterDropdown extends Component {
     view() {
