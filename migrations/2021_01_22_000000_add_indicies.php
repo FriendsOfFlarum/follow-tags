@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) 2020 FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE.md
+ * file that was distributed with this source code.
+ */
+
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Builder;
 
@@ -16,5 +25,5 @@ return [
             $table->dropIndex(['subscription']);
             $table->dropIndex(['user_id', 'subscription']);
         });
-    }
+    },
 ];
