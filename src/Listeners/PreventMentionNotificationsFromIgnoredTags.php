@@ -14,7 +14,6 @@ namespace FoF\FollowTags\Listeners;
 use Flarum\Mentions\Notification\PostMentionedBlueprint;
 use Flarum\Mentions\Notification\UserMentionedBlueprint;
 use Flarum\Notification\Blueprint\BlueprintInterface;
-use Flarum\Notification\Event\Sending;
 use Flarum\Tags\TagState;
 
 class PreventMentionNotificationsFromIgnoredTags

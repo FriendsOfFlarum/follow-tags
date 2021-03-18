@@ -13,8 +13,6 @@ namespace FoF\FollowTags\Query;
 
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
-use Flarum\Search\AbstractRegexGambit;
-use Flarum\Search\SearchState;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
 use Illuminate\Database\Query\Builder;
@@ -52,7 +50,7 @@ class FollowTagsFilter implements FilterInterface
         // alterntive
         // TODO: errors with tag_id column not found
         $query->where(function (Builder $query) use ($tagIds, $negate) {
-            if (! $negate) {
+            if (!$negate) {
                 $query->selectRaw('1')
                     ->from('discussion_tag')
                     ->whereIn('tag_id', $tagIds)
