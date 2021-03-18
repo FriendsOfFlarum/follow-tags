@@ -13,6 +13,7 @@ namespace FoF\FollowTags;
 
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
+use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Event\ConfigureDiscussionGambits;
 use Flarum\Extend;
 use Flarum\Notification\Event as Notification;
@@ -47,11 +48,10 @@ return [
         ->listen(Post\Hidden::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
-        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
-        ->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class)
-        ->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
-            $event->gambits->add(Gambit\FollowTagsGambit::class);
-        }),
+        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilter(Query\FollowTagsFilter::class),
 
     (new Extend\User())
         ->registerPreference('followTagsPageDefault', null),
@@ -62,7 +62,8 @@ return [
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
+        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
 
     function (Dispatcher $events) {
         $events->subscribe(Listeners\QueueNotificationJobs::class);

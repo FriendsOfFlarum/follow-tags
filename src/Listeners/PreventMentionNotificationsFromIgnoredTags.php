@@ -13,17 +13,16 @@ namespace FoF\FollowTags\Listeners;
 
 use Flarum\Mentions\Notification\PostMentionedBlueprint;
 use Flarum\Mentions\Notification\UserMentionedBlueprint;
+use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\Event\Sending;
 use Flarum\Tags\TagState;
 
 class PreventMentionNotificationsFromIgnoredTags
 {
-    public function handle(Sending $event)
+    public function __call(BlueprintInterface $blueprint, array $recipients)
     {
-        $blueprint = $event->blueprint;
-
         if (!($blueprint instanceof PostMentionedBlueprint || $blueprint instanceof UserMentionedBlueprint)) {
-            return;
+            return $recipients;
         }
 
         /**
@@ -31,11 +30,11 @@ class PreventMentionNotificationsFromIgnoredTags
          * @var $ids                                          \Illuminate\Support\Collection
          * @var $tags                                         \Illuminate\Support\Collection
          */
-        $ids = collect($event->users)->pluck('id');
+        $ids = collect($recipients)->pluck('id');
         $tags = $blueprint->post->discussion->tags->pluck('id');
 
         if ($tags->isEmpty()) {
-            return;
+            return $recipients;
         }
 
         $ids = TagState::whereIn('tag_id', $tags)
@@ -47,7 +46,7 @@ class PreventMentionNotificationsFromIgnoredTags
             return;
         }
 
-        $event->users = array_filter($event->users, function ($user) use ($ids) {
+        return array_filter($recipients, function ($user) use ($ids) {
             return !$ids->contains($user->id);
         });
     }

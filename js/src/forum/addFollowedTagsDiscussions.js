@@ -1,7 +1,7 @@
-import { extend } from 'flarum/extend';
+import { extend } from 'flarum/common/extend';
 
-import IndexPage from 'flarum/components/IndexPage';
-import DiscussionListState from 'flarum/states/DiscussionListState';
+import IndexPage from 'flarum/forum/components/IndexPage';
+import DiscussionListState from 'flarum/forum/states/DiscussionListState';
 
 import isFollowingPage from './utils/isFollowingPage';
 
@@ -16,19 +16,12 @@ export default () => {
             this.followTags = getDefaultFollowingFiltering();
         }
 
-        let q = params.filter.q || '';
         const followTags = this.followTags;
 
-        if (app.current.get('routeName') === 'following' && ['tags', 'all'].includes(followTags)) {
-            if (followTags === 'tags' || followTags === 'all') {
-                q += ' is:following-tag';
-            }
+        if (app.current.get('routeName') === 'following' && followTags === 'tags') {
+            params.filter['following-tag'] = true;
 
-            if (followTags === 'tags') {
-                q = q.replace(' is:following', '');
-            }
-
-            params.filter.q = q;
+            delete params.filter.subscription;
         }
     });
 
