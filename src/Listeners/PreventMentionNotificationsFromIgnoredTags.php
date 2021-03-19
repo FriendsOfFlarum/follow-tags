@@ -18,7 +18,7 @@ use Flarum\Tags\TagState;
 
 class PreventMentionNotificationsFromIgnoredTags
 {
-    public function __call(BlueprintInterface $blueprint, array $recipients)
+    public function __invoke(BlueprintInterface $blueprint, array $recipients): array
     {
         if (!($blueprint instanceof PostMentionedBlueprint || $blueprint instanceof UserMentionedBlueprint)) {
             return $recipients;
@@ -42,7 +42,7 @@ class PreventMentionNotificationsFromIgnoredTags
             ->pluck('user_id');
 
         if ($ids->isEmpty()) {
-            return;
+            return $recipients;
         }
 
         return array_filter($recipients, function ($user) use ($ids) {

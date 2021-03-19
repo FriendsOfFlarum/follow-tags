@@ -43,7 +43,7 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
 
     public function handle(NotificationSyncer $notifications)
     {
-        if (!$this->discussion->exists()) {
+        if (!$this->discussion->exists) {
             return;
         }
 

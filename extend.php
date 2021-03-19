@@ -46,24 +46,21 @@ return [
         ->listen(Post\Hidden::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
-        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class),
+        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
+        ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Filter(DiscussionFilterer::class))
         ->addFilter(Query\FollowTagsFilter::class),
 
     (new Extend\User())
-        ->registerPreference('followTagsPageDefault', null),
+        ->registerPreference('followTagsPageDefault'),
 
     (new Extend\ApiSerializer(TagSerializer::class))
-        ->mutate(AddTagSubscriptionAttribute::class),
+        ->attributes(AddTagSubscriptionAttribute::class),
 
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
-
-    function (Dispatcher $events) {
-        $events->subscribe(Listeners\QueueNotificationJobs::class);
-    },
 ];

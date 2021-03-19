@@ -24,7 +24,7 @@ export default () => {
                             onchange: (value) => {
                                 this.user.savePreferences({ followTagsPageDefault: value }).then(() => {
                                     m.redraw();
-                                })
+                                });
                             },
                         })}
                     </div>,

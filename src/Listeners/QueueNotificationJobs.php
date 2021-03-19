@@ -30,7 +30,7 @@ class QueueNotificationJobs
 
     public function whenDiscussionStarted(Started $event)
     {
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenDiscussionIsStarted($event->discussion)
         );
     }
@@ -41,8 +41,8 @@ class QueueNotificationJobs
             return;
         }
 
-        app('flarum.queue.connection')->push(
-            new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->discussion->last_post_number)
+        resolve('flarum.queue.connection')->push(
+            new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
         );
     }
 
@@ -52,7 +52,7 @@ class QueueNotificationJobs
             return;
         }
 
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             $event->post->number == 1
                 ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
                 : new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
@@ -61,7 +61,7 @@ class QueueNotificationJobs
 
     public function whenDiscussionTagChanged(DiscussionWasTagged $event)
     {
-        app('flarum.queue.connection')->push(
+        resolve('flarum.queue.connection')->push(
             new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $event->discussion)
         );
     }
