@@ -18,7 +18,6 @@ use Flarum\Extend;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use FoF\Extend\Extend\ExtensionSettings;
-use Illuminate\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('forum'))
