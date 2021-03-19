@@ -35,29 +35,18 @@ class FollowTagsFilter implements FilterInterface
             return;
         }
 
-        $tagIds = TagState::query()
-            ->where('user_id', $actor->id)
-            ->whereIn('subscription', ['lurk', 'follow'])
-            ->pluck('tag_id')
-            ->all();
+        $method = $negate ? 'whereNotIn' : 'whereIn';
 
-        // TODO: errors with flarum.discussions table not found
-        $query->selectRaw('1')
-            ->from('discussion_tag')
-            ->whereIn('tag_id', $tagIds)
-            ->whereColumn('discussions.id', 'discussion_id');
+        $query->$method('id', function ($query) use ($actor) {
+            $tagIds = TagState::query()
+                ->where('user_id', $actor->id)
+                ->whereIn('subscription', ['lurk', 'follow'])
+                ->pluck('tag_id')
+                ->all();
 
-        // alterntive
-        // TODO: errors with tag_id column not found
-        $query->where(function (Builder $query) use ($tagIds, $negate) {
-            if (!$negate) {
-                $query->selectRaw('1')
-                    ->from('discussion_tag')
-                    ->whereIn('tag_id', $tagIds)
-                    ->whereColumn('discussions.id', 'discussion_id');
-            } else {
-                // TODO: implement negation
-            }
+            $query->select('discussion_id')
+                ->from('discussion_tag')
+                ->whereIn('tag_id', $tagIds);
         });
     }
 }
