@@ -1,6 +1,6 @@
-import { extend } from 'flarum/extend';
-import Model from 'flarum/Model';
-import IndexPage from 'flarum/components/IndexPage';
+import { extend } from 'flarum/common/extend';
+import Model from 'flarum/common/Model';
+import IndexPage from 'flarum/forum/components/IndexPage';
 
 import SubscriptionMenu from './components/SubscriptionMenu';
 

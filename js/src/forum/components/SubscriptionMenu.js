@@ -1,8 +1,8 @@
-import Dropdown from 'flarum/components/Dropdown';
-import Button from 'flarum/components/Button';
-import icon from 'flarum/helpers/icon';
-import extractText from 'flarum/utils/extractText';
-import Stream from 'flarum/utils/Stream';
+import Dropdown from 'flarum/common/components/Dropdown';
+import Button from 'flarum/common/components/Button';
+import icon from 'flarum/common/helpers/icon';
+import extractText from 'flarum/common/utils/extractText';
+import Stream from 'flarum/common/utils/Stream';
 
 import SubscriptionMenuItem from './SubscriptionMenuItem';
 import icons from '../icons';
