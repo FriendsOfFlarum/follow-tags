@@ -1,5 +1,5 @@
-import { extend } from 'flarum/extend';
-import NotificationGrid from 'flarum/components/NotificationGrid';
+import { extend } from 'flarum/common/extend';
+import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 
 import addSubscriptionControls from './addSubscriptionControls';
 import addFollowedTagsDiscussions from './addFollowedTagsDiscussions';

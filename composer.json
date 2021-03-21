@@ -19,8 +19,8 @@
     }
   ],
   "require": {
-    "flarum/core": "^0.1.0-beta.15",
-    "flarum/tags": "^0.1.0-beta.15",
+    "flarum/core": "^0.1.0-beta.16",
+    "flarum/tags": "^0.1.0-beta.16",
     "fof/extend": ">=0.3.1"
   },
   "authors": [
@@ -43,7 +43,10 @@
         "name": "fas fa-user-tag",
         "backgroundColor": "#e74c3c",
         "color": "#fff"
-      }
+      },
+      "optional-dependencies": [
+        "flarum/subscriptions"
+      ]
     },
     "flagrow": {
       "discuss": "https://discuss.flarum.org/d/20525"

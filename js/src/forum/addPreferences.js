@@ -1,8 +1,8 @@
-import { extend } from 'flarum/extend';
+import { extend } from 'flarum/common/extend';
 
-import SettingsPage from 'flarum/components/SettingsPage';
-import FieldSet from 'flarum/components/FieldSet';
-import Select from 'flarum/components/Select';
+import SettingsPage from 'flarum/forum/components/SettingsPage';
+import FieldSet from 'flarum/common/components/FieldSet';
+import Select from 'flarum/common/components/Select';
 
 import { getOptions, getDefaultFollowingFiltering } from './utils/getDefaultFollowingFiltering';
 
@@ -24,7 +24,7 @@ export default () => {
                             onchange: (value) => {
                                 this.user.savePreferences({ followTagsPageDefault: value }).then(() => {
                                     m.redraw();
-                                })
+                                });
                             },
                         })}
                     </div>,

@@ -13,13 +13,11 @@ namespace FoF\FollowTags;
 
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
-use Flarum\Event\ConfigureDiscussionGambits;
+use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
-use Flarum\Notification\Event as Notification;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use FoF\Extend\Extend\ExtensionSettings;
-use Illuminate\Events\Dispatcher;
 
 return [
     (new Extend\Frontend('forum'))
@@ -48,23 +46,20 @@ return [
         ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
         ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
-        ->listen(Notification\Sending::class, Listeners\PreventMentionNotificationsFromIgnoredTags::class)
-        ->listen(ConfigureDiscussionGambits::class, function (ConfigureDiscussionGambits $event) {
-            $event->gambits->add(Gambit\FollowTagsGambit::class);
-        }),
+        ->subscribe(Listeners\QueueNotificationJobs::class),
+
+    (new Extend\Filter(DiscussionFilterer::class))
+        ->addFilter(Query\FollowTagsFilter::class),
 
     (new Extend\User())
-        ->registerPreference('followTagsPageDefault', null),
+        ->registerPreference('followTagsPageDefault'),
 
     (new Extend\ApiSerializer(TagSerializer::class))
-        ->mutate(AddTagSubscriptionAttribute::class),
+        ->attributes(AddTagSubscriptionAttribute::class),
 
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email']),
-
-    function (Dispatcher $events) {
-        $events->subscribe(Listeners\QueueNotificationJobs::class);
-    },
+        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
 ];

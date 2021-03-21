@@ -1,7 +1,7 @@
-import Component from 'flarum/Component';
+import Component from 'flarum/common/Component';
 
-import Button from 'flarum/components/Button';
-import Dropdown from 'flarum/components/Dropdown';
+import Button from 'flarum/common/components/Button';
+import Dropdown from 'flarum/common/components/Dropdown';
 
 import { getDefaultFollowingFiltering, getOptions } from '../utils/getDefaultFollowingFiltering';
 
