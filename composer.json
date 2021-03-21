@@ -43,7 +43,10 @@
         "name": "fas fa-user-tag",
         "backgroundColor": "#e74c3c",
         "color": "#fff"
-      }
+      },
+      "optional-dependencies": [
+        "flarum/subscriptions"
+      ]
     },
     "flagrow": {
       "discuss": "https://discuss.flarum.org/d/20525"
