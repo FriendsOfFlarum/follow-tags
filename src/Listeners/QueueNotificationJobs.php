@@ -30,39 +30,47 @@ class QueueNotificationJobs
 
     public function whenDiscussionStarted(Started $event)
     {
-        resolve('flarum.queue.connection')->push(
-            new Jobs\SendNotificationWhenDiscussionIsStarted($event->discussion)
-        );
+        $event->discussion->afterSave(function ($discussion) {
+            resolve('flarum.queue.connection')->push(
+                new Jobs\SendNotificationWhenDiscussionIsStarted($discussion)
+            );
+        });
     }
 
     public function whenPostCreated(Posted $event)
     {
-        if (!$event->post->discussion->exists || $event->post->number == 1) {
-            return;
-        }
+        $event->post->afterSave(function ($post) {
+            if (!$post->discussion->exists || $post->number == 1) {
+                return;
+            }
 
-        resolve('flarum.queue.connection')->push(
-            new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
-        );
+            resolve('flarum.queue.connection')->push(
+                new Jobs\SendNotificationWhenReplyIsPosted($post, $post->number - 1)
+            );
+        });
     }
 
     public function whenPostApproved(PostWasApproved $event)
     {
-        if (!$event->post->discussion->exists) {
-            return;
-        }
+        $event->post->afterSave(function ($post) {
+            if (!$post->discussion->exists) {
+                return;
+            }
 
-        resolve('flarum.queue.connection')->push(
-            $event->post->number == 1
-                ? new Jobs\SendNotificationWhenDiscussionIsStarted($event->post->discussion)
-                : new Jobs\SendNotificationWhenReplyIsPosted($event->post, $event->post->number - 1)
-        );
+            resolve('flarum.queue.connection')->push(
+                $post->number == 1
+                    ? new Jobs\SendNotificationWhenDiscussionIsStarted($post->discussion)
+                    : new Jobs\SendNotificationWhenReplyIsPosted($post, $post->number - 1)
+            );
+        });
     }
 
     public function whenDiscussionTagChanged(DiscussionWasTagged $event)
     {
-        resolve('flarum.queue.connection')->push(
-            new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $event->discussion)
-        );
+        $event->discussion->afterSave(function ($discussion) use ($event) {
+            resolve('flarum.queue.connection')->push(
+                new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $discussion)
+            );
+        });
     }
 }
