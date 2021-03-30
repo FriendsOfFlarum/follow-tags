@@ -3,9 +3,9 @@
 /*
  * This file is part of fof/follow-tags.
  *
- * Copyright (c) 2020 FriendsOfFlarum.
+ * Copyright (c) FriendsOfFlarum.
  *
- * For the full copyright and license information, please view the LICENSE.md
+ * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
@@ -39,8 +39,10 @@ class QueueNotificationJobs
 
     public function whenPostCreated(Saving $event)
     {
-        if ($event->post->exists) return;
-        
+        if ($event->post->exists) {
+            return;
+        }
+
         $event->post->afterSave(function ($post) {
             if (!$post->discussion->exists || $post->number == 1) {
                 return;
