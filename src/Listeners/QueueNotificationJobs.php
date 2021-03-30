@@ -13,7 +13,7 @@ namespace FoF\FollowTags\Listeners;
 
 use Flarum\Approval\Event\PostWasApproved;
 use Flarum\Discussion\Event\Started;
-use Flarum\Post\Event\Posted;
+use Flarum\Post\Event\Saving;
 use Flarum\Tags\Event\DiscussionWasTagged;
 use FoF\FollowTags\Jobs;
 use Illuminate\Events\Dispatcher;
@@ -23,7 +23,7 @@ class QueueNotificationJobs
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
-        $events->listen(Posted::class, [$this, 'whenPostCreated']);
+        $events->listen(Saving::class, [$this, 'whenPostCreated']);
         $events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
         $events->listen(DiscussionWasTagged::class, [$this, 'whenDiscussionTagChanged']);
     }
@@ -37,8 +37,10 @@ class QueueNotificationJobs
         });
     }
 
-    public function whenPostCreated(Posted $event)
+    public function whenPostCreated(Saving $event)
     {
+        if ($event->post->exists) return;
+        
         $event->post->afterSave(function ($post) {
             if (!$post->discussion->exists || $post->number == 1) {
                 return;
