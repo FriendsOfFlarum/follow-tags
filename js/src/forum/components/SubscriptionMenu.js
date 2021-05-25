@@ -2,6 +2,7 @@ import Dropdown from 'flarum/common/components/Dropdown';
 import Button from 'flarum/common/components/Button';
 import Tooltip from 'flarum/common/components/Tooltip';
 import icon from 'flarum/common/helpers/icon';
+import classList from 'flarum/common/utils/classList';
 import extractText from 'flarum/common/utils/extractText';
 import Stream from 'flarum/common/utils/Stream';
 
@@ -117,8 +118,7 @@ export default class SubscriptionMenu extends Dropdown {
                         buttonLabel
                     )}
                 </Tooltip>
-
-                <button className={'Dropdown-toggle Button Button--icon ' + buttonClass} data-toggle="dropdown">
+                <button className={classList('Dropdown-toggle', 'Button', 'Button--icon', buttonClass)} data-toggle="dropdown">
                     {icon('fas fa-caret-down', { className: 'Button-icon' })}
                 </button>
 
