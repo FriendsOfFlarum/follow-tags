@@ -19,9 +19,9 @@
     }
   ],
   "require": {
-    "flarum/core": "^0.1.0-beta.16",
-    "flarum/tags": "^0.1.0-beta.16",
-    "fof/extend": ">=0.3.1"
+    "flarum/core": "^1.0.0",
+    "flarum/tags": "^1.0.0",
+    "fof/extend": "^1.0.0"
   },
   "authors": [
     {
@@ -38,7 +38,7 @@
   "extra": {
     "flarum-extension": {
       "title": "FoF Follow Tags",
-      "category": "discussion",
+      "category": "feature",
       "icon": {
         "name": "fas fa-user-tag",
         "backgroundColor": "#e74c3c",

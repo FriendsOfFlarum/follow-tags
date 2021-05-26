@@ -1,5 +1,6 @@
 import Component from 'flarum/common/Component';
 import icon from 'flarum/common/helpers/icon';
+import classList from 'flarum/common/utils/classList';
 
 export default class SubscriptionMenuItem extends Component {
     view() {
@@ -9,7 +10,7 @@ export default class SubscriptionMenuItem extends Component {
         };
 
         return (
-            <button className={`SubscriptionMenuItem hasIcon ${this.attrs.disabled && 'disabled'}`} {...attrs}>
+            <button className={classList('SubscriptionMenuItem', 'hasIcon', this.attrs.disabled && 'disabled')} {...attrs}>
                 {this.attrs.active ? icon('fas fa-check', { className: 'Button-icon' }) : ''}
                 <span className="SubscriptionMenuItem-label">
                     {icon(this.attrs.icon, { className: 'Button-icon' })}

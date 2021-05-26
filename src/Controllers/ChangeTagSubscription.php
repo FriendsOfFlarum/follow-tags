@@ -12,6 +12,7 @@
 namespace FoF\FollowTags\Controllers;
 
 use Flarum\Api\Controller\AbstractShowController;
+use Flarum\Http\RequestUtil;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
@@ -34,7 +35,7 @@ class ChangeTagSubscription extends AbstractShowController
         /**
          * @var User
          */
-        $actor = $request->getAttribute('actor');
+        $actor = RequestUtil::getActor($request);
         $id = Arr::get($request->getQueryParams(), 'id');
         $subscription = Arr::get($request->getParsedBody(), 'data.subscription');
 

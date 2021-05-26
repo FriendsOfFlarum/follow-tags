@@ -1,6 +1,8 @@
 import Dropdown from 'flarum/common/components/Dropdown';
 import Button from 'flarum/common/components/Button';
+import Tooltip from 'flarum/common/components/Tooltip';
 import icon from 'flarum/common/helpers/icon';
+import classList from 'flarum/common/utils/classList';
 import extractText from 'flarum/common/utils/extractText';
 import Stream from 'flarum/common/utils/Stream';
 
@@ -12,6 +14,7 @@ export default class SubscriptionMenu extends Dropdown {
         super.oninit(vnode);
 
         this.loading = Stream(false);
+        this.canShowTooltip = Stream(false);
 
         this.options = [
             {
@@ -47,6 +50,23 @@ export default class SubscriptionMenu extends Dropdown {
         ];
     }
 
+    onbeforeupdate(vnode) {
+        super.onbeforeupdate(vnode);
+
+        const tag = this.attrs.model;
+        const subscription = tag.subscription() || false;
+
+        const preferences = app.session.user.preferences();
+        const notifyEmail = preferences['notify_newPostInTag_email'];
+        const notifyAlert = preferences['notify_newPostInTag_alert'];
+
+        if ((notifyEmail || notifyAlert) && subscription === false) {
+            this.canShowTooltip(undefined);
+        } else {
+            this.canShowTooltip(false);
+        }
+    }
+
     view() {
         const tag = this.attrs.model;
         const subscription = tag.subscription() || false;
@@ -63,41 +83,42 @@ export default class SubscriptionMenu extends Dropdown {
 
         const preferences = app.session.user.preferences();
         const notifyEmail = preferences['notify_newPostInTag_email'];
-        const notifyAlert = preferences['notify_newPostInTag_alert'];
 
-        const title = extractText(
+        const tooltipText = extractText(
             app.translator.trans(
                 notifyEmail ? 'fof-follow-tags.forum.sub_controls.notify_email_tooltip' : 'fof-follow-tags.forum.sub_controls.notify_alert_tooltip'
             )
         );
 
-        const buttonAttrs = {
-            className: 'Button SubscriptionMenu-button ' + buttonClass,
-            icon: buttonIcon,
-            onclick: this.saveSubscription.bind(this, tag, ['follow', 'lurk', 'ignore', 'hide'].includes(subscription) ? false : 'follow'),
-            title: title,
-            loading: this.loading(),
-        };
-
-        if ((notifyEmail || notifyAlert) && subscription === false) {
-            buttonAttrs.oncreate = (vnode) =>
-                $(vnode.dom).tooltip({
-                    container: '.SubscriptionMenu',
-                    placement: 'bottom',
-                    delay: 250,
-                    title,
-                });
-        } else {
-            delete buttonAttrs.title;
-        }
-
-        buttonAttrs.onupdate = buttonAttrs.oncreate;
-
         return (
             <div className="Dropdown ButtonGroup SubscriptionMenu App-primaryControl">
-                {Button.component(buttonAttrs, buttonLabel)}
-
-                <button className={'Dropdown-toggle Button Button--icon ' + buttonClass} data-toggle="dropdown">
+                <Tooltip
+                    text={
+                        // By adding this constraint we make sure that when we explicitly set the
+                        // value of `canShowTooltip` to `false`, the internal `shouldRecreateTooltip`
+                        // property of the `Tooltip` componennt is set to `true` and we can, in that
+                        // way, switch between 'manual' and 'hover' trigger modes for the tooltip.
+                        typeof this.canShowTooltip() === 'boolean' ? '' : tooltipText
+                    }
+                    tooltipVisible={this.canShowTooltip()}
+                    position="bottom"
+                    delay={250}
+                >
+                    {Button.component(
+                        {
+                            className: 'Button SubscriptionMenu-button ' + buttonClass,
+                            icon: buttonIcon,
+                            onclick: this.saveSubscription.bind(
+                                this,
+                                tag,
+                                ['follow', 'lurk', 'ignore', 'hide'].includes(subscription) ? false : 'follow'
+                            ),
+                            loading: this.loading(),
+                        },
+                        buttonLabel
+                    )}
+                </Tooltip>
+                <button className={classList('Dropdown-toggle', 'Button', 'Button--icon', buttonClass)} data-toggle="dropdown">
                     {icon('fas fa-caret-down', { className: 'Button-icon' })}
                 </button>
 
@@ -132,6 +153,6 @@ export default class SubscriptionMenu extends Dropdown {
                 m.redraw();
             });
 
-        this.$('.SubscriptionMenu-button').tooltip('hide');
+        this.canShowTooltip(false);
     }
 }
