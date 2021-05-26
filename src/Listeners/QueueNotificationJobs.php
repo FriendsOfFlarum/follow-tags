@@ -71,10 +71,8 @@ class QueueNotificationJobs
 
     public function whenDiscussionTagChanged(DiscussionWasTagged $event)
     {
-        $event->discussion->afterSave(function ($discussion) use ($event) {
-            resolve('flarum.queue.connection')->push(
-                new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $discussion)
-            );
-        });
+        resolve('flarum.queue.connection')->push(
+            new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $event->discussion)
+        );
     }
 }
