@@ -55,7 +55,7 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
         $tags = $discussion->tags;
         $tagIds = $tags->map->id;
 
-        if ($tags->isEmpty()) {
+        if (!$tags || $tags->isEmpty()) {
             return;
         }
 
