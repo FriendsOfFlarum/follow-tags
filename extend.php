@@ -45,11 +45,11 @@ return [
         ->listen(Post\Hidden::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
-        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Query\FollowTagsFilter::class),
+        ->addFilter(Search\FollowTagsFilter::class)
+        ->addFilterMutator(Search\HideTagsFilter::class),
 
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
