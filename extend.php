@@ -14,7 +14,6 @@ namespace FoF\FollowTags;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
-use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;

@@ -42,7 +42,7 @@ class FollowTagsFilter implements FilterInterface
                 ->from('discussion_tag')
                 ->whereIn('tag_id', function ($query) use ($actor) {
                     $query->select('tag_id')
-                        ->from((new TagState)->getTable())
+                        ->from((new TagState())->getTable())
                         ->where('user_id', $actor->id)
                         ->whereIn('subscription', ['lurk', 'follow']);
                 });

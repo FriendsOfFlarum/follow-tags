@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Search;
 
 use Flarum\Filter\FilterState;
@@ -21,7 +30,7 @@ class HideTagsFilter
                 ->from('discussion_tag')
                 ->whereIn('tag_id', function ($query) use ($actor) {
                     $query->select('tag_id')
-                        ->from((new TagState)->getTable())
+                        ->from((new TagState())->getTable())
                         ->where('user_id', $actor->id)
                         ->where('subscription', 'hide');
                 });
