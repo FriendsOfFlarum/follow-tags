@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\Query;
+namespace FoF\FollowTags\Search;
 
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
@@ -38,15 +38,14 @@ class FollowTagsFilter implements FilterInterface
         $method = $negate ? 'whereNotIn' : 'whereIn';
 
         $query->$method('id', function ($query) use ($actor) {
-            $tagIds = TagState::query()
-                ->where('user_id', $actor->id)
-                ->whereIn('subscription', ['lurk', 'follow'])
-                ->pluck('tag_id')
-                ->all();
-
             $query->select('discussion_id')
                 ->from('discussion_tag')
-                ->whereIn('tag_id', $tagIds);
+                ->whereIn('tag_id', function ($query) use ($actor) {
+                    $query->select('tag_id')
+                        ->from((new TagState)->getTable())
+                        ->where('user_id', $actor->id)
+                        ->whereIn('subscription', ['lurk', 'follow']);
+                });
         });
     }
 }

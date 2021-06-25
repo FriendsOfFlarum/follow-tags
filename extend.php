@@ -14,6 +14,7 @@ namespace FoF\FollowTags;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
+use Flarum\Discussion\Search\DiscussionSearcher;
 use Flarum\Extend;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
@@ -45,11 +46,11 @@ return [
         ->listen(Post\Hidden::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Deleted::class, Listeners\DeleteNotificationWhenPostIsHiddenOrDeleted::class)
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
-        ->listen(Discussion\Searching::class, Listeners\HideDiscussionsInIgnoredTags::class)
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
     (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Query\FollowTagsFilter::class),
+        ->addFilter(Search\FollowTagsFilter::class)
+        ->addFilterMutator(Search\HideTagsFilter::class),
 
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
