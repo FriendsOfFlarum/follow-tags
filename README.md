@@ -1,6 +1,6 @@
 # Follow Tags by FriendsOfFlarum
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/follow-tags.svg)](https://packagist.org/packages/fof/follow-tags) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate) [![Donate](https://img.shields.io/badge/donate-datitisev-important.svg)](https://datitisev.me/donate)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/follow-tags.svg)](https://packagist.org/packages/fof/follow-tags) [![Compatibility](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/follow-tags)](https://flarum-badge-api.davwheat.dev/v1/compat-latest/fof/follow-tags) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate) [![Donate](https://img.shields.io/badge/donate-datitisev-important.svg)](https://datitisev.me/donate)
 
 A [Flarum](http://flarum.org) extension. Follow tags and be notified of new discussions.
 
@@ -12,16 +12,16 @@ A [Flarum](http://flarum.org) extension. Follow tags and be notified of new disc
 
 ### Installation
 
-Use [Bazaar](https://discuss.flarum.org/d/5151-flagrow-bazaar-the-extension-marketplace) or install manually with composer:
+Install with composer:
 
 ```sh
-composer require fof/follow-tags
+composer require fof/follow-tags:"*"
 ```
 
 ### Updating
 
 ```sh
-composer update fof/follow-tags
+composer update fof/follow-tags:"*"
 ```
 
 ### Links
