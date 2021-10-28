@@ -18,7 +18,7 @@ class AddTagSubscriptionAttribute
 {
     public function __invoke(TagSerializer $serializer, Tag $tag, array $attributes): array
     {
-        $state = $tag->stateFor($serializer->getActor());
+        $state = $tag->state;
 
         $attributes['subscription'] = $state->subscription;
 
