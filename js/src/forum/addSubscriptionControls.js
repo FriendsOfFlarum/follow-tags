@@ -12,7 +12,7 @@ export default () => {
 
         const tag = this.currentTag();
 
-        items.replace('newDiscussion', items.get('newDiscussion'), 10);
+        if (items.has('newDiscussion')) items.replace('newDiscussion', null, 10);
 
         items.add('subscription', SubscriptionMenu.component({ model: tag, itemClassName: 'App-primaryControl' }), 5);
     });
