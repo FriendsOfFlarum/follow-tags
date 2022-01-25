@@ -1,21 +1,22 @@
+import app from 'flarum/forum/app';
 import Notification from 'flarum/forum/components/Notification';
 
 import icons from '../icons';
 
 export default class NewPostNotification extends Notification {
-    icon() {
-        return icons.lurk;
-    }
+  icon() {
+    return icons.lurk;
+  }
 
-    href() {
-        const notification = this.attrs.notification;
-        const discussion = notification.subject();
-        const content = notification.content() || {};
+  href() {
+    const notification = this.attrs.notification;
+    const discussion = notification.subject();
+    const content = notification.content() || {};
 
-        return app.route.discussion(discussion, content.postNumber);
-    }
+    return app.route.discussion(discussion, content.postNumber);
+  }
 
-    content() {
-        return app.translator.trans('fof-follow-tags.forum.notifications.new_post_text', { user: this.attrs.notification.fromUser() });
-    }
+  content() {
+    return app.translator.trans('fof-follow-tags.forum.notifications.new_post_text', { user: this.attrs.notification.fromUser() });
+  }
 }
