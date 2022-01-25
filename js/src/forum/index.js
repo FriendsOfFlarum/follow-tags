@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 
@@ -14,44 +15,44 @@ export * from './components';
 export * from './utils';
 
 app.initializers.add(
-    'fof/follow-tags',
-    () => {
-        if (!app.initializers.has('flarum-tags')) {
-            console.error('[fof/follow-tags] flarum/tags is not enabled');
-            return;
-        }
+  'fof/follow-tags',
+  () => {
+    if (!app.initializers.has('flarum-tags')) {
+      console.error('[fof/follow-tags] flarum/tags is not enabled');
+      return;
+    }
 
-        addSubscriptionControls();
+    addSubscriptionControls();
 
-        if (app.initializers.has('subscriptions')) {
-            addDiscussionBadge();
-            addFollowedTagsDiscussions();
-            addPreferences();
-        }
+    if (app.initializers.has('subscriptions')) {
+      addDiscussionBadge();
+      addFollowedTagsDiscussions();
+      addPreferences();
+    }
 
-        app.notificationComponents.newPostInTag = NewPostNotification;
-        app.notificationComponents.newDiscussionInTag = NewDiscussionNotification;
-        app.notificationComponents.newDiscussionTag = NewDiscussionTagNotification;
+    app.notificationComponents.newPostInTag = NewPostNotification;
+    app.notificationComponents.newDiscussionInTag = NewDiscussionNotification;
+    app.notificationComponents.newDiscussionTag = NewDiscussionTagNotification;
 
-        extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
-            items.add('newDiscussionInTag', {
-                name: 'newDiscussionInTag',
-                icon: 'fas fa-user-tag',
-                label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_discussion_label'),
-            });
+    extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+      items.add('newDiscussionInTag', {
+        name: 'newDiscussionInTag',
+        icon: 'fas fa-user-tag',
+        label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_discussion_label'),
+      });
 
-            items.add('newPostInTag', {
-                name: 'newPostInTag',
-                icon: 'fas fa-user-tag',
-                label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_post_label'),
-            });
+      items.add('newPostInTag', {
+        name: 'newPostInTag',
+        icon: 'fas fa-user-tag',
+        label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_post_label'),
+      });
 
-            items.add('newDiscussionTag', {
-                name: 'newDiscussionTag',
-                icon: 'fas fa-user-tag',
-                label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_discussion_tag_label'),
-            });
-        });
-    },
-    -1
+      items.add('newDiscussionTag', {
+        name: 'newDiscussionTag',
+        icon: 'fas fa-user-tag',
+        label: app.translator.trans('fof-follow-tags.forum.settings.notify_new_discussion_tag_label'),
+      });
+    });
+  },
+  -1
 );

@@ -6,10 +6,10 @@ import SubscriptionMenu from './SubscriptionMenu';
 import SubscriptionMenuItem from './SubscriptionMenuItem';
 
 export const components = {
-    FollowingPageFilterDropdown,
-    NewDiscussionNotification,
-    NewDiscussionTagNotification,
-    NewPostNotification,
-    SubscriptionMenu,
-    SubscriptionMenuItem,
+  FollowingPageFilterDropdown,
+  NewDiscussionNotification,
+  NewDiscussionTagNotification,
+  NewPostNotification,
+  SubscriptionMenu,
+  SubscriptionMenuItem,
 };
