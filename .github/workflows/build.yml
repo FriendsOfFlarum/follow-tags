@@ -15,10 +15,11 @@ jobs:
         uses: actions/checkout@v2
 
        - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-          cache: 'yarn'
-          cache-dependency-path: js/yarn.lock
+         with:
+           node-version: '16'
+           cache: 'yarn'
+           cache-dependency-path: js/yarn.lock
+
       # Our action will install npm, cd into `./js`, run `npm run build` and
       # `npm run build-typings`, then commit and upload any changes
       - name: Build production JS
