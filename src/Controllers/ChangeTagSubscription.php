@@ -16,6 +16,8 @@ use Flarum\Http\RequestUtil;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
+use FoF\FollowTags\Event\SubscriptionChanged;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -51,6 +53,8 @@ class ChangeTagSubscription extends AbstractShowController
         $state->subscription = $subscription;
 
         $state->save();
+
+        resolve(Dispatcher::class)->dispatch(new SubscriptionChanged($actor, $tag, $state));
 
         return $tag;
     }
