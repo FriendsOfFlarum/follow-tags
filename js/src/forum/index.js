@@ -24,7 +24,7 @@ app.initializers.add(
 
     addSubscriptionControls();
 
-    if (app.initializers.has('subscriptions')) {
+    if ('flarum-subscriptions' in flarum.extensions) {
       addDiscussionBadge();
       addFollowedTagsDiscussions();
       addPreferences();
