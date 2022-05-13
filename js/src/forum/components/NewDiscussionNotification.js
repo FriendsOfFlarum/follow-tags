@@ -19,4 +19,8 @@ export default class NewDiscussionNotification extends Notification {
       title: this.attrs.notification.subject().title(),
     });
   }
+
+  excerpt() {
+    return null;
+  }
 }

@@ -19,4 +19,8 @@ export default class NewPostNotification extends Notification {
   content() {
     return app.translator.trans('fof-follow-tags.forum.notifications.new_post_text', { user: this.attrs.notification.fromUser() });
   }
+
+  excerpt() {
+    return null;
+  }
 }
