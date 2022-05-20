@@ -18,7 +18,7 @@ return Migration::addColumns('tag_user', [
     ],
     'updated_at' => [
         'timestamp',
-        'useCurrent' => true,
+        'useCurrent'         => true,
         'useCurrentOnUpdate' => true,
     ],
 ]);
