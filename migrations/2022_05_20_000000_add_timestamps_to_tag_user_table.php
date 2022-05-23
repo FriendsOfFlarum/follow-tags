@@ -15,10 +15,12 @@ return Migration::addColumns('tag_user', [
     'created_at' => [
         'timestamp',
         'useCurrent' => true,
+        'nullable'   => true,
     ],
     'updated_at' => [
         'timestamp',
         'useCurrent'         => true,
         'useCurrentOnUpdate' => true,
+        'nullable'           => true,
     ],
 ]);
