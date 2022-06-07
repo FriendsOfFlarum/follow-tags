@@ -64,7 +64,7 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->where('tag_user.subscription', 'lurk')
-            ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber)
+            ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1)
             ->get()
             ->reject(function (User $user) use ($tags) {
                 return $tags->map->stateFor($user)->map->subscription->contains('ignore')
