@@ -25,7 +25,7 @@ class HideTagsFilter
             return;
         }
 
-        $state->getQuery()->whereNotIn('id', function ($query) use ($actor) {
+        $state->getQuery()->whereNotIn('discussions.id', function ($query) use ($actor) {
             $query->select('discussion_id')
                 ->from('discussion_tag')
                 ->whereIn('tag_id', function ($query) use ($actor) {

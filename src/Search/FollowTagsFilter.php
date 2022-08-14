@@ -37,7 +37,7 @@ class FollowTagsFilter implements FilterInterface
 
         $method = $negate ? 'whereNotIn' : 'whereIn';
 
-        $query->$method('id', function ($query) use ($actor) {
+        $query->$method('discussions.id', function ($query) use ($actor) {
             $query->select('discussion_id')
                 ->from('discussion_tag')
                 ->whereIn('tag_id', function ($query) use ($actor) {
