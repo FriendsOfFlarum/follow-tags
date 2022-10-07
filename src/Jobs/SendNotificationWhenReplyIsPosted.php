@@ -60,6 +60,7 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
         }
 
         $notify = $this->post->discussion->readers()
+            ->select('users.*')
             ->where('users.id', '!=', $this->post->user_id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
