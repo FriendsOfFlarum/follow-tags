@@ -59,6 +59,7 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
             return;
         }
 
+        // The `select(...)` part is not mandatory here, but makes the query safer. See #55.
         $notify = User::select('users.*')
             ->where('users.id', '!=', $this->actor->id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
