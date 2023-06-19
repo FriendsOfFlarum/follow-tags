@@ -11,20 +11,15 @@
 
 namespace FoF\FollowTags\Jobs;
 
+use Flarum\Database\Eloquent\Collection as DatabaseCollection;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Post;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class SendNotificationWhenReplyIsPosted implements ShouldQueue
+class SendNotificationWhenReplyIsPosted extends FollowTagsJob
 {
-    use Queueable;
-    use SerializesModels;
-
     /**
      * @var Post
      */
@@ -47,31 +42,36 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
             return;
         }
 
-        /**
-         * @var Collection
-         * @var $tagIds    Collection
-         */
         $discussion = $this->post->discussion;
+
+        /**
+         * @var DatabaseCollection
+         */
         $tags = $discussion->tags;
+
+        /**
+         * @var Collection $tagIds
+         */
         $tagIds = $tags->map->id;
 
         if (!$tags || $tags->isEmpty()) {
             return;
         }
 
-        $notify = $this->post->discussion->readers()
-            // The `select(...)` part is not mandatory here, but makes the query safer. See #55.
-            ->select('users.*')
-            ->where('users.id', '!=', $this->post->user_id)
-            ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
-            ->whereIn('tag_user.tag_id', $tagIds->all())
-            ->where('tag_user.subscription', 'lurk')
+        $notify = $this->getNotifyUsersQuery(
+                $this->post->user_id, 
+                $tagIds->all(), 
+                ['lurk'], 
+                $this->post->discussion->readers()
+            )
             ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1)
-            ->get()
-            ->reject(function (User $user) use ($tags) {
-                return $tags->map->stateFor($user)->map->subscription->contains('ignore')
-                    || !$this->post->isVisibleTo($user);
-            });
+            ->get();
+            // ->reject(function (User $user) use ($tags) {
+            //     return $tags->map->stateFor($user)->map->subscription->contains('ignore')
+            //         || !$this->post->isVisibleTo($user);
+            // });
+
+        $notify = $this->applyRejects($notify, $this->post, $tags);
 
         $notifications->sync(
             new NewPostBlueprint($this->post),

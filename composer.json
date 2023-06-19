@@ -19,8 +19,8 @@
     }
   ],
   "require": {
-    "flarum/core": "^1.3.0",
-    "flarum/tags": "^1.3.0",
+    "flarum/core": "^1.8.0",
+    "flarum/tags": "^1.8.0",
     "fof/extend": "^1.0.0"
   },
   "authors": [
@@ -45,11 +45,18 @@
         "color": "#fff"
       },
       "optional-dependencies": [
-        "flarum/subscriptions"
+        "flarum/subscriptions",
+        "flarum/approval",
+        "flarum/mentions"
       ]
     },
     "flagrow": {
       "discuss": "https://discuss.flarum.org/d/20525"
     }
+  },
+  "require-dev": {
+    "flarum/subscriptions": "*",
+    "flarum/approval": "*",
+    "flarum/mentions": "*"
   }
 }

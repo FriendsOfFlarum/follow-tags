@@ -62,4 +62,7 @@ return [
         ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
         ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
+
+    (new Extend\ServiceProvider())
+        ->register(Providers\FollowTagsProvider::class),
 ];
