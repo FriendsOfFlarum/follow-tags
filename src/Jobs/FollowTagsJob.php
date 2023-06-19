@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Jobs;
 
 use Flarum\Database\Eloquent\Collection;
@@ -19,10 +28,11 @@ class FollowTagsJob implements ShouldQueue
     use SerializesModels;
 
     /**
-     * @param integer $actorId
-     * @param array $tagIds
-     * @param array $subscriptions
+     * @param int                $actorId
+     * @param array              $tagIds
+     * @param array              $subscriptions
      * @param BelongsToMany|null $relations
+     *
      * @return Builder|BelongsToMany
      */
     protected function getNotifyUsersQuery(int $actorId, array $tagIds, array $subscriptions = ['follow', 'lurk'], BelongsToMany $relations = null)

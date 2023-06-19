@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Providers;
 
 use Flarum\Database\Eloquent\Collection;
@@ -18,7 +27,7 @@ class FollowTagsProvider extends AbstractServiceProvider
                     return $tags->map->stateFor($user)->map->subscription->contains('ignore')
                         || !$post->discussion->newQuery()->whereVisibleTo($user)->find($post->discussion->id)
                         || !$post->isVisibleTo($user);
-                }
+                },
             ];
         });
     }

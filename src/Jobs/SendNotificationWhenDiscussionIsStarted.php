@@ -57,15 +57,15 @@ class SendNotificationWhenDiscussionIsStarted extends FollowTagsJob
         }
 
         $notify = $this->getNotifyUsersQuery(
-                $this->discussion->user_id, 
-                $tagIds->all()
-            )
+            $this->discussion->user_id,
+            $tagIds->all()
+        )
             ->get();
-            // ->reject(function (User $user) use ($firstPost, $tags) {
+        // ->reject(function (User $user) use ($firstPost, $tags) {
             //     return $tags->map->stateFor($user)->map->subscription->contains('ignore')
             //             || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
             //             || !$firstPost->isVisibleTo($user);
-            // });
+        // });
 
         $notify = $this->applyRejects($notify, $firstPost, $tags);
 

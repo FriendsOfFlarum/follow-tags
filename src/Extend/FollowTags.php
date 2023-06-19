@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Extend;
 
 use Flarum\Extend\ExtenderInterface;
@@ -31,7 +40,7 @@ class FollowTags implements ExtenderInterface
 
         return $this;
     }
-    
+
     public function extend(Container $container, Extension $extension = null)
     {
         $container->extend('fof-follow-tags.rejects', function ($existingRejects) {

@@ -59,17 +59,17 @@ class SendNotificationWhenReplyIsPosted extends FollowTagsJob
         }
 
         $notify = $this->getNotifyUsersQuery(
-                $this->post->user_id, 
-                $tagIds->all(), 
-                ['lurk'], 
-                $this->post->discussion->readers()
-            )
+            $this->post->user_id,
+            $tagIds->all(),
+            ['lurk'],
+            $this->post->discussion->readers()
+        )
             ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1)
             ->get();
-            // ->reject(function (User $user) use ($tags) {
+        // ->reject(function (User $user) use ($tags) {
             //     return $tags->map->stateFor($user)->map->subscription->contains('ignore')
             //         || !$this->post->isVisibleTo($user);
-            // });
+        // });
 
         $notify = $this->applyRejects($notify, $this->post, $tags);
 
