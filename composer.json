@@ -45,11 +45,16 @@
         "color": "#fff"
       },
       "optional-dependencies": [
-        "flarum/subscriptions"
+        "flarum/subscriptions",
+        "flarum/approval"
       ]
     },
     "flagrow": {
       "discuss": "https://discuss.flarum.org/d/20525"
     }
+  },
+  "require-dev": {
+    "flarum/approval": "*",
+    "flarum/subscriptions": "*"
   }
 }
