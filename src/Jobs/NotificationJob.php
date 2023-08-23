@@ -16,7 +16,7 @@ use Flarum\Database\Eloquent\Collection;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Queue\AbstractJob;
-use FoF\FollowTags\Events\GatheringRecipients;
+use FoF\FollowTags\Event\GatheringRecipients;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
 

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\Events;
+namespace FoF\FollowTags\Event;
 
 use Flarum\Database\AbstractModel;
 use Flarum\Database\Eloquent\Collection;
