@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Events;
 
 use Flarum\Database\AbstractModel;
@@ -32,7 +41,7 @@ class GatheringRecipients
     /**
      * Create a new event instance.
      *
-     * @param AbstractModel  $model
+     * @param AbstractModel $model
      * @param Collection    &$recipients
      */
     public function __construct(AbstractModel $model, Collection &$recipients)

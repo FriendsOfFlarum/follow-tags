@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of fof/follow-tags.
+ *
+ * Copyright (c) FriendsOfFlarum.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace FoF\FollowTags\Jobs;
 
 use Flarum\Database\AbstractModel;
@@ -17,12 +26,13 @@ class NotificationJob extends AbstractJob implements ShouldQueue
      * @var Dispatcher
      */
     protected $events;
-    
+
     /**
      * Allow modifications to the list of notification recipients.
      *
      * @param AbstractModel $model
      * @param Collection    $notify
+     *
      * @return Collection
      */
     protected function callForModifications(AbstractModel $model, Collection $notify)
@@ -37,13 +47,12 @@ class NotificationJob extends AbstractJob implements ShouldQueue
     /**
      * Sync the provided notifications.
      *
-     * @param NotificationSyncer     $syncer
-     * @param BlueprintInterface     $blueprint
-     * @param Collection             $recipients
+     * @param NotificationSyncer $syncer
+     * @param BlueprintInterface $blueprint
+     * @param Collection         $recipients
      */
     protected function sync(NotificationSyncer $syncer, BlueprintInterface $blueprint, Collection $recipients): void
     {
         $syncer->sync($blueprint, $recipients->all());
     }
-
 }

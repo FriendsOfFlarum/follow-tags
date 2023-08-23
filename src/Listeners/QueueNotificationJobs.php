@@ -16,7 +16,6 @@ use Flarum\Discussion\Event\Started;
 use Flarum\Post\Event\Saving;
 use Flarum\Tags\Event\DiscussionWasTagged;
 use FoF\FollowTags\Jobs;
-use Illuminate\Contracts\Events\Dispatcher as EventsDispatcher;
 use Illuminate\Events\Dispatcher;
 
 class QueueNotificationJobs
