@@ -47,7 +47,115 @@
   }
 }
 
+// New styles for SubscriptionStateButton
+.SubscriptionButton {
+  width: 100%; // as per your dropdown's button width
+  display: inline-block; // to make it sit alongside other elements
+
+  &--follow {
+      .Button--color(#de8e00, #fff2ae);
+  }
+
+  &--lurk {
+      color: #de8e00;
+      background: #fff2ae;
+  }
+
+  // ... any other subscription state styles similar to the dropdown
+}
+
+.IndexPage-nav .item-subscription {
+  .SubscriptionButton {
+      width: 100%; // to match the dropdown's width
+  }
+}
+
+// Existing media query for mobile
+@media @phone {
+  .IndexPage-nav .item-subscription .Dropdown {
+      width: auto;
+      right: 40px;
+
+      > .Button--icon .icon:before {
+          content: '';
+      }
+  }
+
+  // New media query styles for SubscriptionStateButton
+  .IndexPage-nav .item-subscription .SubscriptionButton {
+      width: auto;
+      right: 40px;
+
+      &.Button--icon .icon:before {
+          content: '';
+      }
+  }
+}
+
 // Fix css for 1.0 Tooltip update
 .ButtonGroup .Button + .tooltip + .Button {
   margin-left: 1px;
+}
+
+@primary-btn-bg: @primary-color;
+@primary-btn-text: @body-bg-light;
+@secondary-btn-bg: @control-bg;
+@secondary-btn-text: @text-color;
+
+// Subscription Modal
+.SubscriptionModal {
+  .Modal-body {
+    color: @text-color;
+  }
+
+  .Button.Button--primary {
+    background-color: @primary-btn-bg;
+    color: @primary-btn-text;
+  }
+
+  .Form-group {
+    margin-bottom: 20px;
+  }
+}
+
+// Subscription Options List
+.SubscriptionOptionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.SubscriptionOption {
+  padding: 10px;
+  border: 1px solid @muted-color;
+  border-radius: @border-radius;
+  background-color: @body-bg;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;  // Added margin for spacing between each item
+
+  &:last-child {
+    margin-bottom: 0;  // Ensure the last item doesn't have extra margin
+  }
+
+  &:hover {
+    background-color: darken(@secondary-btn-bg, 10%);
+  }
+
+  &.selected {
+    background-color: @alert-bg;
+    color: @alert-color; 
+  }
+
+  .SubscriptionOption-icon {
+    flex-shrink: 0;
+    color: @muted-color;
+  }
+
+  .SubscriptionOption-selectedIcon {
+    margin-left: auto; // This will push the check icon to the right side
+    color: @alert-success-color;
+  }
 }

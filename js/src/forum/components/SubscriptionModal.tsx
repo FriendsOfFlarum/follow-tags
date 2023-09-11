@@ -1,0 +1,137 @@
+import app from 'flarum/forum/app';
+import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
+import Button from 'flarum/common/components/Button';
+import ItemList from 'flarum/common/utils/ItemList';
+import { utils } from '../utils';
+import SubscriptionOptionItem from './SubscriptionOptionItem';
+import type Mithril from 'mithril';
+import Tag from 'flarum/tags/models/Tag';
+import Stream from 'flarum/common/utils/Stream';
+import Tooltip from 'flarum/common/components/Tooltip';
+
+interface ISubscriptionModalAttrs extends IInternalModalAttrs {
+  model?: Tag;
+}
+
+export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
+  subscription!: string;
+  loading: Stream<boolean>;
+  canShowTooltip: boolean | undefined = undefined;
+
+  oninit(vnode: Mithril.Vnode<ISubscriptionModalAttrs, this>): void {
+    super.oninit(vnode);
+    this.loading = Stream(false);
+    this.subscription = this.attrs.model.subscription() || 'not_follow';
+
+    const preferences = app.session.user?.preferences();
+    const notifyEmail = preferences['notify_newPostInTag_email'];
+    const notifyAlert = preferences['notify_newPostInTag_alert'];
+
+    if ((notifyEmail || notifyAlert) && this.subscription === 'not_follow') {
+      this.canShowTooltip = true;
+    } else {
+      this.canShowTooltip = false;
+    }
+  }
+
+  className() {
+    return 'SubscriptionModal Modal--medium';
+  }
+
+  title() {
+    return app.translator.trans('fof-follow-tags.forum.sub_controls.header', {
+      tagName: this.attrs.model.name(),
+    });
+  }
+
+  content() {
+    const preferences = app.session.user.preferences();
+    const notifyEmail = preferences['notify_newPostInTag_email'];
+    const notifyAlert = preferences['notify_newPostInTag_alert'];
+
+    return (
+      <div className="Modal-body">
+        <Tooltip
+          text={
+            this.canShowTooltip
+              ? app.translator.trans(
+                  notifyEmail ? 'fof-follow-tags.forum.sub_controls.notify_email_tooltip' : 'fof-follow-tags.forum.sub_controls.notify_alert_tooltip'
+                )
+              : ''
+          }
+          tooltipVisible={this.canShowTooltip}
+          position="bottom"
+          delay={250}
+        >
+          {this.formOptionItems().toArray()}
+        </Tooltip>
+        <div className="Form-group">
+          <Button className="Button Button--primary" type="submit">
+            {app.translator.trans('fof-follow-tags.forum.sub_controls.submit_button')}
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  formOptionItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
+
+    items.add(
+      'subscription_type',
+      <div className="Form-group">
+        <label>{app.translator.trans('fof-follow-tags.forum.sub_controls.subscription_label', { tagName: this.attrs.model.name() })}</label>
+        {this.subscriptionOptionItems().toArray()}
+      </div>,
+      60
+    );
+
+    return items;
+  }
+
+  subscriptionOptionItems(): ItemList<Mithril.Children> {
+    const items = new ItemList<Mithril.Children>();
+    let priority = 100;
+
+    utils.subscriptionOptions.forEach((option, index) => {
+      const attrs = {
+        ...option,
+        onclick: () => {
+          this.subscription = option.subscription;
+          this.canShowTooltip = false;
+        },
+        active: this.subscription === option.subscription,
+        disabled: option.subscription === 'hide' && this.attrs.model.isHidden(),
+      };
+
+      items.add(`subscription-option-${index}`, <SubscriptionOptionItem {...attrs} />, priority);
+      priority -= 5;
+    });
+
+    return items;
+  }
+
+  saveSubscription(subscription: string) {
+    const tag = this.attrs.model;
+
+    this.loading(true);
+
+    app
+      .request({
+        url: `${app.forum.attribute('apiUrl')}/tags/${tag.id()}/subscription`,
+        method: 'POST',
+        body: {
+          data: {
+            subscription,
+          },
+        },
+      })
+      .then((res) => app.store.pushPayload(res))
+      .then(() => {
+        this.loading(false);
+        this.subscription = subscription;
+        m.redraw();
+        this.hide();
+      });
+  }
+}

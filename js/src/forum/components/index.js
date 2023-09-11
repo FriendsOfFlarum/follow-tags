@@ -4,6 +4,7 @@ import NewDiscussionTagNotification from './NewDiscussionTagNotification';
 import NewPostNotification from './NewPostNotification';
 import SubscriptionMenu from './SubscriptionMenu';
 import SubscriptionMenuItem from './SubscriptionMenuItem';
+import SubscriptionModal from './SubscriptionModal';
 
 export const components = {
   FollowingPageFilterDropdown,
@@ -12,4 +13,5 @@ export const components = {
   NewPostNotification,
   SubscriptionMenu,
   SubscriptionMenuItem,
+  SubscriptionModal,
 };

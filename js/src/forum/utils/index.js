@@ -1,5 +1,6 @@
 import { options, getOptions, getDefaultFollowingFiltering } from './getDefaultFollowingFiltering';
 import isFollowingPage from './isFollowingPage';
+import subscriptionOptions from './subscriptionOptions';
 import { utils as commonUtils } from '../../common';
 
 export const utils = {
@@ -7,5 +8,6 @@ export const utils = {
   getOptions,
   getDefaultFollowingFiltering,
   isFollowingPage,
+  subscriptionOptions,
   ...commonUtils,
 };
