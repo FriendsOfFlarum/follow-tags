@@ -66,7 +66,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
           {this.formOptionItems().toArray()}
         </Tooltip>
         <div className="Form-group">
-          <Button className="Button Button--primary" type="submit">
+          <Button className="Button Button--primary" onclick={() => this.saveSubscription(this.subscription)} loading={this.loading()}>
             {app.translator.trans('fof-follow-tags.forum.sub_controls.submit_button')}
           </Button>
         </div>
