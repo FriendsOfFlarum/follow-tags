@@ -28,6 +28,11 @@
       "name": "David Sevilla Martín",
       "email": "me+fof@datitisev.me",
       "role": "Developer"
+    },
+    {
+      "name": "IanM",
+      "email": "ian@flarum.org",
+      "role": "Developer"
     }
   ],
   "autoload": {

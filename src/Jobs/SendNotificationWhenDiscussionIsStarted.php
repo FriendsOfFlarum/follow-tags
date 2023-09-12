@@ -60,8 +60,6 @@ class SendNotificationWhenDiscussionIsStarted extends NotificationJob
                         || !$firstPost->isVisibleTo($user);
             });
 
-        $this->callForModifications($this->discussion, $notify);
-
         $this->sync($notifications, new NewDiscussionBlueprint($this->discussion, $firstPost), $notify);
     }
 }

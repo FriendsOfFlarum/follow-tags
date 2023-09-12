@@ -67,8 +67,6 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
                     || !$this->post->isVisibleTo($user);
             });
 
-        $this->callForModifications($this->post, $notify);
-
         $this->sync($notifications, new NewPostBlueprint($this->post), $notify);
     }
 }

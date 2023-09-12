@@ -66,8 +66,6 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
                         || !$firstPost->isVisibleTo($user);
             });
 
-        $this->callForModifications($this->discussion, $notify);
-
         $this->sync(
             $notifications,
             new NewDiscussionTagBlueprint($this->actor, $this->discussion, $firstPost),
