@@ -116,7 +116,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
       .then((res: any) => app.store.pushPayload(res))
       .then(() => {
         this.loading(false);
-        
+
         m.redraw();
         this.hide();
       });
