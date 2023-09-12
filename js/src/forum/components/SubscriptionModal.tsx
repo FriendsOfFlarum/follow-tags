@@ -45,26 +45,13 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
   }
 
   content() {
-    const preferences = app.session.user.preferences();
+    const preferences = app.session.user?.preferences();
     const notifyEmail = preferences['notify_newPostInTag_email'];
     const notifyAlert = preferences['notify_newPostInTag_alert'];
 
     return (
       <div className="Modal-body">
-        <Tooltip
-          text={
-            this.canShowTooltip
-              ? app.translator.trans(
-                  notifyEmail ? 'fof-follow-tags.forum.sub_controls.notify_email_tooltip' : 'fof-follow-tags.forum.sub_controls.notify_alert_tooltip'
-                )
-              : ''
-          }
-          tooltipVisible={this.canShowTooltip}
-          position="bottom"
-          delay={250}
-        >
-          {this.formOptionItems().toArray()}
-        </Tooltip>
+        {this.formOptionItems().toArray()}
         <div className="Form-group">
           <Button className="Button Button--primary" onclick={() => this.saveSubscription(this.subscription)} loading={this.loading()}>
             {app.translator.trans('fof-follow-tags.forum.sub_controls.submit_button')}
@@ -116,22 +103,26 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
 
     this.loading(true);
 
+    this.subscription = subscription;
+
     app
       .request({
         url: `${app.forum.attribute('apiUrl')}/tags/${tag.id()}/subscription`,
         method: 'POST',
         body: {
-          data: {
-            subscription,
-          },
+          data: this.requestData(),
         },
       })
-      .then((res) => app.store.pushPayload(res))
+      .then((res: any) => app.store.pushPayload(res))
       .then(() => {
         this.loading(false);
-        this.subscription = subscription;
+        
         m.redraw();
         this.hide();
       });
+  }
+
+  requestData(): { [key: string]: string } {
+    return { subscription: this.subscription };
   }
 }
