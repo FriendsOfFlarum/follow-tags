@@ -17,8 +17,8 @@ export default class SubscriptionOptionItem extends Component<SubscriptionOption
     return (
       <div className={`SubscriptionOption ${isSelected ? 'selected' : ''}`} onclick={this.attrs.onclick}>
         {icon(this.attrs.icon, { className: 'SubscriptionOption-icon' })}
-        <span>{app.translator.trans(this.attrs.labelKey)}</span>
-        <div>{app.translator.trans(this.attrs.descriptionKey)}</div>
+        <span className="SubscriptionOption-title">{app.translator.trans(this.attrs.labelKey)}</span>
+        <div className="SubscriptionOption-description">{app.translator.trans(this.attrs.descriptionKey)}</div>
         {isSelected && icon('fas fa-check', { className: 'SubscriptionOption-selectedIcon' })}
       </div>
     );

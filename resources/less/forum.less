@@ -102,10 +102,23 @@
   .SubscriptionOption-icon {
     flex-shrink: 0;
     color: @muted-color;
+    font-size: 1.2em; // Increase the size of the icon
+  }
+
+  .SubscriptionOption-title {
+    font-weight: bold; // Making the title bold
+    flex: 0 0 100px; // Assuming a width of 150px for the title, you can adjust this as per your design
+  }
+
+  .SubscriptionOption-description {
+    flex-grow: 1; // This will make the description take up the remaining width
+    padding-left: 10px; // Some spacing between the title and the description
+    color: @muted-color;
   }
 
   .SubscriptionOption-selectedIcon {
     margin-left: auto; // This will push the check icon to the right side
     color: @alert-success-color;
+    padding-left: 10px; // Some spacing between the description and the check icon
   }
 }
