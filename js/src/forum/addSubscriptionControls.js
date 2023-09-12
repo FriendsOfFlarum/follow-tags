@@ -2,8 +2,6 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
 import IndexPage from 'flarum/forum/components/IndexPage';
-
-import SubscriptionMenu from './components/SubscriptionMenu';
 import SubscriptionModal from './components/SubscriptionModal';
 import SubscriptionStateButton from './components/SubscriptionStateButton';
 
@@ -17,9 +15,6 @@ export default () => {
 
     if (items.has('newDiscussion')) items.setPriority('newDiscussion', 10);
 
-    // TODO: remove the old subscription button when the new one is stable
-    //items.add('subscription', SubscriptionMenu.component({ model: tag, itemClassName: 'App-primaryControl' }), 5);
-
     items.add(
       'subscriptionButton',
       <SubscriptionStateButton
@@ -27,7 +22,7 @@ export default () => {
         subscription={tag.subscription()}
         onclick={() => app.modal.show(SubscriptionModal, { model: tag })}
       />,
-      6
+      5
     );
   });
 };
