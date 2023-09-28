@@ -15,16 +15,10 @@ use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewDiscussionTagBlueprint;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
+class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
 {
-    use Queueable;
-    use SerializesModels;
-
     /**
      * @var User
      */
@@ -72,9 +66,10 @@ class SendNotificationWhenDiscussionIsReTagged implements ShouldQueue
                         || !$firstPost->isVisibleTo($user);
             });
 
-        $notifications->sync(
+        $this->sync(
+            $notifications,
             new NewDiscussionTagBlueprint($this->actor, $this->discussion, $firstPost),
-            $notify->all()
+            $notify
         );
     }
 }

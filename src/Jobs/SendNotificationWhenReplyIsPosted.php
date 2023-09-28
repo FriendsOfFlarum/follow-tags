@@ -15,16 +15,10 @@ use Flarum\Notification\NotificationSyncer;
 use Flarum\Post\Post;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewPostBlueprint;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class SendNotificationWhenReplyIsPosted implements ShouldQueue
+class SendNotificationWhenReplyIsPosted extends NotificationJob
 {
-    use Queueable;
-    use SerializesModels;
-
     /**
      * @var Post
      */
@@ -73,9 +67,6 @@ class SendNotificationWhenReplyIsPosted implements ShouldQueue
                     || !$this->post->isVisibleTo($user);
             });
 
-        $notifications->sync(
-            new NewPostBlueprint($this->post),
-            $notify->all()
-        );
+        $this->sync($notifications, new NewPostBlueprint($this->post), $notify);
     }
 }

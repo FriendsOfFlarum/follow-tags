@@ -15,16 +15,10 @@ use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewDiscussionBlueprint;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
+class SendNotificationWhenDiscussionIsStarted extends NotificationJob
 {
-    use Queueable;
-    use SerializesModels;
-
     /**
      * @var Discussion
      */
@@ -66,9 +60,6 @@ class SendNotificationWhenDiscussionIsStarted implements ShouldQueue
                         || !$firstPost->isVisibleTo($user);
             });
 
-        $notifications->sync(
-            new NewDiscussionBlueprint($this->discussion, $firstPost),
-            $notify->all()
-        );
+        $this->sync($notifications, new NewDiscussionBlueprint($this->discussion, $firstPost), $notify);
     }
 }

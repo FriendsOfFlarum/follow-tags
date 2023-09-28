@@ -2,8 +2,8 @@ import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
 import IndexPage from 'flarum/forum/components/IndexPage';
-
-import SubscriptionMenu from './components/SubscriptionMenu';
+import SubscriptionModal from './components/SubscriptionModal';
+import SubscriptionStateButton from './components/SubscriptionStateButton';
 
 export default () => {
   app.store.models.tags.prototype.subscription = Model.attribute('subscription');
@@ -13,8 +13,16 @@ export default () => {
 
     const tag = this.currentTag();
 
-    if (items.has('newDiscussion')) items.replace('newDiscussion', null, 10);
+    if (items.has('newDiscussion')) items.setPriority('newDiscussion', 10);
 
-    items.add('subscription', SubscriptionMenu.component({ model: tag, itemClassName: 'App-primaryControl' }), 5);
+    items.add(
+      'subscriptionButton',
+      <SubscriptionStateButton
+        className="Button App-primaryControl"
+        subscription={tag.subscription()}
+        onclick={() => app.modal.show(SubscriptionModal, { model: tag })}
+      />,
+      5
+    );
   });
 };
