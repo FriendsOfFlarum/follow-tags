@@ -3,42 +3,34 @@
   display: inline-block; // to make it sit alongside other elements
 
   &--follow {
-      .Button--color(#de8e00, #fff2ae);
+    .Button--color(#de8e00, #fff2ae);
   }
 
   &--lurk {
-      color: #de8e00;
-      background: #fff2ae;
+    color: #de8e00;
+    background: #fff2ae;
   }
 
   // ... any other subscription state styles similar to the dropdown
 }
 
-.IndexPage-nav .item-subscription {
-  .SubscriptionButton {
-      width: 100%; // to match the dropdown's width
-  }
-}
-
 // Existing media query for mobile
 @media @phone {
-  .IndexPage-nav .item-subscription .Dropdown {
-      width: auto;
-      right: 40px;
-
-      > .Button--icon .icon:before {
-          content: '';
-      }
-  }
-
   // New media query styles for SubscriptionStateButton
-  .IndexPage-nav .item-subscription .SubscriptionButton {
-      width: auto;
-      right: 40px;
+  .IndexPage-nav .SubscriptionButton {
+    background: transparent;
+    width: auto;
+    height: var(--header-height-phone, 46px);
+    right: 50px;
 
-      &.Button--icon .icon:before {
-          content: '';
-      }
+    .Button-icon {
+      font-size: 18px;
+      margin-right: 0;
+    }
+
+    .Button-label {
+      display: none;
+    }
   }
 }
 
@@ -84,10 +76,10 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;  // Added margin for spacing between each item
+  margin-bottom: 10px; // Added margin for spacing between each item
 
   &:last-child {
-    margin-bottom: 0;  // Ensure the last item doesn't have extra margin
+    margin-bottom: 0; // Ensure the last item doesn't have extra margin
   }
 
   &:hover {
@@ -96,7 +88,7 @@
 
   &.selected {
     background-color: @alert-bg;
-    color: @alert-color; 
+    color: @alert-color;
   }
 
   .SubscriptionOption-icon {

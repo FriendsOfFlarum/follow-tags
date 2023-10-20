@@ -9,3 +9,5 @@ indent_size = 4
 [*.md]
 indent_size = 2
 trim_trailing_whitespace = false
+[*.less]
+indent_size = 2
