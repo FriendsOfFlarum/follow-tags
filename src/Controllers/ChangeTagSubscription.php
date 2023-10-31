@@ -16,7 +16,6 @@ use Flarum\Http\RequestUtil;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
-use Flarum\User\User;
 use FoF\FollowTags\Event;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -46,7 +45,7 @@ class ChangeTagSubscription extends AbstractShowController
         $actor->assertRegistered();
 
         $tag = Tag::whereVisibleTo($actor)->findOrFail($id);
-        
+
         /** @var TagState $state */
         $state = $tag->stateFor($actor);
 

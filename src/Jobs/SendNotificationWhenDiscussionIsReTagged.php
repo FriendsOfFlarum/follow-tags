@@ -44,6 +44,7 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
 
         /**
          * @var Collection<Tag>|null $tags
+         *
          * @phpstan-ignore-next-line
          */
         $tags = $this->discussion->tags;

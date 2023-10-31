@@ -41,11 +41,11 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
             return;
         }
 
-        
         $discussion = $this->post->discussion;
 
         /**
          * @var Collection<Tag>|null $tags
+         *
          * @phpstan-ignore-next-line
          */
         $tags = $discussion->tags;
