@@ -104,3 +104,10 @@ fof-follow-tags:
     filtering_options:
       none: Followed Discussions
       tags: Followed Tags
+
+blomstra-gdpr:
+  lib:
+    data:
+      tagsubscription:
+        export_description: Exports details of the subscription level for a tag, if one exists.
+        anonymize_description: Removes the subscription of the user to the tag.

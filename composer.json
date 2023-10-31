@@ -52,7 +52,8 @@
             "optional-dependencies": [
                 "flarum/subscriptions",
                 "flarum/approval",
-                "flarum/mentions"
+                "flarum/mentions",
+                "blomstra/gdpr"
             ]
         },
         "flagrow": {
@@ -68,7 +69,8 @@
         "flarum/approval": "*",
         "flarum/subscriptions": "*",
         "flarum/phpstan": "*",
-        "flarum/mentions": "*"
+        "flarum/mentions": "*",
+        "blomstra/gdpr": "@beta"
     },
     "scripts": {
         "analyse:phpstan": "phpstan analyse",
