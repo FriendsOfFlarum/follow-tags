@@ -36,8 +36,8 @@ class SendNotificationWhenDiscussionIsStarted extends NotificationJob
         }
 
         /**
-         * @var Collection
-         * @var $tagIds    Collection
+         * @var Collection<Tag>|null $tags
+         * @phpstan-ignore-next-line
          */
         $tags = $this->discussion->tags;
         $tagIds = $tags->map->id;

@@ -17,6 +17,7 @@ use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Tags\TagState;
 use FoF\Extend\Extend\ExtensionSettings;
 
 return [
@@ -28,6 +29,9 @@ return [
         ->js(__DIR__.'/js/dist/admin.js'),
 
     new Extend\Locales(__DIR__.'/resources/locale'),
+
+    (new Extend\Model(TagState::class))
+        ->cast('subscription', 'string'),
 
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),

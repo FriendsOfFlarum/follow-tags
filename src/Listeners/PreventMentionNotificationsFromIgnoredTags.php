@@ -24,12 +24,8 @@ class PreventMentionNotificationsFromIgnoredTags
             return $recipients;
         }
 
-        /**
-         * @var PostMentionedBlueprint|UserMentionedBlueprint
-         * @var $ids                                          \Illuminate\Support\Collection
-         * @var $tags                                         \Illuminate\Support\Collection
-         */
         $ids = collect($recipients)->pluck('id');
+        /** @phpstan-ignore-next-line */
         $tags = $blueprint->post->discussion->tags->pluck('id');
 
         if ($tags->isEmpty()) {
