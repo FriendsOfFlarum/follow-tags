@@ -25,7 +25,7 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
     protected $post;
 
     /**
-     * @var Post
+     * @var int
      */
     protected $lastPostNumber;
 
@@ -41,11 +41,13 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
             return;
         }
 
-        /**
-         * @var Collection
-         * @var $tagIds    Collection
-         */
         $discussion = $this->post->discussion;
+
+        /**
+         * @var Collection<Tag>|null $tags
+         *
+         * @phpstan-ignore-next-line
+         */
         $tags = $discussion->tags;
         $tagIds = $tags->map->id;
 

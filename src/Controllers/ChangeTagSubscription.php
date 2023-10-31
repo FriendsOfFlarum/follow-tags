@@ -15,7 +15,7 @@ use Flarum\Api\Controller\AbstractShowController;
 use Flarum\Http\RequestUtil;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\Tag;
-use Flarum\User\User;
+use Flarum\Tags\TagState;
 use FoF\FollowTags\Event;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
@@ -24,9 +24,6 @@ use Tobscure\JsonApi\Document;
 
 class ChangeTagSubscription extends AbstractShowController
 {
-    /**
-     * {@inheritdoc}
-     */
     public $serializer = TagSerializer::class;
 
     /**
@@ -39,14 +36,8 @@ class ChangeTagSubscription extends AbstractShowController
         $this->events = $events;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        /**
-         * @var User
-         */
         $actor = RequestUtil::getActor($request);
         $id = Arr::get($request->getQueryParams(), 'id');
         $subscription = Arr::get($request->getParsedBody(), 'data.subscription');
@@ -54,6 +45,8 @@ class ChangeTagSubscription extends AbstractShowController
         $actor->assertRegistered();
 
         $tag = Tag::whereVisibleTo($actor)->findOrFail($id);
+
+        /** @var TagState $state */
         $state = $tag->stateFor($actor);
 
         if (!in_array($subscription, ['follow', 'lurk', 'ignore', 'hide'])) {

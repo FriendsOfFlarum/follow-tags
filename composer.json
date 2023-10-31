@@ -1,65 +1,80 @@
 {
-  "name": "fof/follow-tags",
-  "description": "Follow tags and be notified of new discussions and replies",
-  "keywords": [
-    "flarum"
-  ],
-  "type": "flarum-extension",
-  "license": "MIT",
-  "support": {
-    "issues": "https://github.com/FriendsOfFlarum/follow-tags/issues",
-    "source": "https://github.com/FriendsOfFlarum/follow-tags",
-    "forum": "https://discuss.flarum.org/d/20525"
-  },
-  "homepage": "https://friendsofflarum.org",
-  "funding": [
-    {
-      "type": "website",
-      "url": "https://opencollective.com/fof/donate"
-    }
-  ],
-  "require": {
-    "flarum/core": "^1.3.0",
-    "flarum/tags": "^1.3.0",
-    "fof/extend": "^1.0.0"
-  },
-  "authors": [
-    {
-      "name": "David Sevilla Martín",
-      "email": "me+fof@datitisev.me",
-      "role": "Developer"
+    "name": "fof/follow-tags",
+    "description": "Follow tags and be notified of new discussions and replies",
+    "keywords": [
+        "flarum"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/FriendsOfFlarum/follow-tags/issues",
+        "source": "https://github.com/FriendsOfFlarum/follow-tags",
+        "forum": "https://discuss.flarum.org/d/20525"
     },
-    {
-      "name": "IanM",
-      "email": "ian@flarum.org",
-      "role": "Developer"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "FoF\\FollowTags\\": "src/"
-    }
-  },
-  "extra": {
-    "flarum-extension": {
-      "title": "FoF Follow Tags",
-      "category": "feature",
-      "icon": {
-        "name": "fas fa-user-tag",
-        "backgroundColor": "#e74c3c",
-        "color": "#fff"
-      },
-      "optional-dependencies": [
-        "flarum/subscriptions",
-        "flarum/approval"
-      ]
+    "homepage": "https://friendsofflarum.org",
+    "funding": [
+        {
+            "type": "website",
+            "url": "https://opencollective.com/fof/donate"
+        }
+    ],
+    "require": {
+        "flarum/core": "^1.8.3",
+        "flarum/tags": "^1.8.0",
+        "fof/extend": "^1.2.0"
     },
-    "flagrow": {
-      "discuss": "https://discuss.flarum.org/d/20525"
+    "authors": [
+        {
+            "name": "David Sevilla Martín",
+            "email": "me+fof@datitisev.me",
+            "role": "Developer"
+        },
+        {
+            "name": "IanM",
+            "email": "ian@flarum.org",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "FoF\\FollowTags\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "FoF Follow Tags",
+            "category": "feature",
+            "icon": {
+                "name": "fas fa-user-tag",
+                "backgroundColor": "#e74c3c",
+                "color": "#fff"
+            },
+            "optional-dependencies": [
+                "flarum/subscriptions",
+                "flarum/approval",
+                "flarum/mentions"
+            ]
+        },
+        "flagrow": {
+            "discuss": "https://discuss.flarum.org/d/20525"
+        },
+        "flarum-cli": {
+            "modules": {
+                "githubActions": true
+            }
+        }
+    },
+    "require-dev": {
+        "flarum/approval": "*",
+        "flarum/subscriptions": "*",
+        "flarum/phpstan": "*",
+        "flarum/mentions": "*"
+    },
+    "scripts": {
+        "analyse:phpstan": "phpstan analyse",
+        "clear-cache:phpstan": "phpstan clear-result-cache"
+    },
+    "scripts-descriptions": {
+        "analyse:phpstan": "Run static analysis"
     }
-  },
-  "require-dev": {
-    "flarum/approval": "*",
-    "flarum/subscriptions": "*"
-  }
 }

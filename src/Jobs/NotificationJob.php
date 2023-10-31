@@ -11,12 +11,13 @@
 
 namespace FoF\FollowTags\Jobs;
 
-use Flarum\Database\Eloquent\Collection;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\NotificationSyncer;
 use Flarum\Queue\AbstractJob;
+use Flarum\User\User;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Collection;
 
 class NotificationJob extends AbstractJob implements ShouldQueue
 {
@@ -30,7 +31,7 @@ class NotificationJob extends AbstractJob implements ShouldQueue
      *
      * @param NotificationSyncer $syncer
      * @param BlueprintInterface $blueprint
-     * @param Collection         $recipients
+     * @param Collection<User>   $recipients
      */
     protected function sync(NotificationSyncer $syncer, BlueprintInterface $blueprint, Collection $recipients): void
     {

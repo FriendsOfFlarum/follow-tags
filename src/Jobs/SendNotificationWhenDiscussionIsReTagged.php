@@ -13,6 +13,7 @@ namespace FoF\FollowTags\Jobs;
 
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\NotificationSyncer;
+use Flarum\Tags\Tag;
 use Flarum\User\User;
 use FoF\FollowTags\Notifications\NewDiscussionTagBlueprint;
 use Illuminate\Support\Collection;
@@ -42,8 +43,9 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
         }
 
         /**
-         * @var Collection
-         * @var $tagIds    Collection
+         * @var Collection<Tag>|null $tags
+         *
+         * @phpstan-ignore-next-line
          */
         $tags = $this->discussion->tags;
         $tagIds = $tags->map->id;
