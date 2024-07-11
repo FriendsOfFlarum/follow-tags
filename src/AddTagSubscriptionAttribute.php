@@ -30,8 +30,10 @@ class AddTagSubscriptionAttribute
     /**
      * Get the *correct* state for the tag based on the actor.
      * If a state hasn't been already loaded OR the loaded state is not for the actor, load the correct state.
-     * @param Tag $tag
+     *
+     * @param Tag  $tag
      * @param User $actor
+     *
      * @return TagState
      */
     public function getStateFor(Tag $tag, User $actor): TagState
