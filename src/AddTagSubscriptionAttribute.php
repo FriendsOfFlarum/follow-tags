@@ -41,6 +41,7 @@ class AddTagSubscriptionAttribute
         // If $tag->state is loaded *and* null, this might be because the actor doesn't have tag-specific state
         // OR because the wrong actor has been used for loading it. `$tag->stateFor()` will return the correct state.
         // If it doesn't exist, it returns a dummy state with the correct actor & tag IDs.
+        // @phpstan-ignore-next-line ($tag->state may indeed be null)
         if (!$tag->relationLoaded('state') || is_null($tag->state) || $tag->state->user_id !== $actor->id) {
             $tag->setRelation('state', $tag->stateFor($actor));
         }
