@@ -87,13 +87,24 @@
   }
 
   &.selected {
-    background-color: @alert-bg;
-    color: @alert-color;
+    background-color: var(--following-bg);
+    color: var(--following-color);
+
+    .SubscriptionOption-icon {
+      color: var(--following-color);
+    }
+
+    .SubscriptionOption-title {
+      color: var(--following-color);
+    }
+
+    .SubscriptionOption-description {
+      color: var(--following-color);
+    }
   }
 
   .SubscriptionOption-icon {
     flex-shrink: 0;
-    color: @muted-color;
     font-size: 1.2em; // Increase the size of the icon
   }
 
@@ -105,7 +116,6 @@
   .SubscriptionOption-description {
     flex-grow: 1; // This will make the description take up the remaining width
     padding-left: 10px; // Some spacing between the title and the description
-    color: @muted-color;
   }
 
   .SubscriptionOption-selectedIcon {
