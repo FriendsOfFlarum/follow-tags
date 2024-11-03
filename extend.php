@@ -11,7 +11,7 @@
 
 namespace FoF\FollowTags;
 
-use Blomstra\Gdpr\Extend\UserData;
+use Flarum\Gdpr\Extend\UserData;
 use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
@@ -69,7 +69,7 @@ return [
         ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
 
     (new Extend\Conditional())
-        ->whenExtensionEnabled('blomstra-gdpr', fn () => [
+        ->whenExtensionEnabled('flarum-gdpr', fn () => [
             (new UserData())
                 ->addType(Data\TagSubscription::class),
         ]),
