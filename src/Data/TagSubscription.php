@@ -11,7 +11,7 @@
 
 namespace FoF\FollowTags\Data;
 
-use Blomstra\Gdpr\Data\Type;
+use Flarum\Gdpr\Data\Type;
 use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
 use Illuminate\Support\Arr;
