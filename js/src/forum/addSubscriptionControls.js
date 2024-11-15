@@ -2,7 +2,6 @@ import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 import Model from 'flarum/common/Model';
-import IndexPage from 'flarum/forum/components/IndexPage';
 import SubscriptionModal from './components/SubscriptionModal';
 import SubscriptionStateButton from './components/SubscriptionStateButton';
 

@@ -1,6 +1,5 @@
 .SubscriptionButton {
   width: 100%; // as per your dropdown's button width
-  display: inline-block; // to make it sit alongside other elements
 
   &--follow {
     .Button--color(#de8e00, #fff2ae);
@@ -39,24 +38,26 @@
   margin-left: 1px;
 }
 
-@primary-btn-bg: @primary-color;
-@primary-btn-text: @body-bg-light;
-@secondary-btn-bg: @control-bg;
-@secondary-btn-text: @text-color;
-
 // Subscription Modal
 .SubscriptionModal {
+  --primary-btn-bg: var(--primary-color);
+  --primary-btn-text: var(--body-bg-light);
+
   .Modal-body {
     color: var(--text-color);
   }
 
   .Button.Button--primary {
-    background-color: @primary-btn-bg;
-    color: @primary-btn-text;
+    background-color: var(--primary-btn-bg);
+    color: var(--primary-btn-text);
   }
 
   .Form-group {
     margin-bottom: 20px;
+  }
+
+  &-options {
+    width: 100%;
   }
 }
 
@@ -68,6 +69,16 @@
 }
 
 .SubscriptionOption {
+  --secondary-btn-text: var(--text-color);
+
+  [data-theme^="light"] & {
+    --secondary-btn-bg: darken(@control-bg-light, 10%)
+  }
+
+  [data-theme^="dark"] & {
+    --secondary-btn-bg: darken(@control-bg-dark, 10%)
+  }
+
   padding: 10px;
   border: 1px solid var(--muted-color);
   border-radius: var(--border-radius);
@@ -83,7 +94,7 @@
   }
 
   &:hover {
-    background-color: darken(@secondary-btn-bg, 10%);
+    background-color: var(--secondary-btn-bg);
   }
 
   &.selected {

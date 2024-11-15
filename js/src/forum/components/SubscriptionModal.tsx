@@ -68,7 +68,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
       'subscription_type',
       <div className="Form-group">
         <label>{app.translator.trans('fof-follow-tags.forum.sub_controls.subscription_label', { tagName: this.attrs.model.name() })}</label>
-        {this.subscriptionOptionItems().toArray()}
+        <div className="SubscriptionModal-options">{this.subscriptionOptionItems().toArray()}</div>
       </div>,
       60
     );

@@ -80,5 +80,6 @@
     "scripts-descriptions": {
         "analyse:phpstan": "Run static analysis"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

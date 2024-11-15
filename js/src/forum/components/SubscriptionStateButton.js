@@ -4,6 +4,7 @@ import { utils } from '../utils';
 import Tooltip from 'flarum/common/components/Tooltip';
 import extractText from 'flarum/common/utils/extractText';
 import Stream from 'flarum/common/utils/Stream';
+import classList from 'flarum/common/utils/classList';
 
 export default class SubscriptionStateButton extends Button {
   oninit(vnode) {
@@ -36,7 +37,7 @@ export default class SubscriptionStateButton extends Button {
     let buttonIcon = option ? option.icon : 'fas fa-star';
     let buttonLabel = option ? app.translator.trans(option.labelKey) : app.translator.trans('fof-follow-tags.forum.sub_controls.follow_button');
 
-    this.attrs.className = (this.attrs.className || '') + ' SubscriptionButton ' + 'SubscriptionButton--' + subscription;
+    this.attrs.className = classList(this.attrs.className, `SubscriptionButton SubscriptionButton--${subscription}`);
     this.attrs.icon = buttonIcon;
 
     const preferences = app.session.user.preferences();
