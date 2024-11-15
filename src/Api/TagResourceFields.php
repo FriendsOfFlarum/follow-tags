@@ -9,22 +9,26 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags;
+namespace FoF\FollowTags\Api;
 
-use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Api\Schema;
+use Flarum\Api\Context;
 use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
 
-class AddTagSubscriptionAttribute
+class TagResourceFields
 {
-    public function __invoke(TagSerializer $serializer, Tag $tag, array $attributes): array
+    public function __invoke(): array
     {
-        $state = $this->getStateFor($tag, $serializer->getActor());
+        return [
+            Schema\Str::make('subscription')
+                ->get(function (Tag $tag, Context $context) {
+                    $state = $this->getStateFor($tag, $context->getActor());
 
-        $attributes['subscription'] = $state->subscription ?? null;
-
-        return $attributes;
+                    return $state->subscription ?? null;
+                })
+        ];
     }
 
     /**

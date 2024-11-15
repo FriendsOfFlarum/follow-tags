@@ -5,7 +5,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import { utils } from '../utils';
 import SubscriptionOptionItem from './SubscriptionOptionItem';
 import type Mithril from 'mithril';
-import Tag from 'flarum/tags/models/Tag';
+import Tag from 'ext:flarum/tags/common/models/Tag';
 import Stream from 'flarum/common/utils/Stream';
 import Tooltip from 'flarum/common/components/Tooltip';
 
@@ -68,7 +68,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
       'subscription_type',
       <div className="Form-group">
         <label>{app.translator.trans('fof-follow-tags.forum.sub_controls.subscription_label', { tagName: this.attrs.model.name() })}</label>
-        {this.subscriptionOptionItems().toArray()}
+        <div className="SubscriptionModal-options">{this.subscriptionOptionItems().toArray()}</div>
       </div>,
       60
     );

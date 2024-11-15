@@ -19,20 +19,8 @@ use Illuminate\Support\Collection;
 
 class SendNotificationWhenReplyIsPosted extends NotificationJob
 {
-    /**
-     * @var Post
-     */
-    protected $post;
-
-    /**
-     * @var int
-     */
-    protected $lastPostNumber;
-
-    public function __construct(Post $post, int $lastPostNumber)
+    public function __construct(protected Post $post, protected int $lastPostNumber)
     {
-        $this->post = $post;
-        $this->lastPostNumber = $lastPostNumber;
     }
 
     public function handle(NotificationSyncer $notifications)

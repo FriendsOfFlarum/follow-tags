@@ -11,15 +11,16 @@
 
 namespace FoF\FollowTags;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
-use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Tags\Api\Resource\TagResource;
 use Flarum\Tags\TagState;
 use FoF\Extend\Extend\ExtensionSettings;
+use FoF\FollowTags\Api\Subscribe;
+use FoF\FollowTags\Api\TagResourceFields;
 
 return [
     (new Extend\Frontend('forum'))
@@ -33,9 +34,6 @@ return [
 
     (new Extend\Model(TagState::class))
         ->cast('subscription', 'string'),
-
-    (new Extend\Routes('api'))
-        ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
@@ -52,20 +50,20 @@ return [
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Search\FollowTagsFilter::class)
-        ->addFilterMutator(Search\HideTagsFilter::class),
-
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
 
-    (new Extend\ApiSerializer(TagSerializer::class))
-        ->attributes(AddTagSubscriptionAttribute::class),
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
+    (new Extend\ApiResource(TagResource::class))
+        ->fields(TagResourceFields::class)
+        ->endpoints(fn () => [
+            Subscribe::make('fof-follow-tags.subscribe')
+        ]),
 
     (new Extend\Notification())
-        ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\NewDiscussionBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\NewPostBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\NewDiscussionTagBlueprint::class, ['alert', 'email'])
         ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
 
     (new Extend\Conditional())
@@ -73,4 +71,7 @@ return [
             (new UserData())
                 ->addType(Data\TagSubscription::class),
         ]),
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\FollowTagsFilter::class)
+        ->addMutator(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\HideTagsFilter::class),
 ];

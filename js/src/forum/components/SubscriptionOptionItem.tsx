@@ -1,5 +1,5 @@
 import app from 'flarum/forum/app';
-import icon from 'flarum/common/helpers/icon';
+import Icon from 'flarum/common/components/Icon';
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 
 interface SubscriptionOptionItemAttrs extends ComponentAttrs {
@@ -16,10 +16,10 @@ export default class SubscriptionOptionItem extends Component<SubscriptionOption
 
     return (
       <div className={`SubscriptionOption ${isSelected ? 'selected' : ''}`} onclick={this.attrs.onclick}>
-        {icon(this.attrs.icon, { className: 'SubscriptionOption-icon' })}
+        <Icon name={this.attrs.icon} className="SubscriptionOption-icon" />
         <span className="SubscriptionOption-title">{app.translator.trans(this.attrs.labelKey)}</span>
         <div className="SubscriptionOption-description">{app.translator.trans(this.attrs.descriptionKey)}</div>
-        {isSelected && icon('fas fa-check', { className: 'SubscriptionOption-selectedIcon' })}
+        {isSelected && <Icon name="fas fa-check" className="SubscriptionOption-selectedIcon" />}
       </div>
     );
   }

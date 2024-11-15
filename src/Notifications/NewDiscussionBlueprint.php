@@ -11,34 +11,27 @@
 
 namespace FoF\FollowTags\Notifications;
 
+use Flarum\Database\AbstractModel;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Flarum\User\User;
+use Flarum\Locale\TranslatorInterface;
 
-class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
+class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    /**
-     * @var Post
-     */
-    public $post;
-
-    public function __construct(Discussion $discussion, Post $post = null)
-    {
-        $this->discussion = $discussion;
-        $this->post = $post;
+    public function __construct(
+        public Discussion $discussion,
+        public ?Post $post = null
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?User
     {
         return $this->discussion->user;
     }
@@ -46,7 +39,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?AbstractModel
     {
         return $this->discussion;
     }
@@ -54,7 +47,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return [];
     }
@@ -62,15 +55,15 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
-        return ['text' => 'fof-follow-tags::emails.newDiscussion'];
+        return ['text' => 'fof-follow-tags::email.plain.newDiscussion', 'html' => 'fof-follow-tags::email.html.newDiscussion'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(TranslatorInterface $translator): string
     {
         return $translator->trans('fof-follow-tags.email.subject.newDiscussionInTag', [
             '{title' => $this->discussion->title,
@@ -80,7 +73,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newDiscussionInTag';
     }
@@ -88,7 +81,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }

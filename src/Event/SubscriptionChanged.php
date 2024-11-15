@@ -17,25 +17,10 @@ use Flarum\User\User;
 
 class SubscriptionChanged
 {
-    /**
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * @var Tag
-     */
-    public $tag;
-
-    /**
-     * @var TagState
-     */
-    public $state;
-
-    public function __construct(User $actor, Tag $tag, TagState $state)
-    {
-        $this->actor = $actor;
-        $this->tag = $tag;
-        $this->state = $state;
+    public function __construct(
+        public User $actor,
+        public Tag $tag,
+        public TagState $state
+    ) {
     }
 }
