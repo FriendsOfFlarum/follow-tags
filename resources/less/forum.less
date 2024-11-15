@@ -47,7 +47,7 @@
 // Subscription Modal
 .SubscriptionModal {
   .Modal-body {
-    color: @text-color;
+    color: var(--text-color);
   }
 
   .Button.Button--primary {
@@ -69,9 +69,9 @@
 
 .SubscriptionOption {
   padding: 10px;
-  border: 1px solid @muted-color;
-  border-radius: @border-radius;
-  background-color: @body-bg;
+  border: 1px solid var(--muted-color);
+  border-radius: var(--border-radius);
+  background-color: var(--body-bg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -120,7 +120,7 @@
 
   .SubscriptionOption-selectedIcon {
     margin-left: auto; // This will push the check icon to the right side
-    color: @alert-success-color;
+    color: var(--alert-success-color);
     padding-left: 10px; // Some spacing between the description and the check icon
   }
 }
