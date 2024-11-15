@@ -63,9 +63,9 @@ return [
         ->attributes(AddTagSubscriptionAttribute::class),
 
     (new Extend\Notification())
-        ->type(Notifications\NewDiscussionBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewPostBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
-        ->type(Notifications\NewDiscussionTagBlueprint::class, DiscussionSerializer::class, ['alert', 'email'])
+        ->type(Notifications\NewDiscussionBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\NewPostBlueprint::class, ['alert', 'email'])
+        ->type(Notifications\NewDiscussionTagBlueprint::class, ['alert', 'email'])
         ->beforeSending(Listeners\PreventMentionNotificationsFromIgnoredTags::class),
 
     (new Extend\Conditional())

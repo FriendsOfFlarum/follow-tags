@@ -11,41 +11,28 @@
 
 namespace FoF\FollowTags\Notifications;
 
+use Flarum\Database\AbstractModel;
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use Flarum\User\User;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Flarum\Locale\TranslatorInterface;
 
-class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
+class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var User
-     */
-    public $actor;
-
-    /**
-     * @var Discussion
-     */
-    public $discussion;
-
-    /**
-     * @var Post
-     */
-    public $post;
-
-    public function __construct(User $actor, Discussion $discussion, Post $post = null)
-    {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
-        $this->post = $post;
+    public function __construct(
+        public User $actor,
+        public Discussion $discussion,
+        public ?Post $post = null
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?User
     {
         return $this->actor;
     }
@@ -53,7 +40,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?AbstractModel
     {
         return $this->discussion;
     }
@@ -61,7 +48,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return [];
     }
@@ -69,7 +56,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-follow-tags::emails.newTag'];
     }
@@ -77,7 +64,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(TranslatorInterface $translator): string
     {
         return $translator->trans('fof-follow-tags.email.subject.newDiscussionTag', [
             'actor' => $this->actor,
@@ -88,7 +75,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newDiscussionTag';
     }
@@ -96,7 +83,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
