@@ -1,9 +1,8 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
-import NotificationGrid from 'flarum/forum/components/NotificationGrid';
 
 export default function extendNotificationGrid() {
-  extend(NotificationGrid.prototype, 'notificationTypes', function (items) {
+  extend('flarum/forum/components/NotificationGrid', 'notificationTypes', function (items) {
     items.add('newDiscussionInTag', {
       name: 'newDiscussionInTag',
       icon: 'fas fa-user-tag',
