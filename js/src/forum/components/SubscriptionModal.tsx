@@ -5,7 +5,7 @@ import ItemList from 'flarum/common/utils/ItemList';
 import { utils } from '../utils';
 import SubscriptionOptionItem from './SubscriptionOptionItem';
 import type Mithril from 'mithril';
-import Tag from 'flarum/tags/models/Tag';
+import Tag from 'ext:flarum/tags/common/models/Tag';
 import Stream from 'flarum/common/utils/Stream';
 import Tooltip from 'flarum/common/components/Tooltip';
 
