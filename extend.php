@@ -11,15 +11,16 @@
 
 namespace FoF\FollowTags;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
-use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Tags\Api\Resource\TagResource;
 use Flarum\Tags\TagState;
 use FoF\Extend\Extend\ExtensionSettings;
+use FoF\FollowTags\Api\Subscribe;
+use FoF\FollowTags\Api\TagResourceFields;
 
 return [
     (new Extend\Frontend('forum'))
@@ -33,9 +34,6 @@ return [
 
     (new Extend\Model(TagState::class))
         ->cast('subscription', 'string'),
-
-    (new Extend\Routes('api'))
-        ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
@@ -59,8 +57,12 @@ return [
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
 
-    (new Extend\ApiSerializer(TagSerializer::class))
-        ->attributes(AddTagSubscriptionAttribute::class),
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
+    (new Extend\ApiResource(TagResource::class))
+        ->fields(TagResourceFields::class)
+        ->endpoints(fn () => [
+            Subscribe::make('fof-follow-tags.subscribe')
+        ]),
 
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, ['alert', 'email'])
