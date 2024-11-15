@@ -56,7 +56,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface, Alertab
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-follow-tags::emails.newPost'];
+        return ['text' => 'fof-follow-tags::email.plain.newPost', 'html' => 'fof-follow-tags::email.html.newPost'];
     }
 
     /**
