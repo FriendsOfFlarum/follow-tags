@@ -52,4 +52,70 @@ class NotificationsTest extends TestCase
             ],
         ]);
     }
+
+    /**
+     * @test
+     */
+    public function notification_sent_when_new_discussion_in_followed_tag()
+    {
+        $response = $this->send(
+            $this->request('POST', '/api/discussions', [
+                'authenticatedAs' => 1,
+                'json' => [
+                    'data' => [
+                        'attributes' => [
+                            'title' => 'New discussion',
+                            'content' => '<t><p>New Post</p></t>',
+                        ],
+                        'relationships' => [
+                            'tags' => [
+                                'data' => [
+                                    ['type' => 'tags', 'id' => 1]
+                                ]
+                            ]
+                        ]
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => 2,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(1, count($response['data']));
+        $this->assertEquals('newDiscussionInTag', $response['data'][0]['attributes']['contentType']);
+    }
+
+    /**
+     * @test
+     */
+    public function no_notification_sent_when_new_post_in_followed_tag()
+    {
+        
+    }
+
+    /**
+     * @test
+    */
+    public function notification_sent_when_new_discussion_in_lurked_tag()
+    {
+
+    }
+
+    /**
+     * @test
+    */
+    public function notification_sent_when_new_post_in_lurked_tag()
+    {
+        
+    }
 }
