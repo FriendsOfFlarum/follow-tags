@@ -11,12 +11,15 @@
 
 namespace FoF\FollowTags\tests\integration\notifications;
 
+use Carbon\Carbon;
 use Flarum\Testing\integration\TestCase;
+use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use FoF\FollowTags\tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\tests\integration\TagsDefinitionTrait;
 
 class NotificationsTest extends TestCase
 {
+    use RetrievesAuthorizedUsers;
     use ExtensionDepsTrait;
     use TagsDefinitionTrait;
 
@@ -27,7 +30,19 @@ class NotificationsTest extends TestCase
         $this->extensionDeps();
 
         $this->prepareDatabase([
+            'users' => [
+                $this->normalUser(),
+            ],
             'tags' => $this->tags(),
+            'tag_user' => [
+                ['user_id' => 2, 'tag_id' => 1, 'is_hidden' => 0 , 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
+            ],
+            'discussions' => [
+                ['id' => 1, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
+            ],
+            'posts' => [
+                ['id' => 1, 'discussion_id' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Text</p></t>', 'is_private' => 0, 'is_approved' => 1, 'number' => 1],
+            ],
         ]);
     }
 }
