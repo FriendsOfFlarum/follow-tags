@@ -9,9 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\tests\integration;
+namespace FoF\FollowTags\tests\integration\notifications;
 
 use Flarum\Testing\integration\TestCase;
+use FoF\FollowTags\tests\integration\ExtensionDepsTrait;
+use FoF\FollowTags\tests\integration\TagsDefinitionTrait;
 
 class NotificationsTest extends TestCase
 {
