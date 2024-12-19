@@ -72,11 +72,13 @@
         "flarum/phpstan": "*",
         "flarum/mentions": "*",
         "flarum/gdpr": "dev-main",
-        "flarum/testing": "^1.0.0"
+        "flarum/testing": "^1.0.0",
+        "flarum/tags":"*",
+        "fof/extend": "*"
     },
     "autoload-dev": {
         "psr-4": {
-            "FoF\\FollowTags\\": "tests/"
+            "FoF\\FollowTags\\Tests\\": "tests/"
         }
     },
     "scripts": {

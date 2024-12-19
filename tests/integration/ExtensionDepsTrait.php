@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\tests\integration;
+namespace FoF\FollowTags\Tests\integration;
 
 trait ExtensionDepsTrait
 {
