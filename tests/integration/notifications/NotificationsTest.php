@@ -45,6 +45,7 @@ class NotificationsTest extends TestCase
                 ['discussion_id' => 2, 'tag_id' => 2, 'created_at' => Carbon::now()->toDateTimeString()],
             ],
             'discussion_user' => [
+                ['user_id' => 2, 'discussion_id' => 1, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'discussion_id' => 2, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
             ],
             'discussions' => [
