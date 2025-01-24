@@ -16,6 +16,7 @@ trait ExtensionDepsTrait
     public function extensionDeps(): void
     {
         $this->extension('flarum-tags');
+        $this->extension('flarum-mentions');
         $this->extension('fof-follow-tags');
     }
 }
