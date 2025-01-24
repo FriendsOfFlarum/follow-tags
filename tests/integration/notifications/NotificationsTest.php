@@ -12,12 +12,12 @@
 namespace FoF\FollowTags\Tests\integration\notifications;
 
 use Carbon\Carbon;
+use Flarum\Notification\Notification;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
+use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
-use Flarum\User\User;
-use Flarum\Notification\Notification;
 
 class NotificationsTest extends TestCase
 {
@@ -305,7 +305,6 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, count($response['data']));
         $this->assertEquals(0, User::query()->find($notificationRecipient)->notifications()->count());
         $this->assertEquals(0, Notification::query()->count());
-
     }
 
     /**
@@ -351,7 +350,6 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, count($response['data']));
         $this->assertEquals(0, User::query()->find($notificationRecipient)->notifications()->count());
         $this->assertEquals(0, Notification::query()->count());
-
     }
 
     /**
@@ -364,14 +362,14 @@ class NotificationsTest extends TestCase
                 'authenticatedAs' => 1,
                 'json'            => [
                     'data' => [
-                        'attributes' => [],
+                        'attributes'    => [],
                         'relationships' => [
                             'tags' => [
                                 'data' => [
-                                    ['type' => 'tags', 'id' => 2]
-                                ]
-                            ]
-                        ]
+                                    ['type' => 'tags', 'id' => 2],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ])
@@ -410,14 +408,14 @@ class NotificationsTest extends TestCase
                 'authenticatedAs' => 1,
                 'json'            => [
                     'data' => [
-                        'attributes' => [],
+                        'attributes'    => [],
                         'relationships' => [
                             'tags' => [
                                 'data' => [
-                                    ['type' => 'tags', 'id' => 4]
-                                ]
-                            ]
-                        ]
+                                    ['type' => 'tags', 'id' => 4],
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ])
