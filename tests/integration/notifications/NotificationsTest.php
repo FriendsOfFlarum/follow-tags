@@ -16,6 +16,8 @@ use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
+use Flarum\User\User;
+use Flarum\Notification\Notification;
 
 class NotificationsTest extends TestCase
 {
@@ -36,7 +38,7 @@ class NotificationsTest extends TestCase
             'tags'     => $this->tags(),
             'tag_user' => [
                 ['user_id' => 2, 'tag_id' => 1, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
-                ['user_id' => 2, 'tag_id' => 2, 'is_hidden' => 0, 'subscription' => 'lurking', 'created_at' => Carbon::now()->toDateTimeString()],
+                ['user_id' => 2, 'tag_id' => 2, 'is_hidden' => 0, 'subscription' => 'lurk', 'created_at' => Carbon::now()->toDateTimeString()],
             ],
             'discussion_tag' => [
                 ['discussion_id' => 1, 'tag_id' => 1, 'created_at' => Carbon::now()->toDateTimeString()],
@@ -81,9 +83,11 @@ class NotificationsTest extends TestCase
 
         $this->assertEquals(201, $response->getStatusCode());
 
+        $notificationRecipient = 2;
+
         $response = $this->send(
             $this->request('GET', '/api/notifications', [
-                'authenticatedAs' => 2,
+                'authenticatedAs' => $notificationRecipient,
             ])
         );
 
@@ -93,6 +97,9 @@ class NotificationsTest extends TestCase
 
         $this->assertEquals(1, count($response['data']));
         $this->assertEquals('newDiscussionInTag', $response['data'][0]['attributes']['contentType']);
+        $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->first()->from_user_id);
+        $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
     /**
@@ -100,6 +107,44 @@ class NotificationsTest extends TestCase
      */
     public function no_notification_sent_when_new_post_in_followed_tag()
     {
+        $response = $this->send(
+            $this->request('POST', '/api/posts', [
+                'authenticatedAs' => 1,
+                'json'            => [
+                    'data' => [
+                        'attributes' => [
+                            'content' => '<t><p>New Post</p></t>',
+                        ],
+                        'relationships' => [
+                            'discussion' => [
+                                'data' => [
+                                    'type' => 'discussions',
+                                    'id'   => 1,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $notificationRecipient = 2;
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => $notificationRecipient,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(0, count($response['data']));
+        $this->assertEquals(0, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(0, Notification::query()->count());
     }
 
     /**
@@ -107,6 +152,46 @@ class NotificationsTest extends TestCase
      */
     public function notification_sent_when_new_discussion_in_lurked_tag()
     {
+        $response = $this->send(
+            $this->request('POST', '/api/discussions', [
+                'authenticatedAs' => 1,
+                'json'            => [
+                    'data' => [
+                        'attributes' => [
+                            'title'   => 'New discussion',
+                            'content' => '<t><p>New Post</p></t>',
+                        ],
+                        'relationships' => [
+                            'tags' => [
+                                'data' => [
+                                    ['type' => 'tags', 'id' => 2],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $notificationRecipient = 2;
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => $notificationRecipient,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(1, count($response['data']));
+        $this->assertEquals('newDiscussionInTag', $response['data'][0]['attributes']['contentType']);
+        $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->first()->from_user_id);
+        $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
     /**
