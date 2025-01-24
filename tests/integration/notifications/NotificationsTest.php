@@ -107,6 +107,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(1, count($response['data']));
         $this->assertEquals('newDiscussionInTag', $response['data'][0]['attributes']['contentType']);
         $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->count());
         $this->assertEquals(1, Notification::query()->first()->from_user_id);
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
@@ -199,6 +200,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(1, count($response['data']));
         $this->assertEquals('newDiscussionInTag', $response['data'][0]['attributes']['contentType']);
         $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->count());
         $this->assertEquals(1, Notification::query()->first()->from_user_id);
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
@@ -255,6 +257,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(1, count($response['data']));
         $this->assertEquals('newPostInTag', $response['data'][0]['attributes']['contentType']);
         $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->count());
         $this->assertEquals(1, Notification::query()->first()->from_user_id);
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
@@ -349,5 +352,93 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, User::query()->find($notificationRecipient)->notifications()->count());
         $this->assertEquals(0, Notification::query()->count());
 
+    }
+
+    /**
+     * @test
+     */
+    public function notification_sent_when_discussion_retagged_to_accessible_tag()
+    {
+        $response = $this->send(
+            $this->request('PATCH', '/api/discussions/1', [
+                'authenticatedAs' => 1,
+                'json'            => [
+                    'data' => [
+                        'attributes' => [],
+                        'relationships' => [
+                            'tags' => [
+                                'data' => [
+                                    ['type' => 'tags', 'id' => 2]
+                                ]
+                            ]
+                        ]
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $notificationRecipient = 2;
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => $notificationRecipient,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(1, count($response['data']));
+        $this->assertEquals('newDiscussionTag', $response['data'][0]['attributes']['contentType']);
+
+        $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->count());
+        $this->assertEquals(1, Notification::query()->first()->from_user_id);
+        $this->assertEquals(2, Notification::query()->first()->user_id);
+    }
+
+    /**
+     * @test
+     */
+    public function no_notification_sent_when_discussion_retagged_to_restricted_tag()
+    {
+        $response = $this->send(
+            $this->request('PATCH', '/api/discussions/1', [
+                'authenticatedAs' => 1,
+                'json'            => [
+                    'data' => [
+                        'attributes' => [],
+                        'relationships' => [
+                            'tags' => [
+                                'data' => [
+                                    ['type' => 'tags', 'id' => 4]
+                                ]
+                            ]
+                        ]
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $notificationRecipient = 2;
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => $notificationRecipient,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(0, count($response['data']));
+        $this->assertEquals(0, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(0, Notification::query()->count());
     }
 }
