@@ -44,6 +44,9 @@ class NotificationsTest extends TestCase
                 ['discussion_id' => 1, 'tag_id' => 1, 'created_at' => Carbon::now()->toDateTimeString()],
                 ['discussion_id' => 2, 'tag_id' => 2, 'created_at' => Carbon::now()->toDateTimeString()],
             ],
+            'discussion_user' => [
+                ['user_id' => 2, 'discussion_id' => 2, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
+            ],
             'discussions' => [
                 ['id' => 1, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
                 ['id' => 2, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
@@ -199,5 +202,54 @@ class NotificationsTest extends TestCase
      */
     public function notification_sent_when_new_post_in_lurked_tag()
     {
+        /**
+         * Please notice that a notification is only sent when the user
+         * has read the last post in the discussion which is in a lurking tag.
+         *
+         * See `last_read_post_number` in the `discussion_user` table.
+         *
+         * Users won't receive notifications for posts in discussions they haven't read,
+         * even if the discussion is in a tag, they lurk.
+         */
+        $response = $this->send(
+            $this->request('POST', '/api/posts', [
+                'authenticatedAs' => 1,
+                'json'            => [
+                    'data' => [
+                        'attributes' => [
+                            'content' => '<t><p>New Post</p></t>',
+                        ],
+                        'relationships' => [
+                            'discussion' => [
+                                'data' => [
+                                    'type' => 'discussions',
+                                    'id'   => 2,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(201, $response->getStatusCode());
+
+        $notificationRecipient = 2;
+
+        $response = $this->send(
+            $this->request('GET', '/api/notifications', [
+                'authenticatedAs' => $notificationRecipient,
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $response = json_decode($response->getBody(), true);
+
+        $this->assertEquals(1, count($response['data']));
+        $this->assertEquals('newPostInTag', $response['data'][0]['attributes']['contentType']);
+        $this->assertEquals(1, User::query()->find($notificationRecipient)->notifications()->count());
+        $this->assertEquals(1, Notification::query()->first()->from_user_id);
+        $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 }
