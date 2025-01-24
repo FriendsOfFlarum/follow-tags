@@ -14,8 +14,8 @@ namespace FoF\FollowTags\tests\integration\notifications;
 use Carbon\Carbon;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
-use FoF\FollowTags\tests\integration\ExtensionDepsTrait;
-use FoF\FollowTags\tests\integration\TagsDefinitionTrait;
+use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
+use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
 
 class NotificationsTest extends TestCase
 {
