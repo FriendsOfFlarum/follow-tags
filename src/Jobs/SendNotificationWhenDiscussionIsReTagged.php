@@ -62,6 +62,7 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->whereIn('tag_user.subscription', ['follow', 'lurk'])
             ->get()
+            ->unique()
             ->reject(function ($user) use ($firstPost, $tags) {
                 return $tags->map->stateFor($user)->map->subscription->contains('ignore')
                         || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
