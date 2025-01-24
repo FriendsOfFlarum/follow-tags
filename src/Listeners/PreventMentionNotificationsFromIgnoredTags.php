@@ -34,7 +34,7 @@ class PreventMentionNotificationsFromIgnoredTags
 
         $ids = TagState::whereIn('tag_id', $tags)
             ->whereIn('user_id', $ids)
-            ->where('subscription', 'hide')
+            ->where('subscription', 'ignore')
             ->pluck('user_id');
 
         if ($ids->isEmpty()) {
