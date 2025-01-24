@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace FoF\FollowTags\tests\integration\notifications;
+namespace FoF\FollowTags\Tests\integration\notifications;
 
 use Carbon\Carbon;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
@@ -47,8 +47,8 @@ class NotificationsTest extends TestCase
                 ['id' => 2, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
             ],
             'posts' => [
-                ['id' => 1, 'discussion_id' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Following</p></t>', 'is_private' => 0, 'is_approved' => 1, 'number' => 1],
-                ['id' => 2, 'discussion_id' => 2, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Lurking</p></t>', 'is_private' => 0, 'is_approved' => 1, 'number' => 1],
+                ['id' => 1, 'discussion_id' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Following</p></t>', 'is_private' => 0, 'number' => 1],
+                ['id' => 2, 'discussion_id' => 2, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Lurking</p></t>', 'is_private' => 0, 'number' => 1],
             ],
         ]);
     }
