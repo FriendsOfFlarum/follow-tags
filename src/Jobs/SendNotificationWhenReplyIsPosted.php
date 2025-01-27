@@ -64,6 +64,7 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
             ->where('tag_user.subscription', 'lurk')
             ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1)
             ->get()
+            ->unique()
             ->reject(function (User $user) use ($tags) {
                 return $tags->map->stateFor($user)->map->subscription->contains('ignore')
                     || !$this->post->isVisibleTo($user);
