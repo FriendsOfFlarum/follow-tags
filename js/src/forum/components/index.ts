@@ -1,3 +1,4 @@
+import FollowingHero from './FollowingHero';
 import FollowingPageFilterDropdown from './FollowingPageFilterDropdown';
 import NewDiscussionNotification from './NewDiscussionNotification';
 import NewDiscussionTagNotification from './NewDiscussionTagNotification';
@@ -14,4 +15,5 @@ export const components = {
   SubscriptionModal,
   SubscriptionOptionItem,
   SubscriptionStateButton,
+  FollowingHero,
 };

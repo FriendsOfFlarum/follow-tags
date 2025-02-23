@@ -7,6 +7,7 @@ import NewDiscussionTagNotification from './components/NewDiscussionTagNotificat
 import addDiscussionBadge from './addDiscussionBadge';
 import addPreferences from './addPreferences';
 import extendNotificationGrid from './extendNotificationGrid';
+import extendIndexPage from './extenders/extendIndexPage';
 
 export * from './components';
 export * from './utils';
@@ -20,6 +21,7 @@ app.initializers.add(
     }
 
     addSubscriptionControls();
+    extendIndexPage();
 
     if ('flarum-subscriptions' in flarum.extensions) {
       addDiscussionBadge();
