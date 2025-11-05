@@ -56,8 +56,8 @@
                 "flarum/gdpr"
             ]
         },
-        "flagrow": {
-            "discuss": "https://discuss.flarum.org/d/20525"
+        "branch-alias": {
+            "2.x": "2.x-dev"
         },
         "flarum-cli": {
             "modules": {
