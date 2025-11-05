@@ -19,7 +19,6 @@ export default function extendIndexPage() {
       'subscriptionButton',
       <SubscriptionStateButton
         className="Button App-primaryControl"
-        /** @ts-expect-error */
         subscription={tag.subscription()}
         onclick={() => app.modal.show(SubscriptionModal, { model: tag })}
       />,
