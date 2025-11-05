@@ -35,7 +35,7 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
      */
     public $post;
 
-    public function __construct(User $actor, Discussion $discussion, Post $post = null)
+    public function __construct(User $actor, Discussion $discussion, ?Post $post = null)
     {
         $this->actor = $actor;
         $this->discussion = $discussion;

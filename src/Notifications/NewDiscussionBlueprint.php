@@ -29,7 +29,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface
      */
     public $post;
 
-    public function __construct(Discussion $discussion, Post $post = null)
+    public function __construct(Discussion $discussion, ?Post $post = null)
     {
         $this->discussion = $discussion;
         $this->post = $post;
