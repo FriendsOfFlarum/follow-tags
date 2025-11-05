@@ -1,3 +1,4 @@
+import IndexSidebar from 'flarum/forum/components/IndexSidebar';
 import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import IndexPage from 'flarum/forum/components/IndexPage';
@@ -6,10 +7,10 @@ import SubscriptionModal from '../components/SubscriptionModal';
 import SubscriptionStateButton from '../components/SubscriptionStateButton';
 
 export default function extendIndexPage() {
-  extend(IndexPage.prototype, 'sidebarItems', function (items) {
-    if (!this.currentTag() || !app.session.user) return;
+  extend(IndexSidebar.prototype, 'items', function (items) {
+    if (!app.currentTag() || !app.session.user) return;
 
-    const tag = this.currentTag();
+    const tag = app.currentTag();
     if (!tag) return;
 
     if (items.has('newDiscussion')) items.setPriority('newDiscussion', 10);

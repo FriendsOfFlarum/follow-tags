@@ -2,7 +2,7 @@ import app from 'flarum/admin/app';
 import followingPageOptions from '../common/utils/followingPageOptions';
 
 app.initializers.add('fof/follow-tags', () => {
-  app.extensionData.for('fof-follow-tags').registerSetting({
+  app.registry.for('fof-follow-tags').registerSetting({
     setting: 'fof-follow-tags.following_page_default',
     options: followingPageOptions('admin.settings'),
     type: 'select',
