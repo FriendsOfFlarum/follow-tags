@@ -19,20 +19,19 @@ use Illuminate\Support\Collection;
 
 class SendNotificationWhenDiscussionIsStarted extends NotificationJob
 {
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    public function __construct(Discussion $discussion)
+    public function __construct(protected Discussion $discussion)
     {
-        $this->discussion = $discussion;
     }
 
     public function handle(NotificationSyncer $notifications)
     {
         if (!$this->discussion->exists) {
             return;
+        }
+
+        // Load tags relationship if not already loaded
+        if (!$this->discussion->relationLoaded('tags')) {
+            $this->discussion->load('tags');
         }
 
         /**

@@ -5,12 +5,12 @@ import ItemList from 'flarum/common/utils/ItemList';
 import { utils } from '../utils';
 import SubscriptionOptionItem from './SubscriptionOptionItem';
 import type Mithril from 'mithril';
-import Tag from 'flarum/tags/models/Tag';
+import type Tag from 'ext:flarum/tags/common/models/Tag';
 import Stream from 'flarum/common/utils/Stream';
 import Tooltip from 'flarum/common/components/Tooltip';
 
 interface ISubscriptionModalAttrs extends IInternalModalAttrs {
-  model?: Tag;
+  model: Tag;
 }
 
 export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
@@ -24,8 +24,8 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
     this.subscription = this.attrs.model.subscription() || 'not_follow';
 
     const preferences = app.session.user?.preferences();
-    const notifyEmail = preferences['notify_newPostInTag_email'];
-    const notifyAlert = preferences['notify_newPostInTag_alert'];
+    const notifyEmail = preferences?.['notify_newPostInTag_email'];
+    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
 
     if ((notifyEmail || notifyAlert) && this.subscription === 'not_follow') {
       this.canShowTooltip = true;
@@ -46,8 +46,8 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
 
   content() {
     const preferences = app.session.user?.preferences();
-    const notifyEmail = preferences['notify_newPostInTag_email'];
-    const notifyAlert = preferences['notify_newPostInTag_alert'];
+    const notifyEmail = preferences?.['notify_newPostInTag_email'];
+    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
 
     return (
       <div className="Modal-body">
@@ -105,24 +105,17 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
 
     this.subscription = subscription;
 
-    app
-      .request({
-        url: `${app.forum.attribute('apiUrl')}/tags/${tag.id()}/subscription`,
-        method: 'POST',
-        body: {
-          data: this.requestData(),
-        },
-      })
-      .then((res: any) => app.store.pushPayload(res))
+    // Use standard JSON:API PATCH to update the tag resource
+    tag
+      .save({ subscription: this.subscription })
       .then(() => {
         this.loading(false);
-
         m.redraw();
         this.hide();
+      })
+      .catch(() => {
+        this.loading(false);
+        m.redraw();
       });
-  }
-
-  requestData(): { [key: string]: string } {
-    return { subscription: this.subscription };
   }
 }

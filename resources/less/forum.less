@@ -39,20 +39,15 @@
   margin-left: 1px;
 }
 
-@primary-btn-bg: @primary-color;
-@primary-btn-text: @body-bg-light;
-@secondary-btn-bg: @control-bg;
-@secondary-btn-text: @text-color;
-
 // Subscription Modal
 .SubscriptionModal {
   .Modal-body {
-    color: @text-color;
+    color: var(--text-color);
   }
 
   .Button.Button--primary {
-    background-color: @primary-btn-bg;
-    color: @primary-btn-text;
+    background-color: @primary-color;
+    color: @body-bg-light;
   }
 
   .Form-group {
@@ -69,9 +64,9 @@
 
 .SubscriptionOption {
   padding: 10px;
-  border: 1px solid @muted-color;
-  border-radius: @border-radius;
-  background-color: @body-bg;
+  border: 1px solid var(--muted-color);
+  border-radius: var(--border-radius);
+  background-color: var(--body-bg);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -83,7 +78,7 @@
   }
 
   &:hover {
-    background-color: darken(@secondary-btn-bg, 10%);
+    background-color: var(--control-bg-shaded);
   }
 
   &.selected {
@@ -120,7 +115,7 @@
 
   .SubscriptionOption-selectedIcon {
     margin-left: auto; // This will push the check icon to the right side
-    color: @alert-success-color;
+    color: var(--alert-success-color);
     padding-left: 10px; // Some spacing between the description and the check icon
   }
 }

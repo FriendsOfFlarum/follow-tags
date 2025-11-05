@@ -1,14 +1,13 @@
 import app from 'flarum/forum/app';
 import { extend } from 'flarum/common/extend';
 
-import SettingsPage from 'flarum/forum/components/SettingsPage';
 import FieldSet from 'flarum/common/components/FieldSet';
 import Select from 'flarum/common/components/Select';
 
 import { getOptions, getDefaultFollowingFiltering } from './utils/getDefaultFollowingFiltering';
 
 export default () => {
-  extend(SettingsPage.prototype, 'settingsItems', function (items) {
+  extend('flarum/forum/components/SettingsPage', 'settingsItems', function (items) {
     items.add(
       'fof-follow-tags',
       FieldSet.component(

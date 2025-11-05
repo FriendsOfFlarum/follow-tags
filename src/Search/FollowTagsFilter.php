@@ -11,12 +11,15 @@
 
 namespace FoF\FollowTags\Search;
 
-use Flarum\Filter\FilterInterface;
-use Flarum\Filter\FilterState;
+use Flarum\Search\Database\DatabaseSearchState;
+use Flarum\Search\Filter\FilterInterface;
+use Flarum\Search\SearchState;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
-use Illuminate\Database\Query\Builder;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class FollowTagsFilter implements FilterInterface
 {
     public function getFilterKey(): string
@@ -24,12 +27,12 @@ class FollowTagsFilter implements FilterInterface
         return 'following-tag';
     }
 
-    public function filter(FilterState $filterState, string $filterValue, bool $negate)
+    public function filter(SearchState $state, array|string $value, bool $negate): void
     {
-        $this->constrain($filterState->getQuery(), $filterState->getActor(), $negate);
+        $this->constrain($state->getQuery(), $state->getActor(), $negate);
     }
 
-    protected function constrain(Builder $query, User $actor, bool $negate)
+    protected function constrain(\Illuminate\Database\Eloquent\Builder $query, User $actor, bool $negate): void
     {
         if ($actor->isGuest()) {
             return;

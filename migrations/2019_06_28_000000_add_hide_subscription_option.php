@@ -15,13 +15,21 @@ return [
     'up' => function (Builder $schema) {
         $connection = $schema->getConnection();
         $prefix = $connection->getTablePrefix();
+        $driver = $connection->getDriverName();
 
-        $connection->statement("ALTER TABLE {$prefix}tag_user MODIFY COLUMN subscription ENUM('follow', 'lurk', 'ignore', 'hide')");
+        // Only run for MySQL which uses ENUM type
+        // For SQLite/PostgreSQL, the column is already a string that can hold any value
+        if ($driver === 'mysql') {
+            $connection->statement("ALTER TABLE {$prefix}tag_user MODIFY COLUMN subscription ENUM('follow', 'lurk', 'ignore', 'hide')");
+        }
     },
     'down' => function (Builder $schema) {
         $connection = $schema->getConnection();
         $prefix = $connection->getTablePrefix();
+        $driver = $connection->getDriverName();
 
-        $connection->statement("ALTER TABLE {$prefix}tag_user MODIFY COLUMN subscription ENUM('follow', 'lurk', 'ignore')");
+        if ($driver === 'mysql') {
+            $connection->statement("ALTER TABLE {$prefix}tag_user MODIFY COLUMN subscription ENUM('follow', 'lurk', 'ignore')");
+        }
     },
 ];
