@@ -18,6 +18,10 @@ use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\Tags\Tag;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
 
 class NotificationsCountTest extends TestCase
 {
@@ -32,10 +36,10 @@ class NotificationsCountTest extends TestCase
         $this->extensionDeps();
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
-            'tags'     => $this->tags(),
+            Tag::class     => $this->tags(),
             'tag_user' => [
                 ['user_id' => 2, 'tag_id' => 1, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'tag_id' => 5, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
@@ -49,18 +53,16 @@ class NotificationsCountTest extends TestCase
             'discussion_user' => [
                 ['user_id' => 2, 'discussion_id' => 1, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
             ],
-            'discussions' => [
+            Discussion::class => [
                 ['id' => 1, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
             ],
-            'posts' => [
+            Post::class => [
                 ['id' => 1, 'discussion_id' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Following</p></t>', 'is_private' => 0, 'number' => 1],
             ],
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function single_notification_sent_when_following_tag_and_subtag()
     {
         $response = $this->send(
@@ -107,9 +109,7 @@ class NotificationsCountTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function single_notification_sent_when_lurking_tag_and_subtag()
     {
         $response = $this->send(
@@ -155,9 +155,7 @@ class NotificationsCountTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function single_notification_sent_when_following_tag_and_subtag_and_discussion_retagged()
     {
         $response = $this->send(

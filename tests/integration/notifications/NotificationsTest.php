@@ -18,6 +18,10 @@ use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
+use PHPUnit\Framework\Attributes\Test;
+use Flarum\Tags\Tag;
+use Flarum\Discussion\Discussion;
+use Flarum\Post\Post;
 
 class NotificationsTest extends TestCase
 {
@@ -32,10 +36,10 @@ class NotificationsTest extends TestCase
         $this->extensionDeps();
 
         $this->prepareDatabase([
-            'users' => [
+            User::class => [
                 $this->normalUser(),
             ],
-            'tags'     => $this->tags(),
+            Tag::class     => $this->tags(),
             'tag_user' => [
                 ['user_id' => 2, 'tag_id' => 1, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'tag_id' => 2, 'is_hidden' => 0, 'subscription' => 'lurk', 'created_at' => Carbon::now()->toDateTimeString()],
@@ -51,12 +55,12 @@ class NotificationsTest extends TestCase
                 ['user_id' => 2, 'discussion_id' => 2, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'discussion_id' => 3, 'last_read_post_number' => 1, 'last_read_at' => Carbon::now()->toDateTimeString()],
             ],
-            'discussions' => [
+            Discussion::class => [
                 ['id' => 1, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
                 ['id' => 2, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
                 ['id' => 3, 'title' => 'The quick brown fox jumps over the lazy dog', 'created_at' => Carbon::now()->toDateTimeString(), 'user_id' => 2, 'participant_count' => 1],
             ],
-            'posts' => [
+            Post::class => [
                 ['id' => 1, 'discussion_id' => 1, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Following</p></t>', 'is_private' => 0, 'number' => 1],
                 ['id' => 2, 'discussion_id' => 2, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Lurking</p></t>', 'is_private' => 0, 'number' => 1],
                 ['id' => 3, 'discussion_id' => 3, 'user_id' => 2, 'type' => 'comment', 'content' => '<t><p>Ignoring</p></t>', 'is_private' => 0, 'number' => 1],
@@ -64,9 +68,7 @@ class NotificationsTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function notification_sent_when_new_discussion_in_followed_tag()
     {
         $response = $this->send(
@@ -112,9 +114,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function no_notification_sent_when_new_post_in_followed_tag()
     {
         $response = $this->send(
@@ -157,9 +157,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, Notification::query()->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function notification_sent_when_new_discussion_in_lurked_tag()
     {
         $response = $this->send(
@@ -205,9 +203,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function notification_sent_when_new_post_in_lurked_tag()
     {
         /**
@@ -262,9 +258,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function no_notification_sent_when_new_post_mention_in_ignored_tag()
     {
         $response = $this->send(
@@ -307,9 +301,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, Notification::query()->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function no_notification_sent_when_new_user_mention_in_ignored_tag()
     {
         $response = $this->send(
@@ -352,9 +344,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(0, Notification::query()->count());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function notification_sent_when_discussion_retagged_to_accessible_tag()
     {
         $response = $this->send(
@@ -398,9 +388,7 @@ class NotificationsTest extends TestCase
         $this->assertEquals(2, Notification::query()->first()->user_id);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function no_notification_sent_when_discussion_retagged_to_restricted_tag()
     {
         $response = $this->send(
