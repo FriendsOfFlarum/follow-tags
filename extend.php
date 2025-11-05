@@ -56,10 +56,6 @@ return [
         ->listen(Post\Restored::class, Listeners\RestoreNotificationWhenPostIsRestored::class)
         ->subscribe(Listeners\QueueNotificationJobs::class),
 
-    (new Extend\Filter(DiscussionFilterer::class))
-        ->addFilter(Search\FollowTagsFilter::class)
-        ->addFilterMutator(Search\HideTagsFilter::class),
-
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
 
@@ -78,4 +74,7 @@ return [
             (new UserData())
                 ->addType(Data\TagSubscription::class),
         ]),
+    (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
+        ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\FollowTagsFilter::class)
+        ->addMutator(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\HideTagsFilter::class),
 ];

@@ -11,17 +11,17 @@
 
 namespace FoF\FollowTags\Search;
 
-use Flarum\Filter\FilterState;
-use Flarum\Query\QueryCriteria;
+use Flarum\Search\SearchState;
+use Flarum\Search\SearchCriteria;
 use Flarum\Tags\TagState;
 
 class HideTagsFilter
 {
-    public function __invoke(FilterState $state, QueryCriteria $criteria)
+    public function __invoke(SearchState $state, SearchCriteria $criteria)
     {
         $actor = $state->getActor();
 
-        if ($actor->isGuest() || array_key_exists('tag', $criteria->query)) {
+        if ($actor->isGuest() || array_key_exists('tag', $criteria->filters)) {
             return;
         }
 
