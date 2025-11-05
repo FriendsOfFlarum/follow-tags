@@ -20,6 +20,10 @@ use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\TagState;
 use FoF\Extend\Extend\ExtensionSettings;
+use Flarum\Api\Context;
+use Flarum\Api\Endpoint;
+use Flarum\Api\Resource;
+use Flarum\Api\Schema;
 
 return [
     (new Extend\Frontend('forum'))
@@ -59,6 +63,7 @@ return [
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
 
+    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
     (new Extend\ApiSerializer(TagSerializer::class))
         ->attributes(AddTagSubscriptionAttribute::class),
 
