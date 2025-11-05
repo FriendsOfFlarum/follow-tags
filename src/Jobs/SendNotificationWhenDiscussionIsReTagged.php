@@ -20,20 +20,8 @@ use Illuminate\Support\Collection;
 
 class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
 {
-    /**
-     * @var User
-     */
-    protected $actor;
-
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    public function __construct(User $actor, Discussion $discussion)
+    public function __construct(protected User $actor, protected Discussion $discussion)
     {
-        $this->actor = $actor;
-        $this->discussion = $discussion;
     }
 
     public function handle(NotificationSyncer $notifications)

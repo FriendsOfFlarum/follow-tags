@@ -26,14 +26,8 @@ class ChangeTagSubscription extends AbstractShowController
 {
     public $serializer = TagSerializer::class;
 
-    /**
-     * @var Dispatcher
-     */
-    protected $events;
-
-    public function __construct(Dispatcher $events)
+    public function __construct(protected Dispatcher $events)
     {
-        $this->events = $events;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)

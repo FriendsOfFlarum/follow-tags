@@ -19,14 +19,8 @@ use Illuminate\Support\Collection;
 
 class SendNotificationWhenDiscussionIsStarted extends NotificationJob
 {
-    /**
-     * @var Discussion
-     */
-    protected $discussion;
-
-    public function __construct(Discussion $discussion)
+    public function __construct(protected Discussion $discussion)
     {
-        $this->discussion = $discussion;
     }
 
     public function handle(NotificationSyncer $notifications)

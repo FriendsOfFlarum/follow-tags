@@ -11,31 +11,23 @@
 
 namespace FoF\FollowTags\Notifications;
 
+use Flarum\Notification\AlertableInterface;
 use Flarum\Discussion\Discussion;
 use Flarum\Notification\Blueprint\BlueprintInterface;
 use Flarum\Notification\MailableInterface;
 use Flarum\Post\Post;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class NewPostBlueprint implements BlueprintInterface, MailableInterface
+class NewPostBlueprint implements BlueprintInterface, MailableInterface, AlertableInterface
 {
-    /**
-     * @var Post
-     */
-    public $post;
-
-    /**
-     * @param Post $post
-     */
-    public function __construct(Post $post)
+    public function __construct(public Post $post)
     {
-        $this->post = $post;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getSubject()
+    public function getSubject(): ?\Flarum\Database\AbstractModel
     {
         return $this->post->discussion;
     }
@@ -43,7 +35,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getFromUser()
+    public function getFromUser(): ?\Flarum\User\User
     {
         return $this->post->user;
     }
@@ -51,7 +43,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getData()
+    public function getData(): mixed
     {
         return ['postNumber' => (int) $this->post->number];
     }
@@ -59,7 +51,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailView()
+    public function getEmailViews(): array
     {
         return ['text' => 'fof-follow-tags::emails.newPost'];
     }
@@ -67,7 +59,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public function getEmailSubject(TranslatorInterface $translator)
+    public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
         return $translator->trans('fof-follow-tags.email.subject.newPostInTag', [
             'title' => $this->post->discussion->title,
@@ -77,7 +69,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getType()
+    public static function getType(): string
     {
         return 'newPostInTag';
     }
@@ -85,7 +77,7 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubjectModel()
+    public static function getSubjectModel(): string
     {
         return Discussion::class;
     }
