@@ -29,8 +29,8 @@ class NotificationJob extends AbstractJob implements ShouldQueue
     /**
      * Sync the provided notifications.
      *
-     * @param NotificationSyncer $syncer
-     * @param BlueprintInterface $blueprint
+     * @param NotificationSyncer    $syncer
+     * @param BlueprintInterface    $blueprint
      * @param Collection<int, User> $recipients
      */
     protected function sync(NotificationSyncer $syncer, BlueprintInterface $blueprint, Collection $recipients): void

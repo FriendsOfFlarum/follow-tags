@@ -12,13 +12,13 @@
 namespace FoF\FollowTags\Tests\integration\api;
 
 use Carbon\Carbon;
+use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\Tags\Tag;
 
 class SubscriptionTest extends TestCase
 {
@@ -46,10 +46,10 @@ class SubscriptionTest extends TestCase
         $response = $this->send(
             $this->request('PATCH', '/api/tags/1', [
                 'authenticatedAs' => 2,
-                'json' => [
+                'json'            => [
                     'data' => [
-                        'type' => 'tags',
-                        'id' => '1',
+                        'type'       => 'tags',
+                        'id'         => '1',
                         'attributes' => [
                             'subscription' => 'follow',
                         ],
@@ -79,20 +79,20 @@ class SubscriptionTest extends TestCase
     {
         // First, follow the tag
         $this->database()->table('tag_user')->insert([
-            'user_id' => 2,
-            'tag_id' => 1,
+            'user_id'      => 2,
+            'tag_id'       => 1,
             'subscription' => 'follow',
-            'created_at' => Carbon::now(),
+            'created_at'   => Carbon::now(),
         ]);
 
         // Then change to lurk
         $response = $this->send(
             $this->request('PATCH', '/api/tags/1', [
                 'authenticatedAs' => 2,
-                'json' => [
+                'json'            => [
                     'data' => [
-                        'type' => 'tags',
-                        'id' => '1',
+                        'type'       => 'tags',
+                        'id'         => '1',
                         'attributes' => [
                             'subscription' => 'lurk',
                         ],
@@ -122,20 +122,20 @@ class SubscriptionTest extends TestCase
     {
         // First, follow the tag
         $this->database()->table('tag_user')->insert([
-            'user_id' => 2,
-            'tag_id' => 1,
+            'user_id'      => 2,
+            'tag_id'       => 1,
             'subscription' => 'follow',
-            'created_at' => Carbon::now(),
+            'created_at'   => Carbon::now(),
         ]);
 
         // Then unfollow (set to null)
         $response = $this->send(
             $this->request('PATCH', '/api/tags/1', [
                 'authenticatedAs' => 2,
-                'json' => [
+                'json'            => [
                     'data' => [
-                        'type' => 'tags',
-                        'id' => '1',
+                        'type'       => 'tags',
+                        'id'         => '1',
                         'attributes' => [
                             'subscription' => null,
                         ],
@@ -166,8 +166,8 @@ class SubscriptionTest extends TestCase
             $this->request('PATCH', '/api/tags/1', [
                 'json' => [
                     'data' => [
-                        'type' => 'tags',
-                        'id' => '1',
+                        'type'       => 'tags',
+                        'id'         => '1',
                         'attributes' => [
                             'subscription' => 'follow',
                         ],
@@ -204,10 +204,10 @@ class SubscriptionTest extends TestCase
     {
         // Set up a subscription
         $this->database()->table('tag_user')->insert([
-            'user_id' => 2,
-            'tag_id' => 1,
+            'user_id'      => 2,
+            'tag_id'       => 1,
             'subscription' => 'follow',
-            'created_at' => Carbon::now(),
+            'created_at'   => Carbon::now(),
         ]);
 
         $response = $this->send(

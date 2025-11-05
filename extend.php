@@ -19,6 +19,7 @@ use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
+
 // use FoF\Extend\Extend\ExtensionSettings;
 
 return [

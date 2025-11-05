@@ -16,7 +16,6 @@ use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
-use Illuminate\Database\Query\Builder;
 
 /**
  * @implements FilterInterface<DatabaseSearchState>

@@ -14,7 +14,6 @@ namespace FoF\FollowTags\Access;
 use Flarum\Tags\Tag;
 use Flarum\User\Access\AbstractPolicy;
 use Flarum\User\User;
-use Illuminate\Database\Eloquent\Model;
 
 class TagPolicy extends AbstractPolicy
 {

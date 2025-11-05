@@ -24,7 +24,7 @@ class QueueNotificationJobs
         protected Queue $queue
     ) {
     }
-    
+
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);

@@ -12,8 +12,8 @@
 namespace FoF\FollowTags\Search;
 
 use Flarum\Search\Database\DatabaseSearchState;
-use Flarum\Search\SearchState;
 use Flarum\Search\SearchCriteria;
+use Flarum\Search\SearchState;
 use Flarum\Tags\TagState;
 
 class HideTagsFilter

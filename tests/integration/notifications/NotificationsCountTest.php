@@ -12,16 +12,16 @@
 namespace FoF\FollowTags\Tests\integration\notifications;
 
 use Carbon\Carbon;
+use Flarum\Discussion\Discussion;
 use Flarum\Notification\Notification;
+use Flarum\Post\Post;
+use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
 use PHPUnit\Framework\Attributes\Test;
-use Flarum\Tags\Tag;
-use Flarum\Discussion\Discussion;
-use Flarum\Post\Post;
 
 class NotificationsCountTest extends TestCase
 {
@@ -40,13 +40,13 @@ class NotificationsCountTest extends TestCase
                 array_merge($this->normalUser(), [
                     'preferences' => json_encode([
                         'notify_newDiscussionInTag_alert' => true,
-                        'notify_newPostInTag_alert' => true,
-                        'notify_newDiscussionTag_alert' => true,
+                        'notify_newPostInTag_alert'       => true,
+                        'notify_newDiscussionTag_alert'   => true,
                     ]),
                 ]),
             ],
             Tag::class     => $this->tags(),
-            'tag_user' => [
+            'tag_user'     => [
                 ['user_id' => 2, 'tag_id' => 1, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'tag_id' => 5, 'is_hidden' => 0, 'subscription' => 'follow', 'created_at' => Carbon::now()->toDateTimeString()],
                 ['user_id' => 2, 'tag_id' => 2, 'is_hidden' => 0, 'subscription' => 'lurk', 'created_at' => Carbon::now()->toDateTimeString()],
