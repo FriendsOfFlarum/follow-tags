@@ -53,7 +53,7 @@ class NewDiscussionBlueprint implements BlueprintInterface, MailableInterface, A
      */
     public function getEmailViews(): array
     {
-        return ['text' => 'fof-follow-tags::emails.newDiscussion'];
+        return ['text' => 'fof-follow-tags::email.plain.newDiscussion', 'html' => 'fof-follow-tags::email.html.newDiscussion'];
     }
 
     /**
