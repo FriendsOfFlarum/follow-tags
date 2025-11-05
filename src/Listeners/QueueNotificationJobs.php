@@ -11,30 +11,38 @@
 
 namespace FoF\FollowTags\Listeners;
 
-use Flarum\Approval\Event\PostWasApproved;
 use Flarum\Discussion\Event\Started;
 use Flarum\Post\Event\Saving;
 use Flarum\Tags\Event\DiscussionWasTagged;
 use FoF\FollowTags\Jobs;
+use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Events\Dispatcher;
 
 class QueueNotificationJobs
 {
+    public function __construct(
+        protected Queue $queue
+    ) {
+    }
+    
     public function subscribe(Dispatcher $events)
     {
         $events->listen(Started::class, [$this, 'whenDiscussionStarted']);
         $events->listen(Saving::class, [$this, 'whenPostCreated']);
-        $events->listen(PostWasApproved::class, [$this, 'whenPostApproved']);
+
+        // Only listen for approval events if the extension is enabled
+        if (class_exists('Flarum\Approval\Event\PostWasApproved')) {
+            $events->listen('Flarum\Approval\Event\PostWasApproved', [$this, 'whenPostApproved']);
+        }
+
         $events->listen(DiscussionWasTagged::class, [$this, 'whenDiscussionTagChanged']);
     }
 
     public function whenDiscussionStarted(Started $event)
     {
-        $event->discussion->afterSave(function ($discussion) {
-            resolve('flarum.queue.connection')->push(
-                new Jobs\SendNotificationWhenDiscussionIsStarted($discussion)
-            );
-        });
+        $this->queue->push(
+            new Jobs\SendNotificationWhenDiscussionIsStarted($event->discussion)
+        );
     }
 
     public function whenPostCreated(Saving $event)
@@ -43,35 +51,46 @@ class QueueNotificationJobs
             return;
         }
 
-        $event->post->afterSave(function ($post) {
+        $queue = $this->queue;
+
+        // Queue job after post is saved
+        $event->post->afterSave(function ($post) use ($queue) {
             if (!$post->discussion->exists || $post->number == 1) {
                 return;
             }
 
-            resolve('flarum.queue.connection')->push(
+            $queue->push(
                 new Jobs\SendNotificationWhenReplyIsPosted($post, $post->number - 1)
             );
         });
     }
 
-    public function whenPostApproved(PostWasApproved $event)
+    /**
+     * @param object $event
+     */
+    public function whenPostApproved($event)
     {
-        $event->post->afterSave(function ($post) {
-            if (!$post->discussion->exists) {
-                return;
-            }
+        // Type-check the event dynamically since approval extension is optional
+        if (!property_exists($event, 'post')) {
+            return;
+        }
 
-            resolve('flarum.queue.connection')->push(
-                $post->number == 1
-                    ? new Jobs\SendNotificationWhenDiscussionIsStarted($post->discussion)
-                    : new Jobs\SendNotificationWhenReplyIsPosted($post, $post->number - 1)
-            );
-        });
+        $post = $event->post;
+
+        if (!$post->discussion->exists) {
+            return;
+        }
+
+        $this->queue->push(
+            $post->number == 1
+                ? new Jobs\SendNotificationWhenDiscussionIsStarted($post->discussion)
+                : new Jobs\SendNotificationWhenReplyIsPosted($post, $post->number - 1)
+        );
     }
 
     public function whenDiscussionTagChanged(DiscussionWasTagged $event)
     {
-        resolve('flarum.queue.connection')->push(
+        $this->queue->push(
             new Jobs\SendNotificationWhenDiscussionIsReTagged($event->actor, $event->discussion)
         );
     }

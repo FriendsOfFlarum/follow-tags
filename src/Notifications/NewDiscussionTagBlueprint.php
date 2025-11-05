@@ -62,9 +62,8 @@ class NewDiscussionTagBlueprint implements BlueprintInterface, MailableInterface
      */
     public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
-        return $translator->trans('fof-follow-tags.email.subject.newDiscussionTag', [
-            'actor' => $this->actor,
-            'title' => $this->discussion->title,
+        return $translator->trans('fof-follow-tags.email.newDiscussionTag.subject', [
+            '{title}' => $this->discussion->title,
         ]);
     }
 

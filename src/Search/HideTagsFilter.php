@@ -11,12 +11,16 @@
 
 namespace FoF\FollowTags\Search;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\SearchState;
 use Flarum\Search\SearchCriteria;
 use Flarum\Tags\TagState;
 
 class HideTagsFilter
 {
+    /**
+     * @param DatabaseSearchState $state
+     */
     public function __invoke(SearchState $state, SearchCriteria $criteria)
     {
         $actor = $state->getActor();

@@ -39,11 +39,6 @@
   margin-left: 1px;
 }
 
-@primary-btn-bg: @primary-color;
-@primary-btn-text: @body-bg-light;
-@secondary-btn-bg: @control-bg;
-@secondary-btn-text: @text-color;
-
 // Subscription Modal
 .SubscriptionModal {
   .Modal-body {
@@ -51,8 +46,8 @@
   }
 
   .Button.Button--primary {
-    background-color: @primary-btn-bg;
-    color: @primary-btn-text;
+    background-color: @primary-color;
+    color: @body-bg-light;
   }
 
   .Form-group {
@@ -83,7 +78,7 @@
   }
 
   &:hover {
-    background-color: darken(@secondary-btn-bg, 10%);
+    background-color: var(--control-bg-shaded);
   }
 
   &.selected {

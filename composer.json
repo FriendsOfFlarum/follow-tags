@@ -21,8 +21,7 @@
     "require": {
         "php": "^8.2",
         "flarum/core": "^2.0.0-beta",
-        "flarum/tags": "*",
-        "fof/extend": "^2.0.0"
+        "flarum/tags": "^2.0.0-beta"
     },
     "authors": [
         {
@@ -67,14 +66,12 @@
         }
     },
     "require-dev": {
-        "flarum/approval": "*",
-        "flarum/subscriptions": "*",
-        "flarum/phpstan": "^2.0.0-beta",
-        "flarum/mentions": "*",
-        "flarum/gdpr": "dev-main",
-        "flarum/testing": "^2.0.0-beta",
-        "flarum/tags": "*",
-        "fof/extend": "*"
+        "flarum/subscriptions": "2.x-dev",
+        "flarum/phpstan": "2.x-dev",
+        "flarum/mentions": "2.x-dev",
+        "flarum/gdpr": "2.x-dev",
+        "flarum/testing": "2.x-dev",
+        "flarum/tags": "2.x-dev"
     },
     "autoload-dev": {
         "psr-4": {

@@ -30,6 +30,11 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
             return;
         }
 
+        // Load tags relationship if not already loaded
+        if (!$this->discussion->relationLoaded('tags')) {
+            $this->discussion->load('tags');
+        }
+
         /**
          * @var Collection<Tag>|null $tags
          *

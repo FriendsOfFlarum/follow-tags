@@ -105,24 +105,17 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
 
     this.subscription = subscription;
 
-    app
-      .request({
-        url: `${app.forum.attribute('apiUrl')}/tags/${tag.id()}/subscription`,
-        method: 'POST',
-        body: {
-          data: this.requestData(),
-        },
-      })
-      .then((res: any) => app.store.pushPayload(res))
+    // Use standard JSON:API PATCH to update the tag resource
+    tag
+      .save({ subscription: this.subscription })
       .then(() => {
         this.loading(false);
-
         m.redraw();
         this.hide();
+      })
+      .catch(() => {
+        this.loading(false);
+        m.redraw();
       });
-  }
-
-  requestData(): { [key: string]: string } {
-    return { subscription: this.subscription };
   }
 }

@@ -31,6 +31,11 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
 
         $discussion = $this->post->discussion;
 
+        // Load tags relationship if not already loaded
+        if (!$discussion->relationLoaded('tags')) {
+            $discussion->load('tags');
+        }
+
         /**
          * @var Collection<Tag>|null $tags
          *

@@ -11,12 +11,16 @@
 
 namespace FoF\FollowTags\Search;
 
+use Flarum\Search\Database\DatabaseSearchState;
 use Flarum\Search\Filter\FilterInterface;
 use Flarum\Search\SearchState;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
 use Illuminate\Database\Query\Builder;
 
+/**
+ * @implements FilterInterface<DatabaseSearchState>
+ */
 class FollowTagsFilter implements FilterInterface
 {
     public function getFilterKey(): string

@@ -11,21 +11,20 @@
 
 namespace FoF\FollowTags;
 
-use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\Context;
+use Flarum\Api\Schema;
 use Flarum\Discussion\Event as Discussion;
-use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
-use Flarum\Tags\Api\Serializer\TagSerializer;
+use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
-use FoF\Extend\Extend\ExtensionSettings;
-use Flarum\Api\Context;
-use Flarum\Api\Endpoint;
-use Flarum\Api\Resource;
-use Flarum\Api\Schema;
+// use FoF\Extend\Extend\ExtensionSettings;
 
 return [
+    (new Extend\Policy())
+        ->modelPolicy(Tag::class, Access\TagPolicy::class),
+
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->css(__DIR__.'/resources/less/forum.less'),
@@ -38,14 +37,12 @@ return [
     (new Extend\Model(TagState::class))
         ->cast('subscription', 'string'),
 
-    (new Extend\Routes('api'))
-        ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
-
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
 
-    (new ExtensionSettings())
-        ->addKey('fof-follow-tags.following_page_default'),
+    // @TODO: Re-enable when fof/extend is available for Flarum 2.0
+    // (new ExtensionSettings())
+    //     ->addKey('fof-follow-tags.following_page_default'),
 
     (new Extend\Event())
         ->listen(Discussion\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
@@ -59,9 +56,36 @@ return [
     (new Extend\User())
         ->registerPreference('followTagsPageDefault'),
 
-    // @TODO: Replace with the new implementation https://docs.flarum.org/2.x/extend/api#extending-api-resources
-    (new Extend\ApiSerializer(TagSerializer::class))
-        ->attributes(AddTagSubscriptionAttribute::class),
+    (new Extend\ApiResource(\Flarum\Tags\Api\Resource\TagResource::class))
+        ->fields(function () {
+            return [
+                Schema\Str::make('subscription')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => !$context->getActor()->isGuest())
+                    ->nullable()
+                    ->get(function (\Flarum\Tags\Tag $tag, Context $context) {
+                        $actor = $context->getActor();
+
+                        if (!$tag->relationLoaded('state') || is_null($tag->state) || $tag->state->user_id !== $actor->id) {
+                            $tag->setRelation('state', $tag->stateFor($actor));
+                        }
+
+                        return $tag->state->subscription ?? null;
+                    })
+                    ->set(function (\Flarum\Tags\Tag $tag, ?string $subscription, Context $context) {
+                        $actor = $context->getActor();
+                        $actor->assertRegistered();
+
+                        $state = $tag->stateFor($actor);
+
+                        if (!in_array($subscription, ['follow', 'lurk', 'ignore', 'hide'])) {
+                            $subscription = null;
+                        }
+
+                        $state->subscription = $subscription;
+                        $state->save();
+                    }),
+            ];
+        }),
 
     (new Extend\Notification())
         ->type(Notifications\NewDiscussionBlueprint::class, ['alert', 'email'])

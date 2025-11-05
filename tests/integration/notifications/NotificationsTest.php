@@ -37,7 +37,13 @@ class NotificationsTest extends TestCase
 
         $this->prepareDatabase([
             User::class => [
-                $this->normalUser(),
+                array_merge($this->normalUser(), [
+                    'preferences' => json_encode([
+                        'notify_newDiscussionInTag_alert' => true,
+                        'notify_newPostInTag_alert' => true,
+                        'notify_newDiscussionTag_alert' => true,
+                    ]),
+                ]),
             ],
             Tag::class     => $this->tags(),
             'tag_user' => [

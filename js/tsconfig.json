@@ -4,21 +4,15 @@
     "src/**/*",
     "../vendor/flarum/core/js/dist-typings/@types/**/*",
     "../vendor/flarum/tags/js/dist-typings/@types/**/*",
-    "../vendor/flarum/subscriptions/js/dist-typings/@types/**/*"
+    "../vendor/flarum/subscriptions/js/dist-typings/@types/**/*",
   ],
   "compilerOptions": {
     "declarationDir": "./dist-typings",
     "baseUrl": ".",
     "paths": {
-      "flarum/*": [
-        "../vendor/flarum/core/js/dist-typings/*"
-      ],
-      "flarum/subscriptions": [
-        "../vendor/flarum/subscriptions/js/dist-typings/*"
-      ],
-      "ext:flarum/tags": [
-        "../vendor/flarum/tags/js/dist-typings/*"
-      ]
+      "flarum/*": ["../vendor/flarum/core/js/dist-typings/*"],
+      "ext:flarum/tags/*": ["../vendor/flarum/tags/js/dist-typings/*"],
+      "ext:flarum/subscriptions/*": ["../vendor/flarum/subscriptions/js/dist-typings/*"]
     }
   }
 }

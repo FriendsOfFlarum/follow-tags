@@ -61,8 +61,8 @@ class NewPostBlueprint implements BlueprintInterface, MailableInterface, Alertab
      */
     public function getEmailSubject(\Flarum\Locale\TranslatorInterface $translator): string
     {
-        return $translator->trans('fof-follow-tags.email.subject.newPostInTag', [
-            'title' => $this->post->discussion->title,
+        return $translator->trans('fof-follow-tags.email.newPostInTag.subject', [
+            '{title}' => $this->post->discussion->title,
         ]);
     }
 
