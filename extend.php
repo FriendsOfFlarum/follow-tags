@@ -99,6 +99,7 @@ return [
             (new UserData())
                 ->addType(Data\TagSubscription::class),
         ]),
+
     (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
         ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\FollowTagsFilter::class)
         ->addMutator(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\HideTagsFilter::class),
