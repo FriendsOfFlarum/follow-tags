@@ -26,24 +26,24 @@ use PHPUnit\Framework\Attributes\Test;
  * IMPORTANT: Why we test tag editing behavior in this extension
  * ============================================================
  *
- * This extension modifies Flarum's core tag authorization behavior to allow users
- * to subscribe to restricted tags. To enable this, we:
+ * This extension modifies Flarum's core tag Update endpoint authorization to allow
+ * users to subscribe to tags without requiring the 'edit' permission. To enable this,
+ * we customize the TagResource Update endpoint's ->can() check with payload-aware
+ * authorization that:
  *
- * 1. Use FORCE_ALLOW in TagPolicy->edit() to override the core TagPolicy's DENY
- *    for restricted tags when users have viewForum permission.
+ * 1. Allows the Update endpoint if the user is only updating the 'subscription' attribute
+ * 2. Requires the 'edit' permission if updating any other attributes or relationships
  *
- * 2. Override core tag field definitions in extend.php to require admin permission
- *    for editing name, slug, description, color, icon, isHidden, and isPrimary.
- *
- * These changes could potentially create security vulnerabilities if not properly
+ * This approach could potentially create security vulnerabilities if not properly
  * implemented. These tests ensure that:
  *
- * - Users can ONLY edit the subscription field, not tag metadata
- * - The FORCE_ALLOW doesn't accidentally grant unauthorized tag editing access
- * - Restricted tags remain properly protected
- * - Field-level permissions are correctly enforced
+ * - Users can ONLY update the subscription attribute, not tag metadata
+ * - Attempts to update other fields (name, slug, color, etc.) are properly blocked
+ * - Restricted tags remain properly protected via visibility scoping
+ * - Users cannot subscribe to tags they don't have permission to view
+ * - The payload inspection correctly differentiates between subscription-only and other updates
  *
- * Without these tests, a bug in our policy or field overrides could allow regular
+ * Without these tests, a bug in our custom authorization logic could allow regular
  * users to modify tag names, colors, slugs, etc., which would be a critical
  * security issue.
  */
