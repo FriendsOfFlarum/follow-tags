@@ -1,26 +1,35 @@
 import app from 'flarum/forum/app';
-import Button from 'flarum/common/components/Button';
-import { utils } from '../utils';
+import Button, { IButtonAttrs } from 'flarum/common/components/Button';
+import subscriptionOptions from '../utils/subscriptionOptions';
 import Tooltip from 'flarum/common/components/Tooltip';
 import extractText from 'flarum/common/utils/extractText';
 import Stream from 'flarum/common/utils/Stream';
+import type Mithril from 'mithril';
 
-export default class SubscriptionStateButton extends Button {
-  oninit(vnode) {
+export interface ISubscriptionStateButtonAttrs extends IButtonAttrs {
+  subscription?: string | false;
+  className?: string;
+}
+
+export default class SubscriptionStateButton extends Button<ISubscriptionStateButtonAttrs> {
+  loading!: Stream<boolean>;
+  canShowTooltip!: Stream<boolean | undefined>;
+
+  oninit(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void {
     super.oninit(vnode);
 
     this.loading = Stream(false);
     this.canShowTooltip = Stream(false);
   }
 
-  onbeforeupdate(vnode) {
+  onbeforeupdate(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void {
     super.onbeforeupdate(vnode);
 
     const subscription = this.attrs.subscription || false;
 
-    const preferences = app.session.user.preferences();
-    const notifyEmail = preferences['notify_newPostInTag_email'];
-    const notifyAlert = preferences['notify_newPostInTag_alert'];
+    const preferences = app.session.user?.preferences();
+    const notifyEmail = preferences?.['notify_newPostInTag_email'];
+    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
 
     if ((notifyEmail || notifyAlert) && subscription === false) {
       this.canShowTooltip(undefined);
@@ -29,18 +38,18 @@ export default class SubscriptionStateButton extends Button {
     }
   }
 
-  view(vnode) {
+  view(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>) {
     const subscription = this.attrs.subscription || false;
-    let option = utils.subscriptionOptions.find((opt) => opt.subscription === subscription);
+    const option = subscriptionOptions.find((opt) => opt.subscription === subscription);
 
-    let buttonIcon = option ? option.icon : 'fas fa-star';
-    let buttonLabel = option ? app.translator.trans(option.labelKey) : app.translator.trans('fof-follow-tags.forum.sub_controls.follow_button');
+    const buttonIcon = option ? option.icon : 'fas fa-star';
+    const buttonLabel = option ? app.translator.trans(option.labelKey) : app.translator.trans('fof-follow-tags.forum.sub_controls.follow_button');
 
     this.attrs.className = (this.attrs.className || '') + ' SubscriptionButton ' + 'SubscriptionButton--' + subscription;
     this.attrs.icon = buttonIcon;
 
-    const preferences = app.session.user.preferences();
-    const notifyEmail = preferences['notify_newPostInTag_email'];
+    const preferences = app.session.user?.preferences();
+    const notifyEmail = preferences?.['notify_newPostInTag_email'];
 
     const tooltipText = extractText(
       app.translator.trans(

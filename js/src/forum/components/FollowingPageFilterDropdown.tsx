@@ -3,12 +3,13 @@ import Component from 'flarum/common/Component';
 
 import Button from 'flarum/common/components/Button';
 import Dropdown from 'flarum/common/components/Dropdown';
+import type Mithril from 'mithril';
 
 import { getDefaultFollowingFiltering, getOptions } from '../utils/getDefaultFollowingFiltering';
 
 export default class FollowingPageFilterDropdown extends Component {
-  view() {
-    const selected = app.discussions.followTags;
+  view(): Mithril.Children {
+    const selected = (app.discussions as any).followTags;
     const options = this.options();
 
     return Dropdown.component(
@@ -24,7 +25,7 @@ export default class FollowingPageFilterDropdown extends Component {
             active,
             icon: active ? 'fas fa-check' : true,
             onclick: () => {
-              app.discussions.followTags = key;
+              (app.discussions as any).followTags = key;
 
               app.discussions.refresh();
             },
@@ -35,7 +36,7 @@ export default class FollowingPageFilterDropdown extends Component {
     );
   }
 
-  options() {
+  options(): { [key: string]: string | any[] } {
     return getOptions();
   }
 }

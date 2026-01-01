@@ -2,7 +2,7 @@ import app from 'flarum/forum/app';
 import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
 import Button from 'flarum/common/components/Button';
 import ItemList from 'flarum/common/utils/ItemList';
-import { utils } from '../utils';
+import subscriptionOptions from '../utils/subscriptionOptions';
 import SubscriptionOptionItem from './SubscriptionOptionItem';
 import type Mithril from 'mithril';
 import type Tag from 'ext:flarum/tags/common/models/Tag';
@@ -80,7 +80,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
     const items = new ItemList<Mithril.Children>();
     let priority = 100;
 
-    utils.subscriptionOptions.forEach((option, index) => {
+    subscriptionOptions.forEach((option, index) => {
       const attrs = {
         ...option,
         onclick: () => {
