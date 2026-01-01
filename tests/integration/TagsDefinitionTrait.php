@@ -22,7 +22,7 @@ trait TagsDefinitionTrait
             ['id' => 4, 'name' => 'Archive', 'slug' => 'archive', 'position' => 2, 'parent_id' => null, 'is_restricted' => true],
             ['id' => 5, 'name' => 'General Child', 'slug' => 'general-child', 'position' => 0, 'parent_id' => 1],
             ['id' => 6, 'name' => 'Testing Child', 'slug' => 'testing-child', 'position' => 0, 'parent_id' => 2],
-
+            ['id' => 7, 'name' => 'Restricted', 'slug' => 'restricted', 'position' => 0, 'parent_id' => null, 'is_restricted' => true],
         ];
     }
 }

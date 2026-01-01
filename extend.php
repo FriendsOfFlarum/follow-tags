@@ -60,6 +60,25 @@ return [
     (new Extend\ApiResource(\Flarum\Tags\Api\Resource\TagResource::class))
         ->fields(function () {
             return [
+                // Override core tag fields to require admin permission for editing
+                // This ensures our FORCE_ALLOW policy for subscriptions doesn't accidentally
+                // allow regular users to edit tag metadata
+                Schema\Str::make('name')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Str::make('slug')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Str::make('description')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Str::make('color')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Str::make('icon')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Boolean::make('isHidden')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+                Schema\Boolean::make('isPrimary')
+                    ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => $context->getActor()->isAdmin()),
+
+                // Our subscription field - writable by all registered users
                 Schema\Str::make('subscription')
                     ->writable(fn (\Flarum\Tags\Tag $_, Context $context) => !$context->getActor()->isGuest())
                     ->nullable()
