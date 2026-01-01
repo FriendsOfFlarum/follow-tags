@@ -5,18 +5,11 @@ import addPreferences from './addPreferences';
 import extendNotificationGrid from './extendNotificationGrid';
 import extendIndexPage from './extenders/extendIndexPage';
 
-export * from './components';
-export * from './utils';
 export { default as extend } from './extend';
 
 app.initializers.add(
   'fof/follow-tags',
   () => {
-    if (!app.initializers.has('flarum-tags')) {
-      console.error('[fof/follow-tags] flarum/tags is not enabled');
-      return;
-    }
-
     extendIndexPage();
 
     if ('flarum-subscriptions' in flarum.extensions) {
