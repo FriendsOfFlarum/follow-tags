@@ -1,9 +1,14 @@
-export default class SubscriptionStateButton extends Button<import("flarum/common/components/Button").IButtonAttrs> {
-    constructor();
-    oninit(vnode: any): void;
-    loading: any;
-    canShowTooltip: any;
-    onbeforeupdate(vnode: any): void;
-    view(vnode: any): JSX.Element;
+import Button, { IButtonAttrs } from 'flarum/common/components/Button';
+import Stream from 'flarum/common/utils/Stream';
+import type Mithril from 'mithril';
+export interface ISubscriptionStateButtonAttrs extends IButtonAttrs {
+    subscription?: string | false;
+    className?: string;
 }
-import Button from "flarum/common/components/Button";
+export default class SubscriptionStateButton extends Button<ISubscriptionStateButtonAttrs> {
+    loading: Stream<boolean>;
+    canShowTooltip: Stream<boolean | undefined>;
+    oninit(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void;
+    onbeforeupdate(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void;
+    view(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): JSX.Element;
+}

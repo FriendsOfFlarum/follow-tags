@@ -1,3 +1,7 @@
-export let options: any;
-export function getOptions(): any;
-export function getDefaultFollowingFiltering(): {};
+export declare let options: {
+    [key: string]: string | any[];
+};
+export declare const getOptions: () => {
+    [key: string]: string | any[];
+};
+export declare const getDefaultFollowingFiltering: () => string;

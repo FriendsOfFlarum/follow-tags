@@ -1,1 +1,5 @@
-export default function followingPageOptions(section: any): any;
+type FollowingPageOptions = {
+    [key: string]: string | any[];
+};
+export default function followingPageOptions(section: string): FollowingPageOptions;
+export {};
