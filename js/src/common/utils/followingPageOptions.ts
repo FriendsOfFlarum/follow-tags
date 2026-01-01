@@ -1,17 +1,11 @@
 import app from 'flarum/common/app';
+import { optionProviders } from './addFollowingPageOption';
 
 type FollowingPageOptions = {
   [key: string]: string | any[];
 };
 
 const cache: Record<string, FollowingPageOptions> = {};
-
-// Allow other extensions to add their own options
-const optionProviders: Array<(section: string) => Record<string, string>> = [];
-
-export function addFollowingPageOption(provider: (section: string) => Record<string, string>) {
-  optionProviders.push(provider);
-}
 
 export default function followingPageOptions(section: string): FollowingPageOptions {
   if (!cache[section]) {
