@@ -12,6 +12,7 @@
 namespace FoF\FollowTags\Tests\integration\api;
 
 use Carbon\Carbon;
+use Flarum\Group\Group;
 use Flarum\Tags\Tag;
 use Flarum\Testing\integration\RetrievesAuthorizedUsers;
 use Flarum\Testing\integration\TestCase;
@@ -239,5 +240,45 @@ class SubscriptionTest extends TestCase
 
         // User should see null when they haven't set a subscription
         $this->assertNull($data['data']['attributes']['subscription']);
+    }
+
+    #[Test]
+    public function regular_user_can_follow_a_restricted_tag_with_permission()
+    {
+        // Give the user permission to view the restricted tag
+        $this->database()->table('group_permission')->insert([
+            'group_id'   => Group::MEMBER_ID,
+            'permission' => 'tag7.viewForum',
+        ]);
+
+        $response = $this->send(
+            $this->request('PATCH', '/api/tags/7', [
+                'authenticatedAs' => 2,
+                'json'            => [
+                    'data' => [
+                        'type'       => 'tags',
+                        'id'         => '7',
+                        'attributes' => [
+                            'subscription' => 'follow',
+                        ],
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode());
+
+        $data = json_decode($response->getBody()->getContents(), true);
+
+        $this->assertEquals('follow', $data['data']['attributes']['subscription']);
+
+        // Verify it's saved in the database
+        $this->assertEquals(
+            'follow',
+            $this->database()->table('tag_user')
+                ->where('user_id', 2)
+                ->where('tag_id', 7)
+                ->value('subscription')
+        );
     }
 }
