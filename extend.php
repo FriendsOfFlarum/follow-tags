@@ -18,10 +18,7 @@ use Flarum\Discussion\Event as Discussion;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
-use Flarum\Tags\Tag;
 use Flarum\Tags\TagState;
-
-// use FoF\Extend\Extend\ExtensionSettings;
 
 return [
     (new Extend\Frontend('forum'))
@@ -39,9 +36,8 @@ return [
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
 
-    // @TODO: Re-enable when fof/extend is available for Flarum 2.0
-    // (new ExtensionSettings())
-    //     ->addKey('fof-follow-tags.following_page_default'),
+    (new Extend\Settings())
+        ->default('fof-follow-tags.following_page_default', 'none'),
 
     (new Extend\Event())
         ->listen(Discussion\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
