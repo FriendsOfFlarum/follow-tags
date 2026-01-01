@@ -32,6 +32,7 @@ class TagPolicy extends AbstractPolicy
                 // Use FORCE_ALLOW to override the core TagPolicy's DENY
                 return $this->forceAllow();
             }
+
             // If they don't have viewForum permission, let other policies decide
             return null;
         }

@@ -21,7 +21,7 @@ use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
- * Tag Security Tests
+ * Tag Security Tests.
  *
  * IMPORTANT: Why we test tag editing behavior in this extension
  * ============================================================
@@ -72,7 +72,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -109,7 +109,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -146,7 +146,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -175,7 +175,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -204,7 +204,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -233,7 +233,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -262,7 +262,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -403,7 +403,7 @@ class TagSecurityTest extends TestCase
     {
         // Grant viewForum permission for the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -460,7 +460,7 @@ class TagSecurityTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
@@ -514,7 +514,7 @@ class TagSecurityTest extends TestCase
                         'type'       => 'tags',
                         'id'         => '1',
                         'attributes' => [
-                            'name' => 'Updated General',
+                            'name'        => 'Updated General',
                             'description' => 'Updated description',
                         ],
                     ],
@@ -553,7 +553,7 @@ class TagSecurityTest extends TestCase
                         'type'       => 'tags',
                         'id'         => '7',
                         'attributes' => [
-                            'name' => 'Updated Restricted',
+                            'name'  => 'Updated Restricted',
                             'color' => '#00FF00',
                         ],
                     ],

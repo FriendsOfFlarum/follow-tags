@@ -247,7 +247,7 @@ class SubscriptionTest extends TestCase
     {
         // Give the user permission to view the restricted tag
         $this->database()->table('group_permission')->insert([
-            'group_id' => Group::MEMBER_ID,
+            'group_id'   => Group::MEMBER_ID,
             'permission' => 'tag7.viewForum',
         ]);
 
