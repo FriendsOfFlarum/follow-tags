@@ -3,7 +3,6 @@ import app from 'flarum/forum/app';
 import { extend, override } from 'flarum/common/extend';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import FollowingHero from '../components/FollowingHero';
-import SubscriptionModal from '../components/SubscriptionModal';
 import SubscriptionStateButton from '../components/SubscriptionStateButton';
 
 export default function extendIndexPage() {
@@ -20,7 +19,7 @@ export default function extendIndexPage() {
       <SubscriptionStateButton
         className="Button App-primaryControl"
         subscription={tag.subscription()}
-        onclick={() => app.modal.show(SubscriptionModal, { model: tag })}
+        onclick={() => app.modal.show(() => import('../components/SubscriptionModal'), { model: tag })}
       />,
       5
     );
