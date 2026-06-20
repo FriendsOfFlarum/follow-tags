@@ -17,7 +17,8 @@ export default function extendIndexPage() {
     items.add(
       'subscriptionButton',
       <SubscriptionStateButton
-        className="Button App-primaryControl"
+        className="Button"
+        itemClassName="App-primaryControl"
         subscription={tag.subscription()}
         onclick={() => app.modal.show(() => import('../components/SubscriptionModal'), { model: tag })}
       />,
