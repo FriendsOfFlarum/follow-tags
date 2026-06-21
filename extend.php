@@ -13,6 +13,7 @@ namespace FoF\FollowTags;
 
 use Flarum\Api\Context;
 use Flarum\Api\Endpoint\Update;
+use Flarum\Api\Resource\DiscussionResource;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Extend;
@@ -135,4 +136,16 @@ return [
     (new Extend\SearchDriver(\Flarum\Search\Database\DatabaseSearchDriver::class))
         ->addFilter(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\FollowTagsFilter::class)
         ->addMutator(\Flarum\Discussion\Search\DiscussionSearcher::class, Search\HideTagsFilter::class),
+
+    // Eager-load tag state for the actor on discussion updates so the `subscription`
+    // field getter doesn't fall back to per-tag stateFor() queries.
+    // flarum/tags covers Index, Show, and Create — but not Update.
+    (new Extend\ApiResource(DiscussionResource::class))
+        ->endpoint(
+            Update::class,
+            fn (Update $endpoint) => $endpoint->eagerLoadWhere(
+                'tags',
+                fn ($query, Context $context) => $query->withStateFor($context->getActor())
+            )
+        ),
 ];

@@ -48,18 +48,23 @@ class SendNotificationWhenDiscussionIsStarted extends NotificationJob
         }
 
         // The `select(...)` part is not mandatory here, but makes the query safer. See #55.
-        $notify = User::select('users.*')
+        $users = User::select('users.*')
             ->where('users.id', '!=', $this->discussion->user_id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->whereIn('tag_user.subscription', ['follow', 'lurk'])
             ->get()
-            ->unique()
-            ->reject(function ($user) use ($firstPost, $tags) {
-                return $tags->map->stateFor($user)->map->subscription->contains('ignore')
-                        || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
-                        || !$firstPost->isVisibleTo($user);
-            });
+            ->unique();
+
+        $tagStates = $this->preloadTagStates($users, $tagIds);
+
+        $notify = $users->reject(function ($user) use ($firstPost, $tagStates) {
+            $subscriptions = $tagStates->get($user->id, collect())->pluck('subscription');
+
+            return $subscriptions->contains('ignore')
+                    || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
+                    || !$firstPost->isVisibleTo($user);
+        });
 
         $this->sync($notifications, new NewDiscussionBlueprint($this->discussion, $firstPost), $notify);
     }
