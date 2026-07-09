@@ -11,7 +11,9 @@
 
 namespace FoF\FollowTags;
 
+use Flarum\Api\Controller\ShowForumController;
 use Flarum\Api\Serializer\DiscussionSerializer;
+use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Discussion\Filter\DiscussionFilterer;
 use Flarum\Extend;
@@ -19,7 +21,8 @@ use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\Api\Serializer\TagSerializer;
 use Flarum\Tags\TagState;
-use FoF\Extend\Extend\ExtensionSettings;
+use Flarum\User\Event\Saving as UserSaving;
+use Flarum\User\User;
 
 return [
     (new Extend\Frontend('forum'))
@@ -34,16 +37,36 @@ return [
     (new Extend\Model(TagState::class))
         ->cast('subscription', 'string'),
 
+    (new Extend\Model(User::class))
+        ->cast('fof_follow_tags_prompt_configured_at', 'datetime'),
+
     (new Extend\Routes('api'))
         ->post('/tags/{id}/subscription', 'fof-follow-tags.subscription', Controllers\ChangeTagSubscription::class),
 
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
 
-    (new ExtensionSettings())
-        ->addKey('fof-follow-tags.following_page_default'),
+    (new Extend\Settings())
+        ->default('fof-follow-tags.following_page_default', 'none')
+        ->default('fof-follow-tags.prompt_new_users', '0')
+        ->default('fof-follow-tags.prompt_button_on_following_page', '0')
+        ->default('fof-follow-tags.prompt_tag_strategy', 'primary')
+        ->default('fof-follow-tags.prompt_tag_ids', '[]')
+        ->default('fof-follow-tags.all_discussions_on_following_page_for_guests', '0')
+        ->serializeToForum('fofFollowTagsFollowingPageDefault', 'fof-follow-tags.following_page_default'),
+
+    (new Extend\ApiSerializer(ForumSerializer::class))
+        ->attributes(AddForumPromptAttributes::class)
+        ->hasMany('fofFollowTagsPromptList', TagSerializer::class),
+
+    (new Extend\ApiController(ShowForumController::class))
+        // Loading the parent prevents the Flarum Tags IndexPage side navigation
+        // from mistaking second-level tags for first-level tags
+        ->addInclude(['fofFollowTagsPromptList.parent'])
+        ->prepareDataForSerialization(LoadPromptTags::class),
 
     (new Extend\Event())
+        ->listen(UserSaving::class, Listeners\MarkPromptAsConfigured::class)
         ->listen(Discussion\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(Discussion\Hidden::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)
         ->listen(Discussion\Restored::class, Listeners\RestoreNotificationWhenDiscussionIsRestored::class)
