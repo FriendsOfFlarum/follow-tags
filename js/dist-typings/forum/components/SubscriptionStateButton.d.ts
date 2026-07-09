@@ -2,8 +2,9 @@ import Button, { IButtonAttrs } from 'flarum/common/components/Button';
 import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
 export interface ISubscriptionStateButtonAttrs extends IButtonAttrs {
-    subscription?: string | false;
+    subscription?: string | null | false;
     className?: string;
+    tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 export default class SubscriptionStateButton extends Button<ISubscriptionStateButtonAttrs> {
     loading: Stream<boolean>;
