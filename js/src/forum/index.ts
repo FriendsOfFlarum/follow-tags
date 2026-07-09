@@ -5,8 +5,10 @@ import NewDiscussionNotification from './components/NewDiscussionNotification';
 import NewPostNotification from './components/NewPostNotification';
 import NewDiscussionTagNotification from './components/NewDiscussionTagNotification';
 import addDiscussionBadge from './addDiscussionBadge';
+import addNewUserTagsPrompt from './addNewUserTagsPrompt';
 import addPreferences from './addPreferences';
 import extendNotificationGrid from './extendNotificationGrid';
+import extendFollowingPage from './extenders/extendFollowingPage';
 import extendIndexPage from './extenders/extendIndexPage';
 
 export * from './components';
@@ -22,11 +24,13 @@ app.initializers.add(
 
     addSubscriptionControls();
     extendIndexPage();
+    addNewUserTagsPrompt();
 
     if ('flarum-subscriptions' in flarum.extensions) {
       addDiscussionBadge();
       addFollowedTagsDiscussions();
       addPreferences();
+      extendFollowingPage();
     }
 
     app.notificationComponents.newPostInTag = NewPostNotification;

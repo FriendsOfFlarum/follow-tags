@@ -1,3 +1,4 @@
+import ChooseTagsToFollowModal from './ChooseTagsToFollowModal';
 import FollowingHero from './FollowingHero';
 import FollowingPageFilterDropdown from './FollowingPageFilterDropdown';
 import NewDiscussionNotification from './NewDiscussionNotification';
@@ -8,6 +9,7 @@ import SubscriptionOptionItem from './SubscriptionOptionItem';
 import SubscriptionStateButton from './SubscriptionStateButton';
 
 export const components = {
+  ChooseTagsToFollowModal,
   FollowingPageFilterDropdown,
   NewDiscussionNotification,
   NewDiscussionTagNotification,

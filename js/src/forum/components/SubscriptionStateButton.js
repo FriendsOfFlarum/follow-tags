@@ -58,7 +58,7 @@ export default class SubscriptionStateButton extends Button {
           typeof this.canShowTooltip() === 'boolean' ? '' : tooltipText
         }
         tooltipVisible={this.canShowTooltip()}
-        position="bottom"
+        position={this.attrs.tooltipPosition || 'bottom'}
         delay={250}
       >
         {super.view(Object.assign({}, vnode, { children: buttonLabel }))}

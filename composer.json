@@ -21,8 +21,7 @@
     "require": {
         "php": "^8.0",
         "flarum/core": "^1.8.3",
-        "flarum/tags": "^1.8.0",
-        "fof/extend": "^1.2.0"
+        "flarum/tags": "^1.8.0"
     },
     "authors": [
         {
@@ -40,6 +39,9 @@
         "psr-4": {
             "FoF\\FollowTags\\": "src/"
         }
+    },
+    "replace": {
+        "clarkwinkelmann/flarum-ext-follow-tags-prompt": "*"
     },
     "extra": {
         "flarum-extension": {
@@ -73,8 +75,7 @@
         "flarum/mentions": "*",
         "flarum/gdpr": "dev-main",
         "flarum/testing": "^1.0.0",
-        "flarum/tags":"*",
-        "fof/extend": "*"
+        "flarum/tags":"*"
     },
     "autoload-dev": {
         "psr-4": {
