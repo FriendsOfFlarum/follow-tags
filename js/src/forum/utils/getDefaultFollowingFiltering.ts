@@ -14,7 +14,7 @@ export const getOptions = (): { [key: string]: string | any[] } => {
 export const getDefaultFollowingFiltering = (): string => {
   getOptions();
 
-  let value: string | null = app.data['fof-follow-tags.following_page_default'] as string;
+  let value: string | null = app.forum.attribute<string>('fofFollowTagsFollowingPageDefault');
 
   if (value && !options[value]) {
     value = null;

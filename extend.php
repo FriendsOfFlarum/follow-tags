@@ -12,13 +12,17 @@
 namespace FoF\FollowTags;
 
 use Flarum\Api\Context;
+use Flarum\Api\Endpoint\Show;
 use Flarum\Api\Endpoint\Update;
+use Flarum\Api\Resource\ForumResource;
+use Flarum\Api\Resource\UserResource;
 use Flarum\Api\Schema;
 use Flarum\Discussion\Event as Discussion;
 use Flarum\Extend;
 use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\TagState;
+use Flarum\User\User;
 
 return [
     (new Extend\Frontend('forum'))
@@ -34,11 +38,31 @@ return [
     (new Extend\Model(TagState::class))
         ->cast('subscription', 'string'),
 
+    (new Extend\Model(User::class))
+        ->cast('fof_follow_tags_prompt_configured_at', 'datetime'),
+
     (new Extend\View())
         ->namespace('fof-follow-tags', __DIR__.'/resources/views'),
 
     (new Extend\Settings())
-        ->default('fof-follow-tags.following_page_default', 'none'),
+        ->default('fof-follow-tags.following_page_default', 'none')
+        ->default('fof-follow-tags.prompt_new_users', '0')
+        ->default('fof-follow-tags.prompt_button_on_following_page', '0')
+        ->default('fof-follow-tags.prompt_tag_strategy', 'primary')
+        ->default('fof-follow-tags.prompt_tag_ids', '[]')
+        ->default('fof-follow-tags.all_discussions_on_following_page_for_guests', '0')
+        ->serializeToForum('fofFollowTagsFollowingPageDefault', 'fof-follow-tags.following_page_default'),
+
+    (new Extend\ApiResource(ForumResource::class))
+        ->fields(Api\ForumResourceFields::class)
+        ->endpoint(Show::class, function (Show $endpoint) {
+            // Loading the parent prevents the Flarum Tags IndexPage side navigation
+            // from mistaking second-level tags for first-level tags
+            return $endpoint->addDefaultInclude(['fofFollowTagsPromptList', 'fofFollowTagsPromptList.parent']);
+        }),
+
+    (new Extend\ApiResource(UserResource::class))
+        ->fields(Api\UserResourceFields::class),
 
     (new Extend\Event())
         ->listen(Discussion\Deleted::class, Listeners\DeleteNotificationWhenDiscussionIsHiddenOrDeleted::class)

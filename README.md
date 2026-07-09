@@ -1,8 +1,16 @@
 # Follow Tags by FriendsOfFlarum
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/follow-tags.svg)](https://packagist.org/packages/fof/follow-tags) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate) [![Donate](https://img.shields.io/badge/donate-datitisev-important.svg)](https://datitisev.me/donate)
+![License](https://img.shields.io/badge/license-MIT-blue.svg) [![Latest Stable Version](https://img.shields.io/packagist/v/fof/follow-tags.svg)](https://packagist.org/packages/fof/follow-tags) [![OpenCollective](https://img.shields.io/badge/opencollective-fof-blue.svg)](https://opencollective.com/fof/donate)
 
 A [Flarum](http://flarum.org) extension. Follow tags and be notified of new discussions.
+
+### Features
+
+- Follow, lurk, hide or ignore tags, and be notified of new discussions and replies.
+- Optionally prompt new users to choose tags to follow after registration (off by default). The list of tags offered in the prompt is configurable, and the prompt can also be reopened from a button on the Following page.
+- Optionally show all discussions on the Following page for guests, and offer the Following page as a homepage option (under Basics).
+
+This extension includes the functionality previously provided by `clarkwinkelmann/flarum-ext-follow-tags-prompt`, and declares `replace` on that package so the two can never be installed at once. If you were using it, a regular `composer update` followed by `php flarum migrate && php flarum cache:clear` swaps it out and imports its settings and per-user state automatically; you can then remove the old package from your `composer.json` requirements with `composer remove clarkwinkelmann/flarum-ext-follow-tags-prompt`.
 
 <details> 
   <summary>Screenshots </summary>

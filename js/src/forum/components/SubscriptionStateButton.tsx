@@ -7,8 +7,9 @@ import Stream from 'flarum/common/utils/Stream';
 import type Mithril from 'mithril';
 
 export interface ISubscriptionStateButtonAttrs extends IButtonAttrs {
-  subscription?: string | false;
+  subscription?: string | null | false;
   className?: string;
+  tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 export default class SubscriptionStateButton extends Button<ISubscriptionStateButtonAttrs> {
@@ -67,7 +68,7 @@ export default class SubscriptionStateButton extends Button<ISubscriptionStateBu
           typeof this.canShowTooltip() === 'boolean' ? '' : tooltipText
         }
         tooltipVisible={this.canShowTooltip()}
-        position="bottom"
+        position={this.attrs.tooltipPosition || 'bottom'}
         delay={250}
       >
         {super.view(Object.assign({}, vnode, { children: buttonLabel }))}

@@ -40,6 +40,9 @@
             "FoF\\FollowTags\\": "src/"
         }
     },
+    "replace": {
+        "clarkwinkelmann/flarum-ext-follow-tags-prompt": "*"
+    },
     "extra": {
         "flarum-extension": {
             "title": "FoF Follow Tags",

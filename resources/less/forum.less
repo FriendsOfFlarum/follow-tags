@@ -127,3 +127,91 @@
       }
   }
 }
+
+.ChooseTagsToFollowModal {
+  // Apply less margin than the default 120px
+  margin: 60px auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .Modal-content {
+    overflow: visible; // To not hide the content of the dropdowns
+    background-color: var(--control-bg); // Switch header and body colors so we can see the buttons
+  }
+
+  .Modal-body {
+    background-color: var(--body-bg); // Switch header and body colors so we can see the buttons
+    border-radius: 0 0 var(--border-radius) var(--border-radius); // To preserve radius even with overflow:visible
+  }
+
+  td {
+    padding: 5px 10px;
+  }
+
+  .tooltip {
+    // The invisible tooltip prevents clicking on the button when used in a modal
+    pointer-events: none;
+  }
+
+  .TagName {
+    // Same values as .SelectTagList
+    font-size: 16px;
+    cursor: pointer;
+    white-space: pre;
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
+
+  .TagFollow {
+    text-align: right;
+    min-width: 190px; // Prevent the button from spanning two lines, at least in English
+  }
+
+  .TagDescription {
+    // Same values as .SelectTagList
+    color: var(--muted-color);
+    font-size: 12px;
+
+    @media @phone {
+      display: none;
+    }
+  }
+
+  tr:hover {
+    background-color: var(--body-bg);
+  }
+}
+
+.ChooseTagsToFollowModal-scroll {
+  overflow-y: auto;
+
+  // Height to subtract:
+  // 1x 60px .Modal margin
+  // 2x 25px .Modal-header padding
+  // 1x 20px .Modal-header font size
+  // 2x 30px .Modal-body (footer) padding
+  // 1x 36px button height in footer
+  max-height: ~"calc(100vh - 226px)";
+
+  @media @phone {
+    // Height to subtract:
+    // 1x 46px modal header height on mobile
+    // 2x 30px .Modal-body (footer) padding
+    // 1x 36px button height in footer
+    max-height: ~"calc(100vh - 142px)";
+  }
+}
+
+.ChooseTagsToFollowModal-footer {
+  display: flex;
+  padding: 30px 35px; // Default 25px + Same as table cells so buttons align (at least when there's no scroll bar)
+
+  .Button--primary {
+    margin-left: auto;
+  }
+}
