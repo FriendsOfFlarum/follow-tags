@@ -98,6 +98,15 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
     return items;
   }
 
+  /**
+   * The attributes saved on the tag. Extensions may add their own, once the
+   * backend allows them alongside a subscription through the
+   * `FoF\FollowTags\Extend\Subscription` extender.
+   */
+  requestData(): Record<string, unknown> {
+    return { subscription: this.subscription };
+  }
+
   saveSubscription(subscription: string) {
     const tag = this.attrs.model;
 
@@ -107,7 +116,7 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
 
     // Use standard JSON:API PATCH to update the tag resource
     tag
-      .save({ subscription: this.subscription })
+      .save(this.requestData())
       .then(() => {
         this.loading(false);
         m.redraw();
