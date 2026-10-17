@@ -33,4 +33,16 @@ describe('a subscription option', () => {
 
     expect(onclick).toHaveBeenCalled();
   });
+
+  it("can't be chosen when disabled", () => {
+    const onclick = jest.fn();
+    const out = mq(SubscriptionOptionItem, { ...lurk, active: false, disabled: true, onclick });
+
+    expect(out).toHaveElement('.SubscriptionOption.disabled');
+    expect(out).toHaveElementAttr('.SubscriptionOption', 'aria-disabled', 'true');
+
+    out.click('.SubscriptionOption');
+
+    expect(onclick).not.toHaveBeenCalled();
+  });
 });

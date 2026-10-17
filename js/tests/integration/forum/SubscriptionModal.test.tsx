@@ -29,6 +29,23 @@ describe('choosing a subscription for a tag', () => {
     expect(selected(out)).toBe('Not Following');
   });
 
+  it("doesn't let a tag hidden from All Discussions be hidden", () => {
+    const tag = makeTag('3', { isHidden: true, subscription: 'follow' });
+    const save = jest.spyOn(tag, 'save').mockResolvedValue(tag as never);
+    const out = modal(tag);
+
+    expect(out.find('.SubscriptionOption.disabled')).toHaveLength(1);
+    expect(out.find('.SubscriptionOption.disabled .SubscriptionOption-title')[0].textContent).toBe('Hiding');
+
+    out.click('.SubscriptionOption.disabled');
+
+    expect(selected(out)).toBe('Following');
+
+    out.click('.Button--primary');
+
+    expect(save).toHaveBeenCalledWith({ subscription: 'follow' });
+  });
+
   it('saves the chosen subscription', () => {
     const tag = makeTag('4');
     const save = jest.spyOn(tag, 'save').mockResolvedValue(tag as never);

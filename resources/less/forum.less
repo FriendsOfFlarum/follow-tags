@@ -81,6 +81,15 @@
     background-color: var(--control-bg-shaded);
   }
 
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+
+    &:hover {
+      background-color: var(--body-bg);
+    }
+  }
+
   &.selected {
     background-color: var(--following-bg);
     color: var(--following-color);
