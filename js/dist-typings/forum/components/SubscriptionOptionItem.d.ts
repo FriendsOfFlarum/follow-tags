@@ -2,6 +2,7 @@
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 interface SubscriptionOptionItemAttrs extends ComponentAttrs {
     active: boolean;
+    disabled?: boolean;
     icon: string;
     labelKey: string;
     descriptionKey: string;
