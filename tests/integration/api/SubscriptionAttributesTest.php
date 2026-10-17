@@ -12,6 +12,7 @@
 namespace FoF\FollowTags\Tests\integration\api;
 
 use Flarum\Api\Context;
+use Flarum\Api\Endpoint\Update;
 use Flarum\Api\Schema;
 use Flarum\Extend;
 use Flarum\Tags\Api\Resource\TagResource;
@@ -157,5 +158,42 @@ class SubscriptionAttributesTest extends TestCase
 
         $this->assertEquals(403, $response->getStatusCode());
         $this->assertNull($this->database()->table('tags')->where('id', 1)->value('parent_id'));
+    }
+
+    /**
+     * When the actor's state is already loaded, and empty, before the setters
+     * run, an allowed attribute's setter must reuse the row the subscription
+     * setter saved rather than insert another.
+     */
+    #[Test]
+    public function an_allowed_attribute_saves_to_the_same_state_as_the_subscription()
+    {
+        $this->allowSubscriptionNote();
+
+        $this->extend(
+            (new Extend\ApiResource(TagResource::class))
+                ->endpoint(Update::class, fn (Update $endpoint) => $endpoint->before(function (Context $context) {
+                    $context->model->load(['state' => fn ($query) => $query->where('user_id', $context->getActor()->id)]);
+                }))
+                ->fields(fn () => [
+                    Schema\Boolean::make('subscriptionHidden')
+                        ->writable(fn (Tag $tag, Context $context) => $context->updating() && !$context->getActor()->isGuest())
+                        ->set(function (Tag $tag, bool $value, Context $context) {
+                            $state = $tag->stateFor($context->getActor());
+                            $state->is_hidden = $value;
+                            $state->save();
+                        }),
+                ]),
+            (new Subscription())->attribute('subscriptionHidden')
+        );
+
+        $response = $this->patchTag(['subscription' => 'follow', 'subscriptionHidden' => true]);
+
+        $this->assertEquals(200, $response->getStatusCode(), (string) $response->getBody());
+
+        $row = $this->database()->table('tag_user')->where('user_id', 2)->where('tag_id', 1)->first();
+
+        $this->assertEquals('follow', $row->subscription);
+        $this->assertTrue((bool) $row->is_hidden);
     }
 }

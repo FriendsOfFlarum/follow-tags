@@ -153,6 +153,10 @@ return [
 
                         $state->save();
 
+                        // Other extensions' setters then reuse this row through stateFor(),
+                        // even if the state was loaded, empty, before the setters ran
+                        $tag->setRelation('state', $state);
+
                         $events->dispatch(new Event\SubscriptionChanged($actor, $tag, $state));
                     }),
             ];
