@@ -19,6 +19,7 @@ use Flarum\Testing\integration\TestCase;
 use Flarum\User\User;
 use FoF\FollowTags\Tests\integration\ExtensionDepsTrait;
 use FoF\FollowTags\Tests\integration\TagsDefinitionTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 class SubscriptionTest extends TestCase
@@ -73,6 +74,45 @@ class SubscriptionTest extends TestCase
                 ->where('tag_id', 1)
                 ->value('subscription')
         );
+    }
+
+    /**
+     * Every option the subscription menu offers, on every database: "hide"
+     * was once added for MySQL alone.
+     */
+    #[Test]
+    #[DataProvider('subscriptions')]
+    public function regular_user_can_choose_any_subscription(string $subscription)
+    {
+        $response = $this->send(
+            $this->request('PATCH', '/api/tags/1', [
+                'authenticatedAs' => 2,
+                'json'            => [
+                    'data' => [
+                        'type'       => 'tags',
+                        'id'         => '1',
+                        'attributes' => [
+                            'subscription' => $subscription,
+                        ],
+                    ],
+                ],
+            ])
+        );
+
+        $this->assertEquals(200, $response->getStatusCode(), (string) $response->getBody());
+
+        $this->assertEquals(
+            $subscription,
+            $this->database()->table('tag_user')
+                ->where('user_id', 2)
+                ->where('tag_id', 1)
+                ->value('subscription')
+        );
+    }
+
+    public static function subscriptions(): array
+    {
+        return [['follow'], ['lurk'], ['ignore'], ['hide']];
     }
 
     #[Test]
