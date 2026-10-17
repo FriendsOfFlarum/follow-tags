@@ -49,16 +49,17 @@ class SendNotificationWhenDiscussionIsReTagged extends NotificationJob
         }
 
         // The `select(...)` part is not mandatory here, but makes the query safer. See #55.
-        $notify = User::select('users.*')
+        $followers = User::select('users.*')
             ->where('users.id', '!=', $this->actor->id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
-            ->whereIn('tag_user.subscription', ['follow', 'lurk'])
+            ->whereIn('tag_user.subscription', ['follow', 'lurk']);
+
+        $notify = $this->recipientsAmong($followers, $tagIds->all())
             ->get()
             ->unique()
-            ->reject(function ($user) use ($firstPost, $tags) {
-                return $tags->map->stateFor($user)->map->subscription->contains('ignore')
-                        || !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
+            ->reject(function ($user) use ($firstPost) {
+                return !$this->discussion->newQuery()->whereVisibleTo($user)->find($this->discussion->id)
                         || !$firstPost->isVisibleTo($user);
             });
 
