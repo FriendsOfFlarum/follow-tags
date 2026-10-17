@@ -31,7 +31,9 @@ use PHPUnit\Framework\Attributes\Test;
  * we customize the TagResource Update endpoint's ->can() check with payload-aware
  * authorization that:
  *
- * 1. Allows the Update endpoint if the user is only updating the 'subscription' attribute
+ * 1. Allows the Update endpoint if the user is only updating the 'subscription' attribute,
+ *    plus any attributes other extensions allow through the Subscription extender
+ *    (see SubscriptionAttributesTest)
  * 2. Requires the 'edit' permission if updating any other attributes or relationships
  *
  * This approach could potentially create security vulnerabilities if not properly

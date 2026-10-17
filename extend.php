@@ -23,8 +23,12 @@ use Flarum\Gdpr\Extend\UserData;
 use Flarum\Post\Event as Post;
 use Flarum\Tags\TagState;
 use Flarum\User\User;
+use Illuminate\Contracts\Events\Dispatcher;
 
 return [
+    (new Extend\ServiceProvider())
+        ->register(FollowTagsServiceProvider::class),
+
     (new Extend\Frontend('forum'))
         ->js(__DIR__.'/js/dist/forum.js')
         ->jsDirectory(__DIR__.'/js/dist/forum')
@@ -97,9 +101,12 @@ return [
                     return null;
                 }
 
-                // Check if only subscription is being updated
-                $isOnlySubscription = count($attributes) === 1
-                    && array_key_exists('subscription', $attributes)
+                // Check if only subscription is being updated, with any attributes
+                // other extensions allow alongside it through Extend\Subscription
+                $allowed = ['subscription', ...resolve('fof-follow-tags.subscription-attributes')];
+
+                $isOnlySubscription = array_key_exists('subscription', $attributes)
+                    && empty(array_diff(array_keys($attributes), $allowed))
                     && empty($relationships);
 
                 if ($isOnlySubscription && !$actor->isGuest()) {
@@ -139,7 +146,14 @@ return [
                         }
 
                         $state->subscription = $subscription;
+
+                        $events = resolve(Dispatcher::class);
+
+                        $events->dispatch(new Event\SubscriptionChanging($actor, $tag, $state, $context->request));
+
                         $state->save();
+
+                        $events->dispatch(new Event\SubscriptionChanged($actor, $tag, $state));
                     }),
             ];
         }),

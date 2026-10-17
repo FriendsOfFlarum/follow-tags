@@ -18,6 +18,39 @@ This extension includes the functionality previously provided by `clarkwinkelman
   <img src="https://i.imgur.com/BGJplYw.png" alt="share modal" width="300" />
 </details>
 
+### For developers
+
+Other extensions can save their own fields alongside a user's tag subscription.
+
+**Backend.** Users who cannot edit a tag may only send `subscription` when they `PATCH /api/tags/{id}`. To let them send your attribute with it, add the attribute to `TagResource` with a `writable()` check that refuses guests, then allow it:
+
+```php
+use FoF\FollowTags\Extend\Subscription;
+
+return [
+    (new Flarum\Extend\Conditional())
+        ->whenExtensionEnabled('fof-follow-tags', fn () => [
+            (new Subscription())->attribute('myAttribute'),
+        ]),
+];
+```
+
+Requests must still include `subscription`, and may not change the tag's own fields or relationships.
+
+**Events.** `FoF\FollowTags\Event\SubscriptionChanging` is dispatched before a subscription is saved: listeners can change `$event->state`, and `$event->request` holds the request. `FoF\FollowTags\Event\SubscriptionChanged` is dispatched after it is saved.
+
+**Frontend.** Extend `requestData()` on the subscription modal to send your attribute:
+
+```js
+import { extend } from 'flarum/common/extend';
+
+extend('ext:fof/follow-tags/forum/components/SubscriptionModal', 'requestData', function (data) {
+  data.myAttribute = this.myValue;
+});
+```
+
+`formOptionItems()` is an `ItemList` for adding your own controls to the modal.
+
 ### Installation
 
 Install with composer:
