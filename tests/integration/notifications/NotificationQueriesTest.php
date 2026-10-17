@@ -47,9 +47,16 @@ class NotificationQueriesTest extends TestCase
      */
     protected function allowedRepeatedQueries(): array
     {
+        // Quoted and prefixed as this database does.
+        $grammar = $this->database()->getQueryGrammar();
+
         return [
-            'from `discussions`', 'from `posts`', 'from `groups`', 'as primary_count',
-            'from `users` where `users`.`id` = ?', 'into `unsubscribe_tokens`',
+            'from '.$grammar->wrapTable('discussions'),
+            'from '.$grammar->wrapTable('posts'),
+            'from '.$grammar->wrapTable('groups'),
+            'as primary_count',
+            'from '.$grammar->wrapTable('users').' where '.$grammar->wrap('users.id').' = ?',
+            'into '.$grammar->wrapTable('unsubscribe_tokens'),
         ];
     }
 

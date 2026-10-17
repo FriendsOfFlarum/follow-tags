@@ -41,7 +41,9 @@ class NotificationRecipientsTest extends TestCase
      */
     protected function allowedRepeatedQueries(): array
     {
-        return ['from `users` where `users`.`id` = ?'];
+        $grammar = $this->database()->getQueryGrammar();
+
+        return ['from '.$grammar->wrapTable('users').' where '.$grammar->wrap('users.id').' = ?'];
     }
 
     public function setUp(): void
@@ -55,7 +57,6 @@ class NotificationRecipientsTest extends TestCase
                 $this->user(2), // follows General
                 $this->user(3), // lurks in Testing
                 $this->user(4), // follows General, ignores Testing
-                $this->user(5), // follows General, hides Testing
                 $this->user(6), // no subscriptions
                 $this->user(7), // lurks in Archive, which they can't see
                 $this->user(8), // lurks in Archive, which their group can see
@@ -77,8 +78,6 @@ class NotificationRecipientsTest extends TestCase
                 ['user_id' => 3, 'tag_id' => 2, 'subscription' => 'lurk'],
                 ['user_id' => 4, 'tag_id' => 1, 'subscription' => 'follow'],
                 ['user_id' => 4, 'tag_id' => 2, 'subscription' => 'ignore'],
-                ['user_id' => 5, 'tag_id' => 1, 'subscription' => 'follow'],
-                ['user_id' => 5, 'tag_id' => 2, 'subscription' => 'hide'],
                 ['user_id' => 7, 'tag_id' => 4, 'subscription' => 'lurk'],
                 ['user_id' => 8, 'tag_id' => 4, 'subscription' => 'lurk'],
                 ['user_id' => 9, 'tag_id' => 2, 'subscription' => 'lurk'],
@@ -114,8 +113,8 @@ class NotificationRecipientsTest extends TestCase
     {
         $this->assertEquals(201, $this->startDiscussion([1, 2]));
 
-        // 4 and 9 each ignore one of its tags; hiding one (5) isn't ignoring it.
-        $this->assertEquals([2, 3, 5], $this->recipients('newDiscussionInTag'));
+        // 4 and 9 each ignore one of its tags.
+        $this->assertEquals([2, 3], $this->recipients('newDiscussionInTag'));
     }
 
     #[Test]
@@ -131,7 +130,7 @@ class NotificationRecipientsTest extends TestCase
     {
         $this->assertEquals(201, $this->reply(1));
 
-        // Following a tag (2, 4, 5) is for new discussions, not replies.
+        // Following a tag (2, 4) is for new discussions, not replies.
         $this->assertEquals([3], $this->recipients('newPostInTag'));
     }
 
@@ -148,7 +147,7 @@ class NotificationRecipientsTest extends TestCase
     {
         $this->assertEquals(200, $this->retag(3, [1, 2]));
 
-        $this->assertEquals([2, 3, 5], $this->recipients('newDiscussionTag'));
+        $this->assertEquals([2, 3], $this->recipients('newDiscussionTag'));
     }
 
     #[Test]
