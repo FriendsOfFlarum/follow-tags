@@ -16,6 +16,12 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
     content(): JSX.Element;
     formOptionItems(): ItemList<Mithril.Children>;
     subscriptionOptionItems(): ItemList<Mithril.Children>;
+    /**
+     * The attributes saved on the tag. Extensions may add their own, once the
+     * backend allows them alongside a subscription through the
+     * `FoF\FollowTags\Extend\Subscription` extender.
+     */
+    requestData(): Record<string, unknown>;
     saveSubscription(subscription: string): void;
 }
 export {};
