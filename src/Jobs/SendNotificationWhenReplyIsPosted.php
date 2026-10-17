@@ -48,19 +48,20 @@ class SendNotificationWhenReplyIsPosted extends NotificationJob
             return;
         }
 
-        $notify = $this->post->discussion->readers()
+        $lurkers = $this->post->discussion->readers()
             // The `select(...)` part is not mandatory here, but makes the query safer. See #55.
             ->select('users.*')
             ->where('users.id', '!=', $this->post->user_id)
             ->join('tag_user', 'tag_user.user_id', '=', 'users.id')
             ->whereIn('tag_user.tag_id', $tagIds->all())
             ->where('tag_user.subscription', 'lurk')
-            ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1)
+            ->where('discussion_user.last_read_post_number', '>=', $this->lastPostNumber - 1);
+
+        $notify = $this->recipientsAmong($lurkers, $tagIds->all())
             ->get()
             ->unique()
-            ->reject(function (User $user) use ($tags) {
-                return $tags->map->stateFor($user)->map->subscription->contains('ignore')
-                    || !$this->post->isVisibleTo($user);
+            ->reject(function (User $user) {
+                return !$this->post->isVisibleTo($user);
             });
 
         $this->sync($notifications, new NewPostBlueprint($this->post), $notify);
