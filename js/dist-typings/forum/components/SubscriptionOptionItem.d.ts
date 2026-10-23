@@ -1,4 +1,3 @@
-/// <reference types="mithril" />
 import Component, { ComponentAttrs } from 'flarum/common/Component';
 interface SubscriptionOptionItemAttrs extends ComponentAttrs {
     active: boolean;

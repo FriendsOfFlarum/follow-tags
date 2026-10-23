@@ -1,4 +1,3 @@
-/// <reference types="mithril" />
 import Modal, { IInternalModalAttrs } from 'flarum/common/components/Modal';
 import Tag from 'ext:flarum/tags/common/models/Tag';
 interface IChooseTagsToFollowModalAttrs extends IInternalModalAttrs {
