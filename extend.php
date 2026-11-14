@@ -126,15 +126,7 @@ return [
                 Schema\Str::make('subscription')
                     ->writable(fn (\Flarum\Tags\Tag $tag, Context $context) => $context->updating() && !$context->getActor()->isGuest())
                     ->nullable()
-                    ->get(function (\Flarum\Tags\Tag $tag, Context $context) {
-                        $actor = $context->getActor();
-
-                        if (!$tag->relationLoaded('state') || is_null($tag->state) || $tag->state->user_id !== $actor->id) {
-                            $tag->setRelation('state', $tag->stateFor($actor));
-                        }
-
-                        return $tag->state->subscription ?? null;
-                    })
+                    ->get((new Api\SubscriptionGetter())(...))
                     ->set(function (\Flarum\Tags\Tag $tag, ?string $subscription, Context $context) {
                         $actor = $context->getActor();
                         $actor->assertRegistered();
