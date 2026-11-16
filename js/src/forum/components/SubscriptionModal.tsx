@@ -7,7 +7,6 @@ import SubscriptionOptionItem from './SubscriptionOptionItem';
 import type Mithril from 'mithril';
 import type Tag from 'ext:flarum/tags/common/models/Tag';
 import Stream from 'flarum/common/utils/Stream';
-import Tooltip from 'flarum/common/components/Tooltip';
 
 interface ISubscriptionModalAttrs extends IInternalModalAttrs {
   model: Tag;
@@ -16,22 +15,11 @@ interface ISubscriptionModalAttrs extends IInternalModalAttrs {
 export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
   subscription!: string;
   loading: Stream<boolean>;
-  canShowTooltip: boolean | undefined = undefined;
 
   oninit(vnode: Mithril.Vnode<ISubscriptionModalAttrs, this>): void {
     super.oninit(vnode);
     this.loading = Stream(false);
     this.subscription = this.attrs.model.subscription() || 'not_follow';
-
-    const preferences = app.session.user?.preferences();
-    const notifyEmail = preferences?.['notify_newPostInTag_email'];
-    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
-
-    if ((notifyEmail || notifyAlert) && this.subscription === 'not_follow') {
-      this.canShowTooltip = true;
-    } else {
-      this.canShowTooltip = false;
-    }
   }
 
   className() {
@@ -45,10 +33,6 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
   }
 
   content() {
-    const preferences = app.session.user?.preferences();
-    const notifyEmail = preferences?.['notify_newPostInTag_email'];
-    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
-
     return (
       <div className="Modal-body">
         {this.formOptionItems().toArray()}
@@ -85,7 +69,6 @@ export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
         ...option,
         onclick: () => {
           this.subscription = option.subscription;
-          this.canShowTooltip = false;
         },
         active: this.subscription === option.subscription,
         disabled: option.subscription === 'hide' && this.attrs.model.isHidden(),

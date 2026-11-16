@@ -14,29 +14,11 @@ export interface ISubscriptionStateButtonAttrs extends IButtonAttrs {
 
 export default class SubscriptionStateButton extends Button<ISubscriptionStateButtonAttrs> {
   loading!: Stream<boolean>;
-  canShowTooltip!: Stream<boolean | undefined>;
 
   oninit(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void {
     super.oninit(vnode);
 
     this.loading = Stream(false);
-    this.canShowTooltip = Stream(false);
-  }
-
-  onbeforeupdate(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>): void {
-    super.onbeforeupdate(vnode);
-
-    const subscription = this.attrs.subscription || false;
-
-    const preferences = app.session.user?.preferences();
-    const notifyEmail = preferences?.['notify_newPostInTag_email'];
-    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
-
-    if ((notifyEmail || notifyAlert) && subscription === false) {
-      this.canShowTooltip(undefined);
-    } else {
-      this.canShowTooltip(false);
-    }
   }
 
   view(vnode: Mithril.Vnode<ISubscriptionStateButtonAttrs, this>) {
@@ -49,8 +31,17 @@ export default class SubscriptionStateButton extends Button<ISubscriptionStateBu
     this.attrs.className = (this.attrs.className || '') + ' SubscriptionButton ' + 'SubscriptionButton--' + subscription;
     this.attrs.icon = buttonIcon;
 
+    const button = super.view(Object.assign({}, vnode, { children: buttonLabel }));
+
     const preferences = app.session.user?.preferences();
     const notifyEmail = preferences?.['notify_newPostInTag_email'];
+    const notifyAlert = preferences?.['notify_newPostInTag_alert'];
+
+    // Explain what following does to someone who doesn't follow the tag yet,
+    // and would be notified if they did
+    if (subscription !== false || !(notifyEmail || notifyAlert)) {
+      return button;
+    }
 
     const tooltipText = extractText(
       app.translator.trans(
@@ -59,19 +50,8 @@ export default class SubscriptionStateButton extends Button<ISubscriptionStateBu
     );
 
     return (
-      <Tooltip
-        text={
-          // By adding this constraint we make sure that when we explicitly set the
-          // value of `canShowTooltip` to `false`, the internal `shouldRecreateTooltip`
-          // property of the `Tooltip` component is set to `true` and we can, in that
-          // way, switch between 'manual' and 'hover' trigger modes for the tooltip.
-          typeof this.canShowTooltip() === 'boolean' ? '' : tooltipText
-        }
-        tooltipVisible={this.canShowTooltip()}
-        position={this.attrs.tooltipPosition || 'bottom'}
-        delay={250}
-      >
-        {super.view(Object.assign({}, vnode, { children: buttonLabel }))}
+      <Tooltip text={tooltipText} position={this.attrs.tooltipPosition || 'bottom'} delay={250}>
+        {button}
       </Tooltip>
     );
   }
