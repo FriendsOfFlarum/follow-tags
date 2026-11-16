@@ -9,7 +9,6 @@ interface ISubscriptionModalAttrs extends IInternalModalAttrs {
 export default class SubscriptionModal extends Modal<ISubscriptionModalAttrs> {
     subscription: string;
     loading: Stream<boolean>;
-    canShowTooltip: boolean | undefined;
     oninit(vnode: Mithril.Vnode<ISubscriptionModalAttrs, this>): void;
     className(): string;
     title(): any[];
