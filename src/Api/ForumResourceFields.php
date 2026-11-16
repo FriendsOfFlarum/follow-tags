@@ -17,6 +17,7 @@ use Flarum\Settings\SettingsRepositoryInterface;
 use Flarum\Tags\Tag;
 use Flarum\User\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class ForumResourceFields
 {
@@ -53,7 +54,17 @@ class ForumResourceFields
 
                     $actor = $context->getActor();
 
-                    return $this->query($actor)->get()->all();
+                    $tags = $this->query($actor)->get();
+
+                    // Serializing a child tag checks its permissions against its parent, and
+                    // the parent is included with its subscription: load them all at once
+                    // Guests have no states, so theirs are not loaded
+                    $tags->whereNotNull('parent_id')->load($actor->isGuest() ? ['parent'] : [
+                        'parent',
+                        'parent.state' => fn (Relation $query) => $query->where('user_id', $actor->id),
+                    ]);
+
+                    return $tags->all();
                 }),
         ];
     }
