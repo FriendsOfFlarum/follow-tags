@@ -146,3 +146,11 @@ flarum-gdpr:
       tagsubscription:
         export_description: Exports details of the subscription level for a tag, if one exists.
         anonymize_description: Removes the subscription of the user to the tag.
+
+core:
+  email:
+    notification:
+      types:
+        newDiscussionInTag: New discussions in tags you follow
+        newDiscussionTag: Discussions re-tagged into tags you follow
+        newPostInTag: New posts in tags you follow
